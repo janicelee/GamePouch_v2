@@ -10,7 +10,6 @@ import UIKit
 class SearchViewController: UIViewController {
     
     private let tableView = UITableView()
-    
     private var games: [Game] = []
 
     override func viewDidLoad() {
@@ -29,10 +28,12 @@ class SearchViewController: UIViewController {
     private func configureTableView() {
         view.addSubview(tableView)
         tableView.frame = view.bounds
+        tableView.rowHeight = 80
         
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(GameCell.self, forCellReuseIdentifier: GameCell.reuseID)
+        tableView.removeExcessCells()
     }
     
     private func getHotnessList() {
@@ -40,10 +41,25 @@ class SearchViewController: UIViewController {
             guard let self = self else { return }
             
             switch result {
-            case .success(let games):
-                self.games = games
+            case .success(let gameIds):
+                let group = DispatchGroup()
                 
-                DispatchQueue.main.async {
+                gameIds.forEach { id in
+                    group.enter()
+                    
+                    NetworkManager.shared.getGameInfo(id: id) { [weak self] result in
+                        guard let self = self else { return }
+                        
+                        switch result {
+                        case .success(let game):
+                            self.games.append(game)
+                        case .failure(let error):
+                            print(error.rawValue)
+                        }
+                        group.leave()
+                    }
+                }
+                group.notify(queue: .main) {
                     self.tableView.reloadData()
                 }
             case .failure(let error):

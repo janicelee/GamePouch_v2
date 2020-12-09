@@ -19,6 +19,8 @@
 		F7336CC5257721EF00C05848 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7336CC4257721EF00C05848 /* NetworkManager.swift */; };
 		F7336CCE257724E800C05848 /* GPError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7336CCD257724E800C05848 /* GPError.swift */; };
 		F7336CD42577340100C05848 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7336CD32577340100C05848 /* Game.swift */; };
+		F75E5BEA257B111E00611A40 /* UITableView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75E5BE9257B111E00611A40 /* UITableView+Ext.swift */; };
+		F75E5BEF257B155800611A40 /* GameInfoParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75E5BEE257B155800611A40 /* GameInfoParser.swift */; };
 		F771543D25785A7900FB1508 /* HotnessListParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F771543C25785A7900FB1508 /* HotnessListParser.swift */; };
 		F7B9A7842579E9AF00E06A0F /* GameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B9A7832579E9AF00E06A0F /* GameCell.swift */; };
 /* End PBXBuildFile section */
@@ -59,6 +61,8 @@
 		F7336CC4257721EF00C05848 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		F7336CCD257724E800C05848 /* GPError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPError.swift; sourceTree = "<group>"; };
 		F7336CD32577340100C05848 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		F75E5BE9257B111E00611A40 /* UITableView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Ext.swift"; sourceTree = "<group>"; };
+		F75E5BEE257B155800611A40 /* GameInfoParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameInfoParser.swift; sourceTree = "<group>"; };
 		F771543C25785A7900FB1508 /* HotnessListParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotnessListParser.swift; sourceTree = "<group>"; };
 		F7B9A7832579E9AF00E06A0F /* GameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -112,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				F7336CCC257724C700C05848 /* Utilities */,
+				F75E5BE8257B109700611A40 /* Extensions */,
 				F7336CC3257721CF00C05848 /* Managers */,
 				F7336CD2257733F300C05848 /* Model */,
 				F771542B2578526C00FB1508 /* ViewControllers */,
@@ -159,10 +164,18 @@
 		F7336CD2257733F300C05848 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				F771542D2578531900FB1508 /* Parsers */,
 				F7336CD32577340100C05848 /* Game.swift */,
+				F771542D2578531900FB1508 /* Parsers */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		F75E5BE8257B109700611A40 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				F75E5BE9257B111E00611A40 /* UITableView+Ext.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		F771542B2578526C00FB1508 /* ViewControllers */ = {
@@ -190,6 +203,7 @@
 			isa = PBXGroup;
 			children = (
 				F771543C25785A7900FB1508 /* HotnessListParser.swift */,
+				F75E5BEE257B155800611A40 /* GameInfoParser.swift */,
 			);
 			path = Parsers;
 			sourceTree = "<group>";
@@ -339,6 +353,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F75E5BEA257B111E00611A40 /* UITableView+Ext.swift in Sources */,
 				F771543D25785A7900FB1508 /* HotnessListParser.swift in Sources */,
 				F7336CC5257721EF00C05848 /* NetworkManager.swift in Sources */,
 				F7336C6A257493F800C05848 /* SearchViewController.swift in Sources */,
@@ -348,6 +363,7 @@
 				F7336C66257493F700C05848 /* AppDelegate.swift in Sources */,
 				F7336CA32576033A00C05848 /* TabBarController.swift in Sources */,
 				F7336C68257493F700C05848 /* SceneDelegate.swift in Sources */,
+				F75E5BEF257B155800611A40 /* GameInfoParser.swift in Sources */,
 				F7336CD42577340100C05848 /* Game.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
