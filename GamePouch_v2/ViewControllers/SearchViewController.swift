@@ -41,25 +41,10 @@ class SearchViewController: UIViewController {
             guard let self = self else { return }
             
             switch result {
-            case .success(let gameIds):
-                let group = DispatchGroup()
+            case .success(let games):
+                self.games = games
                 
-                gameIds.forEach { id in
-                    group.enter()
-                    
-                    NetworkManager.shared.getGameInfo(id: id) { [weak self] result in
-                        guard let self = self else { return }
-                        
-                        switch result {
-                        case .success(let game):
-                            self.games.append(game)
-                        case .failure(let error):
-                            print(error.rawValue)
-                        }
-                        group.leave()
-                    }
-                }
-                group.notify(queue: .main) {
+                DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
             case .failure(let error):

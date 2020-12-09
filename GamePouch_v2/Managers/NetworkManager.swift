@@ -16,7 +16,36 @@ class NetworkManager {
     
     private init() {}
     
-    func getHotnessList(completed: @escaping (Result<[String], GPError>) -> ()) {
+    func getHotnessList(completed: @escaping (Result<[Game], GPError>) -> ()) {
+        NetworkManager.shared.getHotnessListIds { result in
+            switch result {
+            case .success(let ids):
+                var games: [Game] = []
+                let group = DispatchGroup()
+                
+                ids.forEach { id in
+                    group.enter()
+                    
+                    NetworkManager.shared.getGameInfo(id: id) { result in
+                        switch result {
+                        case .success(let game):
+                            games.append(game)
+                        case .failure(let error):
+                            print("Game id: \(id), error: \(error.rawValue)")
+                        }
+                        group.leave()
+                    }
+                }
+                group.notify(queue: .main) {
+                    completed(.success(games))
+                }
+            case .failure(let error):
+                completed(.failure(error))
+            }
+        }
+    }
+    
+    private func getHotnessListIds(completed: @escaping (Result<[String], GPError>) -> ()) {
         let endpoint = baseURL + hotnessListURL
         
         guard let url = URL(string: endpoint) else {
@@ -51,7 +80,7 @@ class NetworkManager {
         task.resume()
     }
     
-    func getGameInfo(id: String, completed: @escaping (Result<Game, GPError>) -> ()) {
+    private func getGameInfo(id: String, completed: @escaping (Result<Game, GPError>) -> ()) {
         let endpoint = baseURL + getGameURL + id
         
         guard let url = URL(string: endpoint) else {
