@@ -36,6 +36,6 @@ class GameCell: UITableViewCell {
     }
     
     func set(game: Game) {
-        label.text = game.id
+        label.text = game.name
     }
 }

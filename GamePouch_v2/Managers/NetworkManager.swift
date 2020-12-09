@@ -23,13 +23,13 @@ class NetworkManager {
                 var games: [Game] = []
                 let group = DispatchGroup()
                 
-                ids.forEach { id in
+                for (index, id) in ids.enumerated() {
                     group.enter()
                     
                     NetworkManager.shared.getGameInfo(id: id) { result in
                         switch result {
                         case .success(let game):
-                            games.append(game)
+                            games.insert(game, at: index)
                         case .failure(let error):
                             print("Game id: \(id), error: \(error.rawValue)")
                         }
