@@ -5,7 +5,7 @@
 //  Created by Janice Lee on 2020-12-01.
 //
 
-import Foundation
+import UIKit
 
 class NetworkManager {
     
@@ -112,6 +112,20 @@ class NetworkManager {
                 completed(.failure(.unableToParse))
             }
         }
+        task.resume()
+    }
+    
+    func downloadImage(from urlString: String, completed: @escaping (UIImage) -> ()) {
+        guard let url = URL(string: urlString) else { return }
+        
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            guard error == nil,
+                  let response = response as? HTTPURLResponse,
+                  response.statusCode == 200,
+                  let data = data,
+                  let image = UIImage(data: data) else { return }
+                completed(image)
+            }
         task.resume()
     }
 }
