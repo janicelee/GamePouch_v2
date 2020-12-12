@@ -10,6 +10,8 @@ import UIKit
 class NetworkManager {
     
     static let shared = NetworkManager()
+    private let cache = NSCache<NSString, UIImage>()
+    
     private let baseURL = "https://www.boardgamegeek.com/xmlapi2/"
     private let getGameURL = "thing?type=boardgame,boardgameexpansion&stats=1&id="
     private let hotnessListURL = "hot?type=boardgame"
@@ -116,15 +118,23 @@ class NetworkManager {
     }
     
     func downloadImage(from urlString: String, completed: @escaping (UIImage) -> ()) {
+        let cacheKey = NSString(string: urlString)
+        if let image = cache.object(forKey: cacheKey) {
+            completed(image)
+            return
+        }
+    
         guard let url = URL(string: urlString) else { return }
         
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            guard error == nil,
+        let task = URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
+            guard let self = self,
+                  error == nil,
                   let response = response as? HTTPURLResponse,
                   response.statusCode == 200,
                   let data = data,
                   let image = UIImage(data: data) else { return }
-                completed(image)
+            self.cache.setObject(image, forKey: cacheKey)
+            completed(image)
             }
         task.resume()
     }
