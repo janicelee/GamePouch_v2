@@ -24,6 +24,7 @@ class GameImageView: UIImageView {
         layer.cornerRadius = 10
         clipsToBounds = true
         image = Images.placeholder
+        contentMode = .scaleAspectFill
     }
     
     func setImage(from urlString: String) {

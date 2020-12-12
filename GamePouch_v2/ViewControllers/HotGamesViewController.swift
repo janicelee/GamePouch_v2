@@ -1,5 +1,5 @@
 //
-//  SearchViewController.swift
+//  HotGamesViewController.swift
 //  GamePouch_v2
 //
 //  Created by Janice Lee on 2020-11-29.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SearchViewController: UIViewController {
+class HotGamesViewController: UIViewController {
     
     private let tableView = UITableView()
     private var games: [Game] = []
@@ -54,7 +54,7 @@ class SearchViewController: UIViewController {
     }
 }
 
-extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
+extension HotGamesViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return games.count
     }
@@ -63,5 +63,9 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: GameCell.reuseID) as! GameCell
         cell.set(game: games[indexPath.row])
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return CGFloat(200)
     }
 }

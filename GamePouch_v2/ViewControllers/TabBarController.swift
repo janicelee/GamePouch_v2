@@ -15,7 +15,7 @@ class TabBarController: UITabBarController {
     }
     
     private func createSearchNavigationController() -> UINavigationController {
-        let searchViewController = SearchViewController()
+        let searchViewController = HotGamesViewController()
         searchViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 0)
         return UINavigationController(rootViewController: searchViewController)
     }

@@ -10,7 +10,7 @@ import UIKit
 class GameCell: UITableViewCell {
     static let reuseID = "GameCell"
     
-    let label = UILabel()
+    let gameImageView = GameImageView(frame: .zero)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -22,20 +22,19 @@ class GameCell: UITableViewCell {
     }
     
     private func configure() {
-        addSubview(label)
-        
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = .systemRed
+        addSubview(gameImageView)
         
         NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalTo: self.topAnchor),
-            label.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            label.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            label.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+            gameImageView.topAnchor.constraint(equalTo: self.topAnchor),
+            gameImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 12),
+            gameImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -12),
+            gameImageView.heightAnchor.constraint(equalToConstant: 200)
         ])
     }
     
     func set(game: Game) {
-        label.text = game.name
+        if let imageURL = game.imageURL {
+            gameImageView.setImage(from: imageURL)
+        }
     }
 }

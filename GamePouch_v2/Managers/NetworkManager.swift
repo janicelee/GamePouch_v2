@@ -20,7 +20,7 @@ class NetworkManager {
         NetworkManager.shared.getHotnessListIds { result in
             switch result {
             case .success(let ids):
-                var games: [Game] = []
+                var games: [Game?] = Array(repeating: nil, count: ids.count)
                 let group = DispatchGroup()
                 
                 for (index, id) in ids.enumerated() {
@@ -31,13 +31,13 @@ class NetworkManager {
                         case .success(let game):
                             games.insert(game, at: index)
                         case .failure(let error):
-                            print("Game id: \(id), error: \(error.rawValue)")
+                            print("Failed to get data for game id: \(id), error: \(error.rawValue)")
                         }
                         group.leave()
                     }
                 }
                 group.notify(queue: .main) {
-                    completed(.success(games))
+                    completed(.success(games.compactMap{$0}))
                 }
             case .failure(let error):
                 completed(.failure(error))
