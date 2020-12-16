@@ -8,13 +8,45 @@
 import UIKit
 
 class SmallIconGroup: UIView {
-
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
+    
+    let iconImageView = UIImageView()
+    let label = UILabel()
+    
+    required init(labelText: String, iconImage: UIImage?) {
+        label.text = labelText
+        iconImageView.image = iconImage
+        super.init(frame: .zero)
+        configure()
     }
-    */
-
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func configure() {
+        configureImageView()
+        configureLabel()
+    }
+    
+    private func configureImageView() {
+        addSubview(iconImageView)
+        iconImageView.contentMode = .scaleAspectFit
+        
+        iconImageView.snp.makeConstraints { make in
+            make.leading.top.bottom.equalToSuperview()
+            make.width.height.equalTo(16)
+        }
+    }
+    
+    private func configureLabel() {
+        addSubview(label)
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 13, weight: .bold)
+        label.textColor = .secondaryLabel
+        
+        label.snp.makeConstraints { make in
+            make.leading.equalTo(iconImageView.snp.trailing)
+            make.trailing.bottom.equalToSuperview()
+        }
+    }
 }

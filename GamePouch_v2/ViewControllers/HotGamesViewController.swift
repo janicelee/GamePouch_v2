@@ -9,6 +9,7 @@ import UIKit
 
 class HotGamesViewController: UIViewController {
     
+    private let refreshControl = UIRefreshControl()
     private let tableView = UITableView()
     private var games: [Game] = []
 
@@ -28,15 +29,22 @@ class HotGamesViewController: UIViewController {
     private func configureTableView() {
         view.addSubview(tableView)
         tableView.frame = view.bounds
-        tableView.rowHeight = 80
+        tableView.rowHeight = 300
         
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(GameCell.self, forCellReuseIdentifier: GameCell.reuseID)
         tableView.removeExcessCells()
+        
+        if #available(iOS 10.0, *) {
+            tableView.refreshControl = refreshControl
+        } else {
+            tableView.addSubview(refreshControl)
+        }
+        refreshControl.addTarget(self, action: #selector(getHotnessList), for: .valueChanged)
     }
     
-    private func getHotnessList() {
+    @objc private func getHotnessList() {
         NetworkManager.shared.getHotnessList { [weak self] result in
             guard let self = self else { return }
             
@@ -46,6 +54,7 @@ class HotGamesViewController: UIViewController {
                 
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
+                    self.refreshControl.endRefreshing()
                 }
             case .failure(let error):
                 print(error.rawValue)
@@ -63,9 +72,5 @@ extension HotGamesViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: GameCell.reuseID) as! GameCell
         cell.set(game: games[indexPath.row])
         return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return CGFloat(200)
     }
 }
