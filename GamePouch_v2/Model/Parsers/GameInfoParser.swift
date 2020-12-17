@@ -49,11 +49,15 @@ extension GameInfoParser: XMLParserDelegate {
                 game.mechanics.append(mechanic)
             }
         } else if elementName == "average" {
-            game.rating = attributeDict["value"]
+            if let value = attributeDict["value"], let numValue = Double(value) {
+                game.rating = String(format: "%.1f", numValue)
+            }
         }  else if elementName == "rank" && attributeDict["name"] == "boardgame" {
             game.rank = attributeDict["value"]
         } else if elementName == "averageweight" {
-            game.weight = attributeDict["value"]
+            if let value = attributeDict["value"], let numValue = Double(value) {
+                game.weight = String(format: "%.1f", numValue)
+            }
         }
     }
     
