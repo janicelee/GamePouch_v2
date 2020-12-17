@@ -31,7 +31,11 @@ class GameCell: UITableViewCell {
     let difficultyIconGroup = SmallIconGroup(labelText: "2.4/5", iconImage: Images.difficulty)
     let ageIconGroup = SmallIconGroup(labelText: "10+", iconImage: Images.age)
     
-    let padding: CGFloat = 14
+    let outerEdgePadding: CGFloat = 16
+    let titleColumnProportion = 0.7
+    var largeIconGroupPorportion: Double {
+        return (1 - titleColumnProportion) / 2
+    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -53,7 +57,7 @@ class GameCell: UITableViewCell {
         
         gameImageView.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(padding)
+            make.leading.trailing.equalToSuperview().inset(outerEdgePadding)
             make.height.equalTo(200)
         }
     }
@@ -73,7 +77,7 @@ class GameCell: UITableViewCell {
         
         titleColumn.snp.makeConstraints { make in
             make.top.leading.bottom.equalToSuperview()
-            make.width.equalToSuperview().multipliedBy(0.6)
+            make.width.equalToSuperview().multipliedBy(titleColumnProportion)
         }
         
         titleLabel.snp.makeConstraints { make in
@@ -83,21 +87,21 @@ class GameCell: UITableViewCell {
         ratingColumn.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
             make.leading.equalTo(titleColumn.snp.trailing)
-            make.width.equalToSuperview().multipliedBy(0.2)
+            make.width.equalToSuperview().multipliedBy(largeIconGroupPorportion)
         }
 
         rankColumn.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
             make.leading.equalTo(ratingColumn.snp.trailing)
-            make.width.equalToSuperview().multipliedBy(0.2)
+            make.width.equalToSuperview().multipliedBy(largeIconGroupPorportion)
         }
         
         ratingIconGroup.snp.makeConstraints { make in
-            make.centerX.centerY.equalToSuperview()
+            make.trailing.centerY.equalToSuperview()
         }
         
         rankIconGroup.snp.makeConstraints { make in
-            make.centerX.centerY.equalToSuperview()
+            make.trailing.centerY.equalToSuperview()
         }
     }
     
@@ -107,22 +111,6 @@ class GameCell: UITableViewCell {
         [playersIconGroup, timeIconGroup, difficultyIconGroup, ageIconGroup].forEach {
             secondaryRowView.addSubview($0)
         }
-
-//        playersColumn.addSubview(playersIconGroup)
-//        timeColumn.addSubview(timeIconGroup)
-//        difficultyColumn.addSubview(difficultyIconGroup)
-//        ageColumn.addSubview(ageIconGroup)
-    
-//        playersColumn.backgroundColor = .systemIndigo
-//        timeColumn.backgroundColor = .systemPurple
-//        difficultyColumn.backgroundColor = .systemRed
-//        ageColumn.backgroundColor = .systemOrange
-//
-//        secondaryRowView.backgroundColor = .systemGray
-//        playersIconGroup.backgroundColor = .systemPink
-//        timeIconGroup.backgroundColor = .systemBlue
-//        difficultyIconGroup.backgroundColor = .systemGreen
-//        ageIconGroup.backgroundColor = .systemYellow
         
         secondaryRowView.snp.makeConstraints { make in
             make.top.equalTo(primaryRowView.snp.bottom)
@@ -131,7 +119,7 @@ class GameCell: UITableViewCell {
         }
         
         playersIconGroup.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(4)
+            make.leading.equalToSuperview().offset(2)
             make.centerY.equalToSuperview()
         }
 

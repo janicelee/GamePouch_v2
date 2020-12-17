@@ -26,11 +26,6 @@ class LargeIconGroup: UIView {
     private func configure() {
         configureLabel()
         configureImageView()
-        
-        self.snp.makeConstraints { make in
-            make.width.equalTo(46)
-            make.height.equalTo(20)
-        }
     }
 
     private func configureLabel() {
@@ -40,7 +35,7 @@ class LargeIconGroup: UIView {
         label.textColor = .label
         
         label.snp.makeConstraints { make in
-            make.leading.bottom.equalToSuperview()
+            make.leading.top.bottom.equalToSuperview()
         }
     }
     
@@ -50,7 +45,7 @@ class LargeIconGroup: UIView {
 
         iconImageView.snp.makeConstraints { make in
             make.leading.equalTo(label.snp.trailing)
-            make.bottom.equalToSuperview()
+            make.trailing.bottom.equalToSuperview()
             make.width.height.equalTo(18)
         }
     }
