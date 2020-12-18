@@ -31,8 +31,8 @@ class LargeIconGroup: UIView {
     private func configureLabel() {
         addSubview(label)
         label.textAlignment = .left
-        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        label.textColor = .label
+        label.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+        label.textColor = .black
         
         label.snp.makeConstraints { make in
             make.leading.top.bottom.equalToSuperview()

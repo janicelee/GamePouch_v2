@@ -33,7 +33,8 @@ class SmallIconGroup: UIView {
         iconImageView.contentMode = .scaleAspectFit
         
         iconImageView.snp.makeConstraints { make in
-            make.leading.top.bottom.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.bottom.equalToSuperview().priority(998)
             make.width.height.equalTo(16)
         }
     }
@@ -45,8 +46,8 @@ class SmallIconGroup: UIView {
         label.textColor = .secondaryLabel
         
         label.snp.makeConstraints { make in
-            make.leading.equalTo(iconImageView.snp.trailing)
-            make.trailing.bottom.equalToSuperview()
+            make.leading.equalTo(iconImageView.snp.trailing).priority(998)
+            make.top.bottom.trailing.equalToSuperview()
         }
     }
 }

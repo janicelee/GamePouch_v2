@@ -12,18 +12,21 @@ class GameCell: UITableViewCell {
     static let reuseID = "GameCell"
     
     let gameImageView = GameImageView(frame: .zero)
-    let primaryRowView = UIView()
-    let titleColumn = UIView()
-    let titleLabel = TitleLabel(textAlignment: .left, fontSize: 16)
-    let largeIconGroupColumn = UIView()
+    
+    let largeIconView = UIView()
+    let ratingColumnView = UIView()
+    let rankColumnView = UIView()
     let ratingIconGroup = LargeIconGroup(labelText: "N/A", iconImage: Images.rating)
     let rankIconGroup = LargeIconGroup(labelText: "N/A", iconImage: Images.rank)
     
+    let primaryRowView = UIView()
+    let titleLabel = TitleLabel(textAlignment: .left, fontSize: 16)
+    
     let secondaryRowView = UIView()
-    let playersColumn = UIView()
-    let timeColumn = UIView()
-    let difficultyColumn = UIView()
-    let ageColumn = UIView()
+    let playersColumnView = UIView()
+    let timeColumnView = UIView()
+    let difficultyColumnView = UIView()
+    let ageColumnView = UIView()
     
     let playersIconGroup = SmallIconGroup(labelText: "N/A", iconImage: Images.players)
     let timeIconGroup = SmallIconGroup(labelText: "N/A", iconImage: Images.time)
@@ -31,10 +34,6 @@ class GameCell: UITableViewCell {
     let ageIconGroup = SmallIconGroup(labelText: "N/A", iconImage: Images.age)
     
     let outerEdgePadding: CGFloat = 16
-    let titleColumnProportion = 0.7
-    var largeIconGroupPorportion: Double {
-        return (1 - titleColumnProportion)
-    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -47,6 +46,7 @@ class GameCell: UITableViewCell {
     
     private func configure() {
         configureGameImageView()
+        configureLargeIconGroup()
         configurePrimaryRowView()
         configureSecondaryRowView()
     }
@@ -61,11 +61,35 @@ class GameCell: UITableViewCell {
         }
     }
     
+    private func configureLargeIconGroup() {
+        gameImageView.addSubview(largeIconView)
+        
+        [ratingIconGroup, rankIconGroup].forEach { largeIconView.addSubview($0) }
+        
+        largeIconView.layer.cornerRadius = 6
+        largeIconView.backgroundColor = UIColor.white.withAlphaComponent(0.86)
+        
+        largeIconView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(12)
+            make.trailing.equalToSuperview().offset(-12)
+        }
+        
+        ratingIconGroup.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(4)
+            make.bottom.equalToSuperview().offset(-4)
+            make.leading.equalToSuperview().offset(8)
+        }
+        
+        rankIconGroup.snp.makeConstraints { make in
+            make.leading.equalTo(ratingIconGroup.snp.trailing).offset(4)
+            make.trailing.equalToSuperview().offset(-8)
+            make.centerY.equalTo(ratingIconGroup.snp.centerY)
+        }
+    }
+    
     private func configurePrimaryRowView() {
         addSubview(primaryRowView)
-        [titleColumn, largeIconGroupColumn].forEach { primaryRowView.addSubview($0) }
-        titleColumn.addSubview(titleLabel)
-        [ratingIconGroup, rankIconGroup].forEach { largeIconGroupColumn.addSubview($0) }
+        primaryRowView.addSubview(titleLabel)
         
         primaryRowView.snp.makeConstraints { make in
             make.top.equalTo(gameImageView.snp.bottom).offset(4)
@@ -73,28 +97,8 @@ class GameCell: UITableViewCell {
             make.height.equalTo(28)
         }
         
-        titleColumn.snp.makeConstraints { make in
-            make.top.leading.bottom.equalToSuperview()
-            make.width.equalToSuperview().multipliedBy(titleColumnProportion)
-        }
-        
         titleLabel.snp.makeConstraints { make in
             make.leading.top.bottom.trailing.equalToSuperview()
-        }
-        
-        largeIconGroupColumn.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.leading.equalTo(titleColumn.snp.trailing)
-            make.width.equalToSuperview().multipliedBy(largeIconGroupPorportion)
-        }
-        
-        rankIconGroup.snp.makeConstraints { make in
-            make.trailing.centerY.equalToSuperview()
-            make.leading.equalTo(ratingIconGroup.snp.trailing).offset(2)
-        }
-        
-        ratingIconGroup.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
         }
     }
     
@@ -115,34 +119,72 @@ class GameCell: UITableViewCell {
             make.leading.equalToSuperview().offset(2)
             make.centerY.equalToSuperview()
         }
+        
+        playersIconGroup.label.snp.makeConstraints { make in
+            make.leading.equalTo(playersIconGroup.iconImageView.snp.trailing).offset(3).priority(999)
+        }
+        
+        playersIconGroup.iconImageView.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().offset(-1).priority(999)
+        }
 
         timeIconGroup.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.leading.equalTo(playersIconGroup.snp.trailing).offset(14)
+        }
+        
+        timeIconGroup.label.snp.makeConstraints { make in
+            make.leading.equalTo(timeIconGroup.iconImageView.snp.trailing).offset(2).priority(999)
         }
 
         difficultyIconGroup.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.leading.equalTo(timeIconGroup.snp.trailing).offset(14)
         }
+        
+        difficultyIconGroup.label.snp.makeConstraints { make in
+            make.leading.equalTo(difficultyIconGroup.iconImageView.snp.trailing).offset(4).priority(999)
+        }
 
         ageIconGroup.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.leading.equalTo(difficultyIconGroup.snp.trailing).offset(14)
         }
+        
+        secondaryRowView.updateConstraints()
     }
     
     func set(game: Game) {
         titleLabel.text = game.name
         ratingIconGroup.label.text = game.rating
-        rankIconGroup.label.text = game.rank != nil && game.rank!.isValidDisplayText() ? game.rank : "N/A"
-        playersIconGroup.label.text = game.minPlayers != nil && game.maxPlayers != nil && game.minPlayers!.isValidDisplayText() && game.maxPlayers!.isValidDisplayText() ? "\(game.minPlayers!)-\(game.maxPlayers!)" : "N/A"
-        timeIconGroup.label.text = game.minPlayTime != nil && game.maxPlayTime != nil && game.minPlayTime!.isValidDisplayText() && game.maxPlayTime!.isValidDisplayText() ? "\(game.minPlayTime!)-\(game.maxPlayTime!) min" : "N/A"
-        difficultyIconGroup.label.text = game.weight != nil && game.weight!.isValidDisplayText() ? "\(game.weight!)/5" : "N/A"
-        ageIconGroup.label.text = game.minAge != nil && game.minAge!.isValidDisplayText() ? "\(game.minAge!)+" : "N/A"
+        rankIconGroup.label.text = getRankText(rank: game.rank)
+        playersIconGroup.label.text = game.minPlayers != nil && game.maxPlayers != nil && isValidDisplayText(game.minPlayers!) && isValidDisplayText(game.maxPlayers!) ? "\(game.minPlayers!)-\(game.maxPlayers!)" : "N/A"
+        timeIconGroup.label.text = game.minPlayTime != nil && game.maxPlayTime != nil && isValidDisplayText(game.minPlayTime!) && isValidDisplayText(game.maxPlayTime!) ? "\(game.minPlayTime!)-\(game.maxPlayTime!) min" : "N/A"
+        difficultyIconGroup.label.text = game.weight != nil && isValidDisplayText(game.weight!) ? "\(game.weight!)/5" : "N/A"
+        ageIconGroup.label.text = game.minAge != nil && isValidDisplayText(game.minAge!) ? "\(game.minAge!)+" : "N/A"
         
         if let imageURL = game.imageURL {
             gameImageView.setImage(from: imageURL)
         }
     }
+    
+    private func isValidDisplayText(_ label: String) -> Bool {
+        return !label.isEmpty && label != "0" && label != "0.0" && label != "Not Ranked"
+    }
+    
+    private func getRankText(rank: String?) -> String {
+        guard let rank = rank, isValidDisplayText(rank) else { return "N/A" }
+        
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .ordinal
+        
+        if let rankInt = Int(rank) {
+            let rankNSNumber = NSNumber(value: rankInt)
+            guard let result = formatter.string(from: rankNSNumber) else { return "N/A" }
+            return result
+        } else {
+            return "N/A"
+        }
+    }
+    
 }
