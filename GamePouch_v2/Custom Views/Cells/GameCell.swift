@@ -157,7 +157,8 @@ class GameCell: UITableViewCell {
     func set(game: Game) {
         titleLabel.text = game.name
         ratingIconGroup.label.text = game.rating
-        rankIconGroup.label.text = getRankText(rank: game.rank)
+        //rankIconGroup.label.text = getRankText(rank: game.rank)
+        getRankText(rank: game.rank)
         playersIconGroup.label.text = game.minPlayers != nil && game.maxPlayers != nil && isValidDisplayText(game.minPlayers!) && isValidDisplayText(game.maxPlayers!) ? "\(game.minPlayers!)-\(game.maxPlayers!)" : "N/A"
         timeIconGroup.label.text = game.minPlayTime != nil && game.maxPlayTime != nil && isValidDisplayText(game.minPlayTime!) && isValidDisplayText(game.maxPlayTime!) ? "\(game.minPlayTime!)-\(game.maxPlayTime!) min" : "N/A"
         difficultyIconGroup.label.text = game.weight != nil && isValidDisplayText(game.weight!) ? "\(game.weight!)/5" : "N/A"
@@ -172,19 +173,32 @@ class GameCell: UITableViewCell {
         return !label.isEmpty && label != "0" && label != "0.0" && label != "Not Ranked"
     }
     
-    private func getRankText(rank: String?) -> String {
-        guard let rank = rank, isValidDisplayText(rank) else { return "N/A" }
+    private func getRankText(rank: String?) {
+        guard let rank = rank, isValidDisplayText(rank) else {
+            rankIconGroup.label.text = "N/A"
+            return
+        }
         
         let formatter = NumberFormatter()
         formatter.numberStyle = .ordinal
         
         if let rankInt = Int(rank) {
             let rankNSNumber = NSNumber(value: rankInt)
-            guard let result = formatter.string(from: rankNSNumber) else { return "N/A" }
-            return result
+            guard var result = formatter.string(from: rankNSNumber) else {
+                rankIconGroup.label.text = "N/A"
+                return
+            }
+            result = result.replacingOccurrences(of: ",", with: "")
+            
+            let font: UIFont? = UIFont.systemFont(ofSize: 15, weight: .bold)
+            let fontSuper: UIFont? = UIFont.systemFont(ofSize: 10, weight: .bold)
+            let attString: NSMutableAttributedString = NSMutableAttributedString(string: result, attributes: [.font:font!])
+            let location = result.count - 2
+            
+            attString.setAttributes([.font:fontSuper!,.baselineOffset:5], range: NSRange(location: location, length:2))
+            rankIconGroup.label.attributedText = attString
         } else {
-            return "N/A"
+            rankIconGroup.label.text = "N/A"
         }
     }
-    
 }
