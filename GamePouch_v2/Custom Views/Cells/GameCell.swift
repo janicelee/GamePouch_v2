@@ -14,8 +14,6 @@ class GameCell: UITableViewCell {
     let gameImageView = GameImageView(frame: .zero)
     
     let largeIconView = UIView()
-    let ratingColumnView = UIView()
-    let rankColumnView = UIView()
     let ratingIconGroup = LargeIconGroup(labelText: "N/A", iconImage: Images.rating)
     let rankIconGroup = LargeIconGroup(labelText: "N/A", iconImage: Images.rank)
     
@@ -23,11 +21,6 @@ class GameCell: UITableViewCell {
     let titleLabel = TitleLabel(textAlignment: .left, fontSize: 16)
     
     let secondaryRowView = UIView()
-    let playersColumnView = UIView()
-    let timeColumnView = UIView()
-    let difficultyColumnView = UIView()
-    let ageColumnView = UIView()
-    
     let playersIconGroup = SmallIconGroup(labelText: "N/A", iconImage: Images.players)
     let timeIconGroup = SmallIconGroup(labelText: "N/A", iconImage: Images.time)
     let difficultyIconGroup = SmallIconGroup(labelText: "N/A", iconImage: Images.difficulty)
@@ -46,7 +39,7 @@ class GameCell: UITableViewCell {
     
     private func configure() {
         configureGameImageView()
-        configureLargeIconGroup()
+        configureLargeIconView()
         configurePrimaryRowView()
         configureSecondaryRowView()
     }
@@ -61,9 +54,8 @@ class GameCell: UITableViewCell {
         }
     }
     
-    private func configureLargeIconGroup() {
+    private func configureLargeIconView() {
         gameImageView.addSubview(largeIconView)
-        
         [ratingIconGroup, rankIconGroup].forEach { largeIconView.addSubview($0) }
         
         largeIconView.layer.cornerRadius = 6
@@ -155,39 +147,29 @@ class GameCell: UITableViewCell {
     }
     
     func set(game: Game) {
-        titleLabel.text = game.name
-        ratingIconGroup.label.text = game.rating
-        //rankIconGroup.label.text = getRankText(rank: game.rank)
-        getRankText(rank: game.rank)
-        playersIconGroup.label.text = game.minPlayers != nil && game.maxPlayers != nil && isValidDisplayText(game.minPlayers!) && isValidDisplayText(game.maxPlayers!) ? "\(game.minPlayers!)-\(game.maxPlayers!)" : "N/A"
-        timeIconGroup.label.text = game.minPlayTime != nil && game.maxPlayTime != nil && isValidDisplayText(game.minPlayTime!) && isValidDisplayText(game.maxPlayTime!) ? "\(game.minPlayTime!)-\(game.maxPlayTime!) min" : "N/A"
-        difficultyIconGroup.label.text = game.weight != nil && isValidDisplayText(game.weight!) ? "\(game.weight!)/5" : "N/A"
-        ageIconGroup.label.text = game.minAge != nil && isValidDisplayText(game.minAge!) ? "\(game.minAge!)+" : "N/A"
+        titleLabel.text = game.getTitle()
+        ratingIconGroup.label.text = game.getRating()
+        setRankText(rank: game.getRank())
+        playersIconGroup.label.text = game.getNumPlayers()
+        timeIconGroup.label.text = game.getPlayTime()
+        difficultyIconGroup.label.text = game.getDifficulty()
+        ageIconGroup.label.text = game.getMinAge()
         
         if let imageURL = game.imageURL {
             gameImageView.setImage(from: imageURL)
         }
     }
     
-    private func isValidDisplayText(_ label: String) -> Bool {
-        return !label.isEmpty && label != "0" && label != "0.0" && label != "Not Ranked"
-    }
-    
-    private func getRankText(rank: String?) {
-        guard let rank = rank, isValidDisplayText(rank) else {
-            rankIconGroup.label.text = "N/A"
-            return
-        }
+    private func setRankText(rank: String) {
+        rankIconGroup.label.text = rank
+        guard rank != "N/A" else { return }
         
         let formatter = NumberFormatter()
         formatter.numberStyle = .ordinal
         
         if let rankInt = Int(rank) {
             let rankNSNumber = NSNumber(value: rankInt)
-            guard var result = formatter.string(from: rankNSNumber) else {
-                rankIconGroup.label.text = "N/A"
-                return
-            }
+            guard var result = formatter.string(from: rankNSNumber) else { return }
             result = result.replacingOccurrences(of: ",", with: "")
             
             let font: UIFont? = UIFont.systemFont(ofSize: 15, weight: .bold)
@@ -197,8 +179,6 @@ class GameCell: UITableViewCell {
             
             attString.setAttributes([.font:fontSuper!,.baselineOffset:5], range: NSRange(location: location, length:2))
             rankIconGroup.label.attributedText = attString
-        } else {
-            rankIconGroup.label.text = "N/A"
         }
     }
 }

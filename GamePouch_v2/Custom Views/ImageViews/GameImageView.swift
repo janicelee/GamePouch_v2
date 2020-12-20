@@ -24,4 +24,13 @@ class GameImageView: UIImageView {
         image = Images.placeholder
         contentMode = .scaleAspectFill
     }
+    
+    func setImage(from urlString: String) {
+        NetworkManager.shared.downloadImage(from: urlString) { [weak self] image in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.image = image
+            }
+        }
+    }
 }

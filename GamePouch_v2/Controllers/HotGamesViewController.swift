@@ -20,6 +20,13 @@ class HotGamesViewController: UIViewController {
         getHotnessList()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let selectedIndexPath = tableView.indexPathForSelectedRow {
+            tableView.deselectRow(at: selectedIndexPath, animated: animated)
+        }
+    }
+    
     private func configureViewController() {
         view.backgroundColor = .systemBackground
         title = "Hot Games"
@@ -72,5 +79,12 @@ extension HotGamesViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: GameCell.reuseID) as! GameCell
         cell.set(game: games[indexPath.row])
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let game = games[indexPath.row]
+        let destination = GameInfoViewController(game: game)
+        
+        navigationController?.pushViewController(destination, animated: true)
     }
 }

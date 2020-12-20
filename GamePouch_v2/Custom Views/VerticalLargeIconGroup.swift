@@ -1,13 +1,13 @@
 //
-//  SmallIconGroup.swift
+//  VerticalLargeIconGroup.swift
 //  GamePouch_v2
 //
-//  Created by Janice Lee on 2020-12-15.
+//  Created by Janice Lee on 2020-12-19.
 //
 
 import UIKit
 
-class SmallIconGroup: UIView {
+class VerticalLargeIconGroup: UIView {
     
     let iconImageView = UIImageView()
     let label = UILabel()
@@ -33,22 +33,22 @@ class SmallIconGroup: UIView {
         iconImageView.contentMode = .scaleAspectFit
         
         iconImageView.snp.makeConstraints { make in
-            make.leading.equalToSuperview()
-            make.bottom.equalToSuperview().priority(998)
-            make.width.height.equalTo(16)
+            make.top.centerX.equalToSuperview()
+            make.width.height.equalTo(22)
         }
     }
     
     private func configureLabel() {
         addSubview(label)
         
-        label.textAlignment = .left
+        label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 13, weight: .bold)
         label.textColor = .secondaryLabel
         
         label.snp.makeConstraints { make in
-            make.leading.equalTo(iconImageView.snp.trailing).priority(998)
-            make.top.bottom.trailing.equalToSuperview()
+            make.top.equalTo(iconImageView.snp.bottom).offset(4)
+            make.leading.trailing.bottom.equalToSuperview()
         }
     }
+    
 }
