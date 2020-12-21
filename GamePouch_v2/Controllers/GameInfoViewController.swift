@@ -13,7 +13,6 @@ class GameInfoViewController: UIViewController {
     var game: Game!
     
     let scrollView = UIScrollView()
-    let contentView = UIView()
     let gameImageView = GameImageView(frame: .zero)
     
     let largeIconView = UIView()
@@ -65,13 +64,8 @@ class GameInfoViewController: UIViewController {
     private func configure() {
         view.backgroundColor = .systemBackground
         view.addSubview(scrollView)
-        scrollView.addSubview(contentView)
         
         scrollView.snp.makeConstraints { make in
-            make.top.bottom.leading.trailing.equalToSuperview()
-        }
-        
-        contentView.snp.makeConstraints { make in
             make.top.bottom.leading.trailing.equalToSuperview()
         }
     
@@ -83,22 +77,23 @@ class GameInfoViewController: UIViewController {
     }
     
     private func configureGameImageView() {
-        contentView.addSubview(gameImageView)
+        scrollView.addSubview(gameImageView)
         
         gameImageView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+            make.leading.trailing.equalTo(view)
             make.height.equalTo(300)
         }
     }
     
     private func configureLargeIconView() {
-        contentView.addSubview(largeIconView)
+        scrollView.addSubview(largeIconView)
         [ratingIconGroup, rankIconGroup].forEach { largeIconView.addSubview($0) }
         
         largeIconView.snp.makeConstraints { make in
             make.top.equalTo(gameImageView.snp.bottom).offset(verticalPadding)
-            make.leading.equalToSuperview().offset(leftEdgePadding)
-            make.trailing.equalToSuperview()
+            make.leading.equalTo(view).offset(leftEdgePadding)
+            make.trailing.equalTo(view)
         }
         
         ratingIconGroup.snp.makeConstraints { make in
@@ -114,7 +109,7 @@ class GameInfoViewController: UIViewController {
     }
     
     private func configureTitleLabels() {
-        [titleLabel, yearLabel].forEach { contentView.addSubview($0) }
+        [titleLabel, yearLabel].forEach { scrollView.addSubview($0) }
         
         titleLabel.numberOfLines = 2
         titleLabel.adjustsFontSizeToFitWidth = true
@@ -125,19 +120,19 @@ class GameInfoViewController: UIViewController {
         
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(largeIconView.snp.bottom).offset(verticalPadding)
-            make.leading.equalToSuperview().offset(leftEdgePadding)
-            make.trailing.equalToSuperview().offset(-leftEdgePadding)
+            make.leading.equalTo(view).offset(leftEdgePadding)
+            make.trailing.equalTo(view).offset(-leftEdgePadding)
         }
         
         yearLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(verticalPadding)
-            make.leading.equalToSuperview().offset(leftEdgePadding + 2)
-            make.trailing.equalToSuperview()
+            make.leading.equalTo(view).offset(leftEdgePadding + 2)
+            make.trailing.equalTo(view)
         }
     }
     
     private func configureRowStackView() {
-        contentView.addSubview(rowStackView)
+        scrollView.addSubview(rowStackView)
         [playersIconGroup, timeIconGroup, difficultyIconGroup, ageIconGroup].forEach { rowStackView.addArrangedSubview($0)
         }
         
@@ -151,20 +146,21 @@ class GameInfoViewController: UIViewController {
         
         rowStackView.snp.makeConstraints { make in
             make.top.equalTo(yearLabel.snp.bottom).offset(verticalPadding)
-            make.leading.equalToSuperview().offset(8)
-            make.trailing.equalToSuperview().offset(-8)
+            make.leading.equalTo(view).offset(8)
+            make.trailing.equalTo(view).offset(-8)
         }
     }
     
     private func configureDescriptionLabel() {
-        contentView.addSubview(descriptionLabel)
+        scrollView.addSubview(descriptionLabel)
         descriptionLabel.backgroundColor = .systemRed
         
         descriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(rowStackView.snp.bottom).offset(verticalPadding)
-            make.leading.equalToSuperview().offset(leftEdgePadding)
-            make.trailing.equalToSuperview().offset(-leftEdgePadding)
+            make.leading.equalTo(view).offset(leftEdgePadding)
+            make.trailing.equalTo(view).offset(-leftEdgePadding)
             make.height.equalTo(100)
+            make.bottom.equalToSuperview()
         }
     }
     
