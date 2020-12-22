@@ -10,8 +10,6 @@ import SnapKit
 
 class GameInfoViewController: UIViewController {
     
-    var game: Game!
-    
     let scrollView = UIScrollView()
     let gameImageView = GameImageView(frame: .zero)
     
@@ -30,8 +28,15 @@ class GameInfoViewController: UIViewController {
     
     let descriptionLabel = UILabel()
     
+    let categoriesTitleLabel = TitleLabel(textAlignment: .left, fontSize: 22)
+    let testView = UIView()
+    var categoryCollectionView: UICollectionView!
+    
     let leftEdgePadding: CGFloat = 20
     let verticalPadding: CGFloat = 8
+    
+    var game: Game!
+    var descriptionExpanded = false
     
     init(game: Game) {
         super.init(nibName: nil, bundle: nil)
@@ -55,6 +60,7 @@ class GameInfoViewController: UIViewController {
         difficultyIconGroup.label.text = "\(game.getDifficulty())\nDifficulty"
         ageIconGroup.label.text = "\(game.getMinAge())\nYears"
         descriptionLabel.text = game.getDescription()
+        categoriesTitleLabel.text = "Categories"
         
         if let imageURL = game.imageURL {
             gameImageView.setImage(from: imageURL)
@@ -74,6 +80,8 @@ class GameInfoViewController: UIViewController {
         configureTitleLabels()
         configureRowStackView()
         configureDescriptionLabel()
+        configureCategories()
+        configureCollectionView()
     }
     
     private func configureGameImageView() {
@@ -153,15 +161,63 @@ class GameInfoViewController: UIViewController {
     
     private func configureDescriptionLabel() {
         scrollView.addSubview(descriptionLabel)
-        descriptionLabel.backgroundColor = .systemRed
+        
+        descriptionLabel.font = UIFont.systemFont(ofSize: 15)
+        descriptionLabel.numberOfLines = 5
+        descriptionLabel.lineBreakMode = .byTruncatingTail
+        
+        descriptionLabel.isUserInteractionEnabled = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(labelTapped(_:)))
+        descriptionLabel.addGestureRecognizer(tapGesture)
         
         descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(rowStackView.snp.bottom).offset(verticalPadding)
+            make.top.equalTo(rowStackView.snp.bottom).offset(verticalPadding * 2)
             make.leading.equalTo(view).offset(leftEdgePadding)
             make.trailing.equalTo(view).offset(-leftEdgePadding)
-            make.height.equalTo(100)
+        }
+    }
+    
+    private func configureCategories() {
+        scrollView.addSubview(categoriesTitleLabel)
+        
+        categoriesTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(descriptionLabel.snp.bottom).offset(verticalPadding * 2)
+            make.leading.equalTo(view).offset(leftEdgePadding)
+            make.trailing.equalTo(view).offset(-leftEdgePadding)
+        }
+    }
+    
+    private func configureCollectionView() {
+        scrollView.addSubview(testView)
+
+        testView.snp.makeConstraints { make in
+            make.leading.equalTo(view).offset(leftEdgePadding)
+            make.trailing.equalTo(view).offset(-leftEdgePadding)
+            make.top.equalTo(categoriesTitleLabel.snp.bottom)
             make.bottom.equalToSuperview()
         }
+        
+        categoryCollectionView = TagCollectionView(frame: testView.frame, collectionViewLayout: TagCollectionViewFlowLayout())
+        categoryCollectionView.delegate = self
+        categoryCollectionView.dataSource = self
+        categoryCollectionView.register(TagCell.self, forCellWithReuseIdentifier: TagCell.reuseID)
+        categoryCollectionView.backgroundColor = .systemGreen
+        testView.addSubview(categoryCollectionView)
+        
+        categoryCollectionView.snp.makeConstraints { make in
+            make.top.bottom.leading.trailing.equalToSuperview()
+        }
+    }
+    
+    @objc private func labelTapped(_ sender: UITapGestureRecognizer) {
+        if descriptionExpanded {
+            descriptionLabel.numberOfLines = 5
+            descriptionLabel.lineBreakMode = .byTruncatingTail
+        } else {
+            descriptionLabel.numberOfLines = 0
+            descriptionLabel.lineBreakMode = .byWordWrapping
+        }
+        descriptionExpanded = !descriptionExpanded
     }
     
     private func setRankText(rank: String) {
@@ -185,5 +241,26 @@ class GameInfoViewController: UIViewController {
             rankIconGroup.label.attributedText = attString
         }
     }
+}
 
+extension GameInfoViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return game.categories.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TagCell.reuseID, for: indexPath) as! TagCell
+        cell.setLabel(to: game.categories[indexPath.row])
+        return cell
+    }
+}
+
+extension GameInfoViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let text = game.categories[indexPath.row]
+        let width = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 15)]).width + 26
+        let height = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 15)]).height + 10
+        return CGSize(width: width, height: height)
+    }
 }
