@@ -9,7 +9,6 @@ import UIKit
 
 class TagCollectionViewFlowLayout: UICollectionViewFlowLayout {
     var tempCellAttributesArray = [UICollectionViewLayoutAttributes]()
-    let leftEdgeInset: CGFloat = 0
     
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         let cellAttributesArray = super.layoutAttributesForElements(in: rect)
@@ -21,7 +20,7 @@ class TagCollectionViewFlowLayout: UICollectionViewFlowLayout {
                 let maximumSpacing: CGFloat = 8
                 let prevCellMaxX: CGFloat = prevLayoutAttributes.frame.maxX
                 //UIEdgeInset 30 from left
-                let collectionViewSectionWidth = self.collectionViewContentSize.width - leftEdgeInset
+                let collectionViewSectionWidth = self.collectionViewContentSize.width
                 let currentCellExpectedMaxX = prevCellMaxX + maximumSpacing + (currentLayoutAttributes.frame.size.width )
                 if currentCellExpectedMaxX < collectionViewSectionWidth {
                     var frame: CGRect? = currentLayoutAttributes.frame
@@ -29,10 +28,10 @@ class TagCollectionViewFlowLayout: UICollectionViewFlowLayout {
                     frame?.origin.y = prevLayoutAttributes.frame.origin.y
                     currentLayoutAttributes.frame = frame ?? CGRect.zero
                 } else {
-                    currentLayoutAttributes.frame.origin.x = leftEdgeInset
+                    currentLayoutAttributes.frame.origin.x = 0
                     //To Avoid InConvience Emoji Cell
                     if (prevLayoutAttributes.frame.origin.x != 0) {
-                        currentLayoutAttributes.frame.origin.y = prevLayoutAttributes.frame.origin.y + prevLayoutAttributes.frame.size.height + 08
+                        currentLayoutAttributes.frame.origin.y = prevLayoutAttributes.frame.origin.y + prevLayoutAttributes.frame.size.height + 8
                     }
                 }
             }

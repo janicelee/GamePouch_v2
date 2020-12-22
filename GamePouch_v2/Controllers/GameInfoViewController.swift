@@ -29,8 +29,12 @@ class GameInfoViewController: UIViewController {
     let descriptionLabel = UILabel()
     
     let categoriesTitleLabel = TitleLabel(textAlignment: .left, fontSize: 22)
-    let testView = UIView()
-    var categoryCollectionView: UICollectionView!
+    let categoriesContainerView = UIView()
+    var categoriesCollectionView: TagCollectionView!
+    
+    let mechanicsTitleLabel = TitleLabel(textAlignment: .left, fontSize: 22)
+    let mechanicsContainerView = UIView()
+    var mechanicsCollectionView: TagCollectionView!
     
     let leftEdgePadding: CGFloat = 20
     let verticalPadding: CGFloat = 8
@@ -61,6 +65,7 @@ class GameInfoViewController: UIViewController {
         ageIconGroup.label.text = "\(game.getMinAge())\nYears"
         descriptionLabel.text = game.getDescription()
         categoriesTitleLabel.text = "Categories"
+        mechanicsTitleLabel.text = "Mechanics"
         
         if let imageURL = game.imageURL {
             gameImageView.setImage(from: imageURL)
@@ -80,8 +85,8 @@ class GameInfoViewController: UIViewController {
         configureTitleLabels()
         configureRowStackView()
         configureDescriptionLabel()
-        configureCategories()
-        configureCollectionView()
+        configureCategoriesSection()
+        configureMechanicsSection()
     }
     
     private func configureGameImageView() {
@@ -177,34 +182,59 @@ class GameInfoViewController: UIViewController {
         }
     }
     
-    private func configureCategories() {
+    private func configureCategoriesSection() {
         scrollView.addSubview(categoriesTitleLabel)
+        scrollView.addSubview(categoriesContainerView)
+        
+        categoriesCollectionView = TagCollectionView(frame: categoriesContainerView.frame, collectionViewLayout: TagCollectionViewFlowLayout())
+        categoriesCollectionView.delegate = self
+        categoriesCollectionView.dataSource = self
+        categoriesCollectionView.register(TagCell.self, forCellWithReuseIdentifier: TagCell.reuseID)
+        categoriesCollectionView.backgroundColor = .systemBackground
+        categoriesContainerView.addSubview(categoriesCollectionView)
         
         categoriesTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(descriptionLabel.snp.bottom).offset(verticalPadding * 2)
             make.leading.equalTo(view).offset(leftEdgePadding)
             make.trailing.equalTo(view).offset(-leftEdgePadding)
         }
-    }
-    
-    private func configureCollectionView() {
-        scrollView.addSubview(testView)
-
-        testView.snp.makeConstraints { make in
+        
+        categoriesContainerView.snp.makeConstraints { make in
             make.leading.equalTo(view).offset(leftEdgePadding)
             make.trailing.equalTo(view).offset(-leftEdgePadding)
-            make.top.equalTo(categoriesTitleLabel.snp.bottom)
+            make.top.equalTo(categoriesTitleLabel.snp.bottom).offset(verticalPadding)
+        }
+        
+        categoriesCollectionView.snp.makeConstraints { make in
+            make.top.bottom.leading.trailing.equalToSuperview()
+        }
+    }
+    
+    private func configureMechanicsSection() {
+        scrollView.addSubview(mechanicsTitleLabel)
+        scrollView.addSubview(mechanicsContainerView)
+        
+        mechanicsCollectionView = TagCollectionView(frame: mechanicsContainerView.frame, collectionViewLayout: TagCollectionViewFlowLayout())
+        mechanicsCollectionView.delegate = self
+        mechanicsCollectionView.dataSource = self
+        mechanicsCollectionView.register(TagCell.self, forCellWithReuseIdentifier: TagCell.reuseID)
+        mechanicsCollectionView.backgroundColor = .systemBackground
+        mechanicsContainerView.addSubview(mechanicsCollectionView)
+        
+        mechanicsTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(categoriesContainerView.snp.bottom).offset(verticalPadding * 2)
+            make.leading.equalTo(view).offset(leftEdgePadding)
+            make.trailing.equalTo(view).offset(-leftEdgePadding)
+        }
+        
+        mechanicsContainerView.snp.makeConstraints { make in
+            make.leading.equalTo(view).offset(leftEdgePadding)
+            make.trailing.equalTo(view).offset(-leftEdgePadding)
+            make.top.equalTo(mechanicsTitleLabel.snp.bottom).offset(verticalPadding)
             make.bottom.equalToSuperview()
         }
         
-        categoryCollectionView = TagCollectionView(frame: testView.frame, collectionViewLayout: TagCollectionViewFlowLayout())
-        categoryCollectionView.delegate = self
-        categoryCollectionView.dataSource = self
-        categoryCollectionView.register(TagCell.self, forCellWithReuseIdentifier: TagCell.reuseID)
-        categoryCollectionView.backgroundColor = .systemGreen
-        testView.addSubview(categoryCollectionView)
-        
-        categoryCollectionView.snp.makeConstraints { make in
+        mechanicsCollectionView.snp.makeConstraints { make in
             make.top.bottom.leading.trailing.equalToSuperview()
         }
     }
@@ -246,21 +276,39 @@ class GameInfoViewController: UIViewController {
 extension GameInfoViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return game.categories.count
+        if collectionView == categoriesCollectionView {
+            return game.categories.count
+        } else {
+            return game.mechanics.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TagCell.reuseID, for: indexPath) as! TagCell
-        cell.setLabel(to: game.categories[indexPath.row])
-        return cell
+        if collectionView == categoriesCollectionView {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TagCell.reuseID, for: indexPath) as! TagCell
+            cell.setLabel(to: game.categories[indexPath.row])
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TagCell.reuseID, for: indexPath) as! TagCell
+            cell.setLabel(to: game.mechanics[indexPath.row])
+            return cell
+        }
     }
 }
 
 extension GameInfoViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let text = game.categories[indexPath.row]
-        let width = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 15)]).width + 26
-        let height = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 15)]).height + 10
-        return CGSize(width: width, height: height)
+        if collectionView == categoriesCollectionView {
+            let text = game.categories[indexPath.row]
+            let width = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 15)]).width + 26
+            let height = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 15)]).height + 10
+            return CGSize(width: width, height: height)
+        } else {
+            let text = game.mechanics[indexPath.row]
+            let width = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 15)]).width + 26
+            let height = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 15)]).height + 10
+            return CGSize(width: width, height: height)
+        }
+
     }
 }
