@@ -186,7 +186,11 @@ class GameInfoViewController: UIViewController {
         scrollView.addSubview(categoriesTitleLabel)
         scrollView.addSubview(categoriesContainerView)
         
-        categoriesCollectionView = TagCollectionView(frame: categoriesContainerView.frame, collectionViewLayout: TagCollectionViewFlowLayout())
+        let flowLayout = TagCollectionViewFlowLayout()
+        flowLayout.minimumInteritemSpacing = 6
+        flowLayout.minimumLineSpacing = 6
+        
+        categoriesCollectionView = TagCollectionView(frame: categoriesContainerView.frame, collectionViewLayout: flowLayout)
         categoriesCollectionView.delegate = self
         categoriesCollectionView.dataSource = self
         categoriesCollectionView.register(TagCell.self, forCellWithReuseIdentifier: TagCell.reuseID)
@@ -214,7 +218,11 @@ class GameInfoViewController: UIViewController {
         scrollView.addSubview(mechanicsTitleLabel)
         scrollView.addSubview(mechanicsContainerView)
         
-        mechanicsCollectionView = TagCollectionView(frame: mechanicsContainerView.frame, collectionViewLayout: TagCollectionViewFlowLayout())
+        let flowLayout = TagCollectionViewFlowLayout()
+        flowLayout.minimumInteritemSpacing = 6
+        flowLayout.minimumLineSpacing = 6
+        
+        mechanicsCollectionView = TagCollectionView(frame: mechanicsContainerView.frame, collectionViewLayout: flowLayout)
         mechanicsCollectionView.delegate = self
         mechanicsCollectionView.dataSource = self
         mechanicsCollectionView.register(TagCell.self, forCellWithReuseIdentifier: TagCell.reuseID)
