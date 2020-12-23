@@ -284,31 +284,22 @@ extension GameInfoViewController: UICollectionViewDelegate, UICollectionViewData
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TagCell.reuseID, for: indexPath) as! TagCell
+        
         if collectionView == categoriesCollectionView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TagCell.reuseID, for: indexPath) as! TagCell
             cell.setLabel(to: game.categories[indexPath.row])
-            return cell
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TagCell.reuseID, for: indexPath) as! TagCell
             cell.setLabel(to: game.mechanics[indexPath.row])
-            return cell
         }
+        return cell 
     }
 }
 
 extension GameInfoViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if collectionView == categoriesCollectionView {
-            let text = game.categories[indexPath.row]
-            let width = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 15)]).width + 26
-            let height = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 15)]).height + 10
-            return CGSize(width: width, height: height)
-        } else {
-            let text = game.mechanics[indexPath.row]
-            let width = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 15)]).width + 26
-            let height = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 15)]).height + 10
-            return CGSize(width: width, height: height)
-        }
-
+        let text = (collectionView == categoriesCollectionView) ? game.categories[indexPath.row] : game.mechanics[indexPath.row]
+        let width = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 15)]).width + 26
+        let height = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 15)]).height + 10
+        return CGSize(width: width, height: height)
     }
 }

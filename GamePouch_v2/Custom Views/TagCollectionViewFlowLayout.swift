@@ -8,34 +8,24 @@
 import UIKit
 
 class TagCollectionViewFlowLayout: UICollectionViewFlowLayout {
-    var tempCellAttributesArray = [UICollectionViewLayoutAttributes]()
     
+    // Left align cells in collection view:
+    // Uses max y position of the new element to determine when new line is needed
+    // Origin x position of new element is set to left section inset when element is placed on new line, otherwise increments by the element's width + min item spacing 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        let cellAttributesArray = super.layoutAttributesForElements(in: rect)
-        //Oth position cellAttr is InConvience Emoji Cell, from 1st onwards info cells are there, thats why we start count from 2nd position.
-        if(cellAttributesArray != nil && cellAttributesArray!.count > 1) {
-            for i in 1..<(cellAttributesArray!.count) {
-                let prevLayoutAttributes: UICollectionViewLayoutAttributes = cellAttributesArray![i - 1]
-                let currentLayoutAttributes: UICollectionViewLayoutAttributes = cellAttributesArray![i]
-                let maximumSpacing: CGFloat = 8
-                let prevCellMaxX: CGFloat = prevLayoutAttributes.frame.maxX
-                //UIEdgeInset 30 from left
-                let collectionViewSectionWidth = self.collectionViewContentSize.width
-                let currentCellExpectedMaxX = prevCellMaxX + maximumSpacing + (currentLayoutAttributes.frame.size.width )
-                if currentCellExpectedMaxX < collectionViewSectionWidth {
-                    var frame: CGRect? = currentLayoutAttributes.frame
-                    frame?.origin.x = prevCellMaxX + maximumSpacing
-                    frame?.origin.y = prevLayoutAttributes.frame.origin.y
-                    currentLayoutAttributes.frame = frame ?? CGRect.zero
-                } else {
-                    currentLayoutAttributes.frame.origin.x = 0
-                    //To Avoid InConvience Emoji Cell
-                    if (prevLayoutAttributes.frame.origin.x != 0) {
-                        currentLayoutAttributes.frame.origin.y = prevLayoutAttributes.frame.origin.y + prevLayoutAttributes.frame.size.height + 8
-                    }
-                }
+        let attributes = super.layoutAttributesForElements(in: rect)
+
+        var leftMargin = sectionInset.left
+        var maxY: CGFloat = -1.0
+        attributes?.forEach { layoutAttribute in
+            if layoutAttribute.frame.origin.y >= maxY {
+                leftMargin = sectionInset.left
             }
+            layoutAttribute.frame.origin.x = leftMargin
+
+            leftMargin += layoutAttribute.frame.width + minimumInteritemSpacing
+            maxY = max(layoutAttribute.frame.maxY , maxY)
         }
-        return cellAttributesArray
+        return attributes
     }
 }
