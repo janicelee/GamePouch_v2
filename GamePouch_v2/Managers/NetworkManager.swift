@@ -15,6 +15,7 @@ class NetworkManager {
     private let baseURL = "https://www.boardgamegeek.com/xmlapi2/"
     private let getGameURL = "thing?type=boardgame,boardgameexpansion&stats=1&id="
     private let hotnessListURL = "hot?type=boardgame"
+    private let imageGalleryURL = "https://api.geekdo.com/api/images?ajax=1&gallery=all&nosession=1&objecttype=thing&pageid=1&showcount=36&size=thumb&sort=hot&objectid="
     
     private init() {}
     
@@ -136,6 +137,46 @@ class NetworkManager {
             self.cache.setObject(image, forKey: cacheKey)
             completed(image)
             }
+        task.resume()
+    }
+    
+    func getImageGalleryURLs(for id: String, completed: @escaping (Result<[String], GPError>) -> ()) {
+        let endpoint = imageGalleryURL + id
+        
+        guard let url = URL(string: endpoint) else {
+            completed(.failure(.invalidURL))
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            if let _ = error {
+                completed(.failure(.unableToComplete))
+                return
+            }
+            
+            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+                completed(.failure(.invalidResponse))
+                return
+            }
+            
+            guard let data = data else {
+                completed(.failure(.invalidData))
+                return
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                let galleryImages = try decoder.decode(GalleryImages.self, from: data)
+                var result: [String] = []
+                
+                for galleryImage in galleryImages.images {
+                    result.append(galleryImage.imageurl_lg)
+                }
+                completed(.success(result))
+            } catch {
+                completed(.failure(.unableToParse))
+            }
+        }
         task.resume()
     }
 }

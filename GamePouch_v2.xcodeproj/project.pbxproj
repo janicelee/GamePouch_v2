@@ -30,7 +30,9 @@
 		F771543D25785A7900FB1508 /* HotnessListParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F771543C25785A7900FB1508 /* HotnessListParser.swift */; };
 		F777D9DD25887CA900859D64 /* SmallIconGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = F777D9DC25887CA900859D64 /* SmallIconGroup.swift */; };
 		F779E7F72585D82B00AC829D /* LargeIconGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = F779E7F62585D82B00AC829D /* LargeIconGroup.swift */; };
+		F7A3A283259572FD00544BFF /* GalleryImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A3A282259572FD00544BFF /* GalleryImages.swift */; };
 		F7B9A7842579E9AF00E06A0F /* GameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B9A7832579E9AF00E06A0F /* GameCell.swift */; };
+		F7C11AB7259454C200A53778 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C11AB6259454C200A53778 /* ImageCell.swift */; };
 		F7D8C74925837B8700237071 /* GameImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D8C74825837B8700237071 /* GameImageView.swift */; };
 		F7D8C74E25837C2F00237071 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D8C74D25837C2F00237071 /* Constants.swift */; };
 		F7D8C757258472BD00237071 /* TitleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D8C756258472BD00237071 /* TitleLabel.swift */; };
@@ -89,7 +91,9 @@
 		F771543C25785A7900FB1508 /* HotnessListParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotnessListParser.swift; sourceTree = "<group>"; };
 		F777D9DC25887CA900859D64 /* SmallIconGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallIconGroup.swift; sourceTree = "<group>"; };
 		F779E7F62585D82B00AC829D /* LargeIconGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeIconGroup.swift; sourceTree = "<group>"; };
+		F7A3A282259572FD00544BFF /* GalleryImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryImages.swift; sourceTree = "<group>"; };
 		F7B9A7832579E9AF00E06A0F /* GameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCell.swift; sourceTree = "<group>"; };
+		F7C11AB6259454C200A53778 /* ImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 		F7D8C74825837B8700237071 /* GameImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameImageView.swift; sourceTree = "<group>"; };
 		F7D8C74D25837C2F00237071 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		F7D8C756258472BD00237071 /* TitleLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleLabel.swift; sourceTree = "<group>"; };
@@ -226,6 +230,7 @@
 			isa = PBXGroup;
 			children = (
 				F7336CD32577340100C05848 /* Game.swift */,
+				F7A3A282259572FD00544BFF /* GalleryImages.swift */,
 				F771542D2578531900FB1508 /* Parsers */,
 			);
 			path = Model;
@@ -275,6 +280,7 @@
 			children = (
 				F7B9A7832579E9AF00E06A0F /* GameCell.swift */,
 				F734756625905FDF00308880 /* TagCell.swift */,
+				F7C11AB6259454C200A53778 /* ImageCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -550,6 +556,7 @@
 				F779E7F72585D82B00AC829D /* LargeIconGroup.swift in Sources */,
 				F75E5BEA257B111E00611A40 /* UITableView+Ext.swift in Sources */,
 				F771543D25785A7900FB1508 /* HotnessListParser.swift in Sources */,
+				F7A3A283259572FD00544BFF /* GalleryImages.swift in Sources */,
 				F7336CC5257721EF00C05848 /* NetworkManager.swift in Sources */,
 				F7D8C757258472BD00237071 /* TitleLabel.swift in Sources */,
 				F7336C6A257493F800C05848 /* HotGamesViewController.swift in Sources */,
@@ -566,6 +573,7 @@
 				F7336CA32576033A00C05848 /* TabBarController.swift in Sources */,
 				F7EC6278258E136400FD536A /* VerticalLargeIconGroup.swift in Sources */,
 				F7336C68257493F700C05848 /* SceneDelegate.swift in Sources */,
+				F7C11AB7259454C200A53778 /* ImageCell.swift in Sources */,
 				F7D8C74E25837C2F00237071 /* Constants.swift in Sources */,
 				F75E5BEF257B155800611A40 /* GameInfoParser.swift in Sources */,
 				F7336CD42577340100C05848 /* Game.swift in Sources */,

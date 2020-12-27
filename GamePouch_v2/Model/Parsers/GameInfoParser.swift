@@ -72,7 +72,10 @@ extension GameInfoParser: XMLParserDelegate {
             description = description.replacingOccurrences(of: "&rdquo;", with: "\"")
             description = description.replacingOccurrences(of: "&lsquo;", with: "'")
             description = description.replacingOccurrences(of: "&rsquo;", with: "'")
+            description = description.replacingOccurrences(of: "&quot;", with: "\"")
             description = description.replacingOccurrences(of: "&mdash;", with: "-")
+            description = description.replacingOccurrences(of: "&ndash;", with: "-")
+            description = description.replacingOccurrences(of: "&nbsp;", with: "\u{00a0}")
             game.description = description
         }
         self.foundCharacters = ""
