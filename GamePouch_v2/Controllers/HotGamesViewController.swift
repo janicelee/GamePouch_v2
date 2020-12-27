@@ -79,6 +79,7 @@ extension HotGamesViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: GameCell.reuseID) as! GameCell
         cell.set(game: games[indexPath.row])
+        cell.selectionStyle = .none
         return cell
     }
     

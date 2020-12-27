@@ -101,6 +101,8 @@ class GameInfoViewController: UIViewController {
     private func configureHeaderImageView() {
         scrollView.addSubview(headerImageView)
         
+        headerImageView.layer.cornerRadius = 0
+        
         headerImageView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.leading.trailing.equalTo(view)
