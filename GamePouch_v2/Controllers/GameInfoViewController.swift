@@ -49,7 +49,7 @@ class GameInfoViewController: UIViewController {
     
     init(game: Game) {
         super.init(nibName: nil, bundle: nil)
-        self.title = nil
+        
         self.game = game
     }
     
@@ -59,6 +59,7 @@ class GameInfoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.largeTitleDisplayMode = .never
         configure()
         
         ratingIconGroup.label.text = game.getRating()
