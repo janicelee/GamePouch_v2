@@ -49,7 +49,6 @@ class GameInfoViewController: UIViewController {
     
     init(game: Game) {
         super.init(nibName: nil, bundle: nil)
-        
         self.game = game
     }
     
@@ -62,19 +61,6 @@ class GameInfoViewController: UIViewController {
         self.navigationItem.largeTitleDisplayMode = .never
         configure()
         
-        ratingIconGroup.label.text = game.getRating()
-        setRankText(rank: game.getRank())
-        titleLabel.text = game.getTitle()
-        yearLabel.text = game.getYearPublished()
-        playersIconGroup.label.text = "\(game.getNumPlayers())\nPlayers"
-        timeIconGroup.label.text = "\(game.getPlayTime())\nMinutes"
-        difficultyIconGroup.label.text = "\(game.getDifficulty())\nDifficulty"
-        ageIconGroup.label.text = "\(game.getMinAge())\nYears"
-        descriptionLabel.text = game.getDescription()
-        galleryImagesTitleLabel.text = "Images"
-        categoriesTitleLabel.text = "Categories"
-        mechanicsTitleLabel.text = "Mechanics"
-        
         if let imageURL = game.imageURL {
             headerImageView.setImage(from: imageURL)
         }
@@ -83,11 +69,8 @@ class GameInfoViewController: UIViewController {
     
     private func configure() {
         view.backgroundColor = .systemBackground
-        view.addSubview(scrollView)
-        
-        scrollView.snp.makeConstraints { make in
-            make.top.bottom.leading.trailing.equalToSuperview()
-        }
+
+        configureScrollView()
         configureHeaderImageView()
         configureLargeIconView()
         configureTitleLabels()
@@ -96,6 +79,14 @@ class GameInfoViewController: UIViewController {
         configureGalleryImagesCollectionView()
         configureCategoriesSection()
         configureMechanicsSection()
+    }
+    
+    private func configureScrollView() {
+        view.addSubview(scrollView)
+        
+        scrollView.snp.makeConstraints { make in
+            make.top.bottom.leading.trailing.equalToSuperview()
+        }
     }
     
     private func configureHeaderImageView() {
@@ -113,6 +104,9 @@ class GameInfoViewController: UIViewController {
     private func configureLargeIconView() {
         scrollView.addSubview(largeIconView)
         [ratingIconGroup, rankIconGroup].forEach { largeIconView.addSubview($0) }
+        
+        ratingIconGroup.label.text = game.getRating()
+        setRankText(rank: game.getRank())
         
         largeIconView.snp.makeConstraints { make in
             make.top.equalTo(headerImageView.snp.bottom).offset(verticalPadding)
@@ -135,10 +129,12 @@ class GameInfoViewController: UIViewController {
     private func configureTitleLabels() {
         [titleLabel, yearLabel].forEach { scrollView.addSubview($0) }
         
+        titleLabel.text = game.getTitle()
         titleLabel.numberOfLines = 2
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = 0.9
-
+        
+        yearLabel.text = game.getYearPublished()
         yearLabel.font = UIFont.systemFont(ofSize: 14, weight: .bold)
         yearLabel.textColor = .secondaryLabel
         
@@ -158,15 +154,16 @@ class GameInfoViewController: UIViewController {
     private func configureRowStackView() {
         scrollView.addSubview(rowStackView)
         [playersIconGroup, timeIconGroup, difficultyIconGroup, ageIconGroup].forEach { rowStackView.addArrangedSubview($0)
+            $0.label.numberOfLines = 2
         }
         
         rowStackView.backgroundColor = .systemBackground
         rowStackView.distribution = .fillEqually
         
-        playersIconGroup.label.numberOfLines = 2
-        timeIconGroup.label.numberOfLines = 2
-        difficultyIconGroup.label.numberOfLines = 2
-        ageIconGroup.label.numberOfLines = 2
+        playersIconGroup.label.text = "\(game.getNumPlayers())\nPlayers"
+        timeIconGroup.label.text = "\(game.getPlayTime())\nMinutes"
+        difficultyIconGroup.label.text = "\(game.getDifficulty())\nDifficulty"
+        ageIconGroup.label.text = "\(game.getMinAge())\nYears"
         
         rowStackView.snp.makeConstraints { make in
             make.top.equalTo(yearLabel.snp.bottom).offset(verticalPadding * 2)
@@ -178,11 +175,12 @@ class GameInfoViewController: UIViewController {
     private func configureDescriptionLabel() {
         scrollView.addSubview(descriptionLabel)
         
+        descriptionLabel.text = game.getDescription()
         descriptionLabel.font = UIFont.systemFont(ofSize: 15)
         descriptionLabel.numberOfLines = 6
         descriptionLabel.lineBreakMode = .byTruncatingTail
-        
         descriptionLabel.isUserInteractionEnabled = true
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(labelTapped(_:)))
         descriptionLabel.addGestureRecognizer(tapGesture)
         
@@ -197,6 +195,8 @@ class GameInfoViewController: UIViewController {
         scrollView.addSubview(galleryImagesTitleLabel)
         scrollView.addSubview(galleryImagesContainerView)
 
+        galleryImagesTitleLabel.text = "Images"
+        
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
 
@@ -229,6 +229,8 @@ class GameInfoViewController: UIViewController {
         scrollView.addSubview(categoriesTitleLabel)
         scrollView.addSubview(categoriesContainerView)
         
+        categoriesTitleLabel.text = "Categories"
+        
         let flowLayout = TagCollectionViewFlowLayout()
         flowLayout.minimumInteritemSpacing = 6
         flowLayout.minimumLineSpacing = 6
@@ -247,9 +249,9 @@ class GameInfoViewController: UIViewController {
         }
         
         categoriesContainerView.snp.makeConstraints { make in
+            make.top.equalTo(categoriesTitleLabel.snp.bottom).offset(verticalPadding)
             make.leading.equalTo(view).offset(edgePadding)
             make.trailing.equalTo(view).offset(-edgePadding)
-            make.top.equalTo(categoriesTitleLabel.snp.bottom).offset(verticalPadding)
         }
         
         categoriesCollectionView.snp.makeConstraints { make in
@@ -260,6 +262,8 @@ class GameInfoViewController: UIViewController {
     private func configureMechanicsSection() {
         scrollView.addSubview(mechanicsTitleLabel)
         scrollView.addSubview(mechanicsContainerView)
+        
+        mechanicsTitleLabel.text = "Mechanics"
         
         let flowLayout = TagCollectionViewFlowLayout()
         flowLayout.minimumInteritemSpacing = 6
@@ -279,9 +283,9 @@ class GameInfoViewController: UIViewController {
         }
         
         mechanicsContainerView.snp.makeConstraints { make in
+            make.top.equalTo(mechanicsTitleLabel.snp.bottom).offset(verticalPadding)
             make.leading.equalTo(view).offset(edgePadding)
             make.trailing.equalTo(view).offset(-edgePadding)
-            make.top.equalTo(mechanicsTitleLabel.snp.bottom).offset(verticalPadding)
             make.bottom.equalToSuperview()
         }
         
@@ -333,10 +337,10 @@ class GameInfoViewController: UIViewController {
             
             let font: UIFont? = UIFont.systemFont(ofSize: 15, weight: .bold)
             let fontSuper: UIFont? = UIFont.systemFont(ofSize: 10, weight: .bold)
-            let attString: NSMutableAttributedString = NSMutableAttributedString(string: result, attributes: [.font:font!])
+            let attString: NSMutableAttributedString = NSMutableAttributedString(string: result, attributes: [.font: font!])
             let location = result.count - 2
             
-            attString.setAttributes([.font:fontSuper!,.baselineOffset:5], range: NSRange(location: location, length:2))
+            attString.setAttributes([.font: fontSuper!,.baselineOffset: 5], range: NSRange(location: location, length: 2))
             rankIconGroup.label.attributedText = attString
         }
     }
@@ -373,7 +377,7 @@ extension GameInfoViewController: UICollectionViewDelegateFlowLayout {
         
         if collectionView == galleryImagesCollectionView {
             let numVisibleImages = 1.5
-            let width = (collectionView.frame.size.width / CGFloat(numVisibleImages))
+            let width = collectionView.frame.size.width / CGFloat(numVisibleImages)
             let height = collectionView.frame.size.height
             return CGSize(width: width, height: height)
         } else if collectionView == categoriesCollectionView || collectionView == mechanicsCollectionView {
@@ -382,7 +386,7 @@ extension GameInfoViewController: UICollectionViewDelegateFlowLayout {
             let height = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 15)]).height + 10
             return CGSize(width: width, height: height)
         } else {
-            print("Unhandled collection view flow layout item size")
+            print("Unhandled collection view, cannot determine item size in flow layout")
             return CGSize(width: 0, height: 0)
         }
     }
