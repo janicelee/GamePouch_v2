@@ -32,13 +32,8 @@ class GameInfoViewController: UIViewController {
     let galleryImagesContainerView = UIView()
     var galleryImagesCollectionView: UICollectionView!
     
-    let categoriesTitleLabel = TitleLabel(textAlignment: .left, fontSize: 22)
     let categoriesContainerView = UIView()
-    var categoriesCollectionView: TagCollectionView!
-    
-    let mechanicsTitleLabel = TitleLabel(textAlignment: .left, fontSize: 22)
     let mechanicsContainerView = UIView()
-    var mechanicsCollectionView: TagCollectionView!
     
     let edgePadding: CGFloat = 20
     let verticalPadding: CGFloat = 8
@@ -226,71 +221,41 @@ class GameInfoViewController: UIViewController {
     }
     
     private func configureCategoriesSection() {
-        scrollView.addSubview(categoriesTitleLabel)
         scrollView.addSubview(categoriesContainerView)
         
-        categoriesTitleLabel.text = "Categories"
-        
-        let flowLayout = TagCollectionViewFlowLayout()
-        flowLayout.minimumInteritemSpacing = 6
-        flowLayout.minimumLineSpacing = 6
-        
-        categoriesCollectionView = TagCollectionView(frame: categoriesContainerView.frame, collectionViewLayout: flowLayout)
-        categoriesCollectionView.delegate = self
-        categoriesCollectionView.dataSource = self
-        categoriesCollectionView.register(TagCell.self, forCellWithReuseIdentifier: TagCell.reuseID)
-        categoriesCollectionView.backgroundColor = .systemBackground
-        categoriesContainerView.addSubview(categoriesCollectionView)
-        
-        categoriesTitleLabel.snp.makeConstraints { make in
+        categoriesContainerView.snp.makeConstraints { make in
             make.top.equalTo(galleryImagesContainerView.snp.bottom).offset(verticalPadding * 2)
             make.leading.equalTo(view).offset(edgePadding)
             make.trailing.equalTo(view).offset(-edgePadding)
         }
         
-        categoriesContainerView.snp.makeConstraints { make in
-            make.top.equalTo(categoriesTitleLabel.snp.bottom).offset(verticalPadding)
-            make.leading.equalTo(view).offset(edgePadding)
-            make.trailing.equalTo(view).offset(-edgePadding)
-        }
+        let categoriesViewController = TagViewController(title: "Categories", tags: game.categories)
+        addChild(categoriesViewController)
+        categoriesContainerView.addSubview(categoriesViewController.view)
+        categoriesViewController.didMove(toParent: self )
         
-        categoriesCollectionView.snp.makeConstraints { make in
-            make.top.bottom.leading.trailing.equalToSuperview()
+        categoriesViewController.view.snp.makeConstraints { make in
+            make.top.leading.trailing.bottom.equalToSuperview()
         }
     }
     
     private func configureMechanicsSection() {
-        scrollView.addSubview(mechanicsTitleLabel)
         scrollView.addSubview(mechanicsContainerView)
         
-        mechanicsTitleLabel.text = "Mechanics"
-        
-        let flowLayout = TagCollectionViewFlowLayout()
-        flowLayout.minimumInteritemSpacing = 6
-        flowLayout.minimumLineSpacing = 6
-        
-        mechanicsCollectionView = TagCollectionView(frame: mechanicsContainerView.frame, collectionViewLayout: flowLayout)
-        mechanicsCollectionView.delegate = self
-        mechanicsCollectionView.dataSource = self
-        mechanicsCollectionView.register(TagCell.self, forCellWithReuseIdentifier: TagCell.reuseID)
-        mechanicsCollectionView.backgroundColor = .systemBackground
-        mechanicsContainerView.addSubview(mechanicsCollectionView)
-        
-        mechanicsTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(categoriesContainerView.snp.bottom).offset(verticalPadding * 2)
-            make.leading.equalTo(view).offset(edgePadding)
-            make.trailing.equalTo(view).offset(-edgePadding)
-        }
-        
         mechanicsContainerView.snp.makeConstraints { make in
-            make.top.equalTo(mechanicsTitleLabel.snp.bottom).offset(verticalPadding)
+            make.top.equalTo(categoriesContainerView.snp.bottom).offset(verticalPadding * 2)
             make.leading.equalTo(view).offset(edgePadding)
             make.trailing.equalTo(view).offset(-edgePadding)
             make.bottom.equalToSuperview()
         }
         
-        mechanicsCollectionView.snp.makeConstraints { make in
-            make.top.bottom.leading.trailing.equalToSuperview()
+        let mechanicsViewController = TagViewController(title: "Mechanics", tags: game.mechanics)
+        addChild(mechanicsViewController)
+        mechanicsContainerView.addSubview(mechanicsViewController.view)
+        mechanicsViewController.didMove(toParent: self )
+        
+        mechanicsViewController.view.snp.makeConstraints { make in
+            make.top.leading.trailing.bottom.equalToSuperview()
         }
     }
     
@@ -349,41 +314,22 @@ class GameInfoViewController: UIViewController {
 extension GameInfoViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == galleryImagesCollectionView {
-            return galleryImageURLs.count
-        } else if collectionView == categoriesCollectionView {
-            return game.categories.count
-        } else {
-            return game.mechanics.count
-        }
+        return galleryImageURLs.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if collectionView == galleryImagesCollectionView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCell.reuseID, for: indexPath) as! ImageCell
-            cell.set(imageURL: galleryImageURLs[indexPath.row])
-            return cell
-        } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TagCell.reuseID, for: indexPath) as! TagCell
-            let label = (collectionView == categoriesCollectionView) ? game.categories[indexPath.row] : game.mechanics[indexPath.row]
-            cell.setLabel(to: label)
-            return cell
-        }
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCell.reuseID, for: indexPath) as! ImageCell
+        cell.set(imageURL: galleryImageURLs[indexPath.row])
+        return cell
     }
 }
 
 extension GameInfoViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
         if collectionView == galleryImagesCollectionView {
             let numVisibleImages = 1.5
             let width = collectionView.frame.size.width / CGFloat(numVisibleImages)
             let height = collectionView.frame.size.height
-            return CGSize(width: width, height: height)
-        } else if collectionView == categoriesCollectionView || collectionView == mechanicsCollectionView {
-            let text = (collectionView == categoriesCollectionView) ? game.categories[indexPath.row] : game.mechanics[indexPath.row]
-            let width = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 15)]).width + 26
-            let height = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 15)]).height + 10
             return CGSize(width: width, height: height)
         } else {
             print("Unhandled collection view, cannot determine item size in flow layout")
