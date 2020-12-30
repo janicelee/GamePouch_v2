@@ -37,7 +37,7 @@ class HotGamesViewController: UIViewController {
     private func configureTableView() {
         view.addSubview(tableView)
         tableView.frame = view.bounds
-        tableView.rowHeight = 300
+        tableView.rowHeight = 310
         
         tableView.delegate = self
         tableView.dataSource = self
