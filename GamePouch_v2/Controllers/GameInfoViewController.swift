@@ -44,16 +44,6 @@ class GameInfoViewController: UIViewController {
         self.navigationItem.largeTitleDisplayMode = .never
         configure()
         downloadGalleryImages()
-        
-//        scrollView.backgroundColor = .systemOrange
-//        largeIconView.backgroundColor = .systemRed
-//        titleLabel.backgroundColor = .systemYellow
-//        yearLabel.backgroundColor = .systemGreen
-//        rowStackView.backgroundColor = .systemBlue
-//        descriptionLabel.backgroundColor = .systemPurple
-//        galleryImagesTitleLabel.backgroundColor = .systemTeal
-//        galleryImagesContainerView.backgroundColor = .systemYellow
-//        categoriesContainerView.backgroundColor = .systemBlue
     }
     
     private func configure() {
