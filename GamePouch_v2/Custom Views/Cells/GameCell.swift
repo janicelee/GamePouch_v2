@@ -165,26 +165,4 @@ class GameCell: UITableViewCell {
             gameImageView.setImage(from: imageURL)
         }
     }
-    
-//    private func setRankText(rank: String) {
-//        rankIconGroup.label.text = rank
-//        guard rank != "N/A" else { return }
-//
-//        let formatter = NumberFormatter()
-//        formatter.numberStyle = .ordinal
-//
-//        if let rankInt = Int(rank) {
-//            let rankNSNumber = NSNumber(value: rankInt)
-//            guard var result = formatter.string(from: rankNSNumber) else { return }
-//            result = result.replacingOccurrences(of: ",", with: "")
-//
-//            let font: UIFont? = UIFont.systemFont(ofSize: 15, weight: .bold)
-//            let fontSuper: UIFont? = UIFont.systemFont(ofSize: 10, weight: .bold)
-//            let attString: NSMutableAttributedString = NSMutableAttributedString(string: result, attributes: [.font:font!])
-//            let location = result.count - 2
-//
-//            attString.setAttributes([.font:fontSuper!,.baselineOffset:5], range: NSRange(location: location, length:2))
-//            rankIconGroup.label.attributedText = attString
-//        }
-//    }
 }
