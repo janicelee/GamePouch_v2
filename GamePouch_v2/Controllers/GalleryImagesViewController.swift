@@ -1,23 +1,29 @@
 //
-//  TagViewController.swift
+//  GalleryImagesViewController.swift
 //  GamePouch_v2
 //
-//  Created by Janice Lee on 2020-12-28.
+//  Created by Janice Lee on 2021-01-01.
 //
 
 import UIKit
 
-class TagViewController: UIViewController {
+class GalleryImagesViewController: UIViewController {
     
-    let tags: [String]
-    
+    var imageURLs: [String] {
+        didSet {
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
+        }
+    }
+
     let titleLabel = TitleLabel(textAlignment: .left, fontSize: 22)
     let containerView = UIView()
-    var collectionView: TagCollectionView!
-    
-    init(title: String, tags: [String]) {
+    var collectionView: UICollectionView!
+
+    init(title: String, imageURLs: [String]) {
         titleLabel.text = title
-        self.tags = tags
+        self.imageURLs = imageURLs
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -34,14 +40,13 @@ class TagViewController: UIViewController {
         view.addSubview(titleLabel)
         view.addSubview(containerView)
         
-        let flowLayout = TagCollectionViewFlowLayout()
-        flowLayout.minimumInteritemSpacing = 6
-        flowLayout.minimumLineSpacing = 6
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
         
-        collectionView = TagCollectionView(frame: containerView.frame, collectionViewLayout: flowLayout)
+        collectionView = UICollectionView(frame: containerView.frame, collectionViewLayout: flowLayout)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(TagCell.self, forCellWithReuseIdentifier: TagCell.reuseID)
+        collectionView.register(ImageCell.self, forCellWithReuseIdentifier: ImageCell.reuseID)
         collectionView.backgroundColor = .systemBackground
         containerView.addSubview(collectionView)
         
@@ -50,35 +55,35 @@ class TagViewController: UIViewController {
         titleLabel.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
         }
-        
+
         containerView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(verticalPadding)
             make.leading.trailing.bottom.equalToSuperview()
         }
-        
+
         collectionView.snp.makeConstraints { make in
             make.top.leading.trailing.bottom.equalToSuperview()
         }
     }
 }
 
-extension TagViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension GalleryImagesViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return tags.count
+        return imageURLs.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TagCell.reuseID, for: indexPath) as! TagCell
-        cell.setLabel(to: tags[indexPath.row])
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCell.reuseID, for: indexPath) as! ImageCell
+        cell.set(imageURL: imageURLs[indexPath.row])
         return cell
     }
 }
 
-extension TagViewController: UICollectionViewDelegateFlowLayout {
+extension GalleryImagesViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let text = tags[indexPath.row]
-        let width = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 15)]).width + 26
-        let height = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 15)]).height + 10
+        let numVisibleImages = 1.5
+        let width = collectionView.frame.size.width / CGFloat(numVisibleImages)
+        let height = collectionView.frame.size.height
         return CGSize(width: width, height: height)
     }
 }

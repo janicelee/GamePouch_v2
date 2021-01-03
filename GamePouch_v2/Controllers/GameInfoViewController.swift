@@ -17,9 +17,9 @@ class GameInfoViewController: UIViewController {
     let yearLabel = UILabel()
     let rowStackView = UIStackView()
     let descriptionLabel = UILabel()
-    let galleryImagesTitleLabel = TitleLabel(textAlignment: .left, fontSize: 22)
+    
+    var galleryImagesViewController: GalleryImagesViewController!
     let galleryImagesContainerView = UIView()
-    var galleryImagesCollectionView: UICollectionView!
     let categoriesContainerView = UIView()
     
     let edgePadding: CGFloat = 20
@@ -28,7 +28,6 @@ class GameInfoViewController: UIViewController {
     
     var game: Game!
     var descriptionExpanded = false
-    var galleryImageURLs: [String] = []
     
     init(game: Game) {
         super.init(nibName: nil, bundle: nil)
@@ -56,8 +55,7 @@ class GameInfoViewController: UIViewController {
         configureYearLabel()
         configureRowStackView()
         configureDescriptionLabel()
-        configureGalleryImagesTitleLabel()
-        configureGalleryImagesContainerView()
+        configureGalleryImagesSection()
         configureCategoriesSection()
         configureMechanicsSection()
     }
@@ -195,40 +193,23 @@ class GameInfoViewController: UIViewController {
         }
     }
     
-    private func configureGalleryImagesTitleLabel() {
-        scrollView.addSubview(galleryImagesTitleLabel)
+    private func configureGalleryImagesSection() {
+        scrollView.addSubview(galleryImagesContainerView)
         
-        galleryImagesTitleLabel.text = "Images"
+        galleryImagesViewController = GalleryImagesViewController(title: "Images", imageURLs: [])
+        addChild(galleryImagesViewController)
+        galleryImagesContainerView.addSubview(galleryImagesViewController.view)
+        galleryImagesViewController.didMove(toParent: self)
         
-        galleryImagesTitleLabel.snp.makeConstraints { make in
+        galleryImagesContainerView.snp.makeConstraints { make in
             make.top.equalTo(descriptionLabel.snp.bottom).offset(verticalPadding * 2)
             make.leading.equalTo(view).offset(edgePadding)
             make.trailing.equalTo(view).offset(-edgePadding)
-        }
-    }
-    
-    private func configureGalleryImagesContainerView() {
-        scrollView.addSubview(galleryImagesContainerView)
-        
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .horizontal
-
-        galleryImagesCollectionView = UICollectionView(frame: galleryImagesContainerView.frame, collectionViewLayout: flowLayout)
-        galleryImagesCollectionView.delegate = self
-        galleryImagesCollectionView.dataSource = self
-        galleryImagesCollectionView.register(ImageCell.self, forCellWithReuseIdentifier: ImageCell.reuseID)
-        galleryImagesCollectionView.backgroundColor = .systemBackground
-        galleryImagesContainerView.addSubview(galleryImagesCollectionView)
-        
-        galleryImagesContainerView.snp.makeConstraints { make in
-            make.top.equalTo(galleryImagesTitleLabel.snp.bottom).offset(verticalPadding)
-            make.leading.equalTo(view).offset(edgePadding)
-            make.trailing.equalTo(view).offset(-edgePadding)
-            make.height.equalTo(180)
+            make.height.equalTo(view.snp.height).multipliedBy(0.3)
         }
         
-        galleryImagesCollectionView.snp.makeConstraints { make in
-            make.top.bottom.leading.trailing.equalToSuperview()
+        galleryImagesViewController.view.snp.makeConstraints { make in
+            make.top.leading.trailing.bottom.equalToSuperview()
         }
     }
     
@@ -280,10 +261,7 @@ class GameInfoViewController: UIViewController {
             
             switch result {
             case .success(let urls):
-                self.galleryImageURLs = urls
-                DispatchQueue.main.async {
-                    self.galleryImagesCollectionView.reloadData()
-                }
+                self.galleryImagesViewController.imageURLs = urls
             case .failure(let error):
                 print(error.rawValue)
             }
@@ -299,27 +277,5 @@ class GameInfoViewController: UIViewController {
             descriptionLabel.lineBreakMode = .byWordWrapping
         }
         descriptionExpanded = !descriptionExpanded
-    }
-}
-
-extension GameInfoViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return galleryImageURLs.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCell.reuseID, for: indexPath) as! ImageCell
-        cell.set(imageURL: galleryImageURLs[indexPath.row])
-        return cell
-    }
-}
-
-extension GameInfoViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let numVisibleImages = 1.5
-        let width = collectionView.frame.size.width / CGFloat(numVisibleImages)
-        let height = collectionView.frame.size.height
-        return CGSize(width: width, height: height)
     }
 }

@@ -34,6 +34,7 @@
 		F7AF6B05259ABD9400BBE0CB /* TagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7AF6B04259ABD9400BBE0CB /* TagViewController.swift */; };
 		F7B9A7842579E9AF00E06A0F /* GameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B9A7832579E9AF00E06A0F /* GameCell.swift */; };
 		F7C11AB7259454C200A53778 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C11AB6259454C200A53778 /* ImageCell.swift */; };
+		F7D4C96E259F36BB006E3157 /* GalleryImagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D4C96D259F36BB006E3157 /* GalleryImagesViewController.swift */; };
 		F7D8C74925837B8700237071 /* GameImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D8C74825837B8700237071 /* GameImageView.swift */; };
 		F7D8C74E25837C2F00237071 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D8C74D25837C2F00237071 /* Constants.swift */; };
 		F7D8C757258472BD00237071 /* TitleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D8C756258472BD00237071 /* TitleLabel.swift */; };
@@ -96,6 +97,7 @@
 		F7AF6B04259ABD9400BBE0CB /* TagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagViewController.swift; sourceTree = "<group>"; };
 		F7B9A7832579E9AF00E06A0F /* GameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCell.swift; sourceTree = "<group>"; };
 		F7C11AB6259454C200A53778 /* ImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
+		F7D4C96D259F36BB006E3157 /* GalleryImagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryImagesViewController.swift; sourceTree = "<group>"; };
 		F7D8C74825837B8700237071 /* GameImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameImageView.swift; sourceTree = "<group>"; };
 		F7D8C74D25837C2F00237071 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		F7D8C756258472BD00237071 /* TitleLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleLabel.swift; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 				F7336C69257493F700C05848 /* HotGamesViewController.swift */,
 				F7EC6267258CC14900FD536A /* GameInfoViewController.swift */,
 				F7AF6B04259ABD9400BBE0CB /* TagViewController.swift */,
+				F7D4C96D259F36BB006E3157 /* GalleryImagesViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -575,6 +578,7 @@
 				F7D8C74925837B8700237071 /* GameImageView.swift in Sources */,
 				F73475772591C89800308880 /* TagCollectionViewFlowLayout.swift in Sources */,
 				F7336CA32576033A00C05848 /* TabBarController.swift in Sources */,
+				F7D4C96E259F36BB006E3157 /* GalleryImagesViewController.swift in Sources */,
 				F7EC6278258E136400FD536A /* VerticalLargeIconGroup.swift in Sources */,
 				F7336C68257493F700C05848 /* SceneDelegate.swift in Sources */,
 				F7C11AB7259454C200A53778 /* ImageCell.swift in Sources */,
