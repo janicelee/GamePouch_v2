@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 
 class GameCell: UITableViewCell {
+    
     static let reuseID = "GameCell"
     
     let gameImageView = GameImageView(frame: .zero)

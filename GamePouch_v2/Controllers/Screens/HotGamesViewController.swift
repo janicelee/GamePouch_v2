@@ -22,10 +22,6 @@ class HotGamesViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        if let selectedIndexPath = tableView.indexPathForSelectedRow {
-            tableView.deselectRow(at: selectedIndexPath, animated: animated)
-        }
     }
     
     private func configureViewController() {

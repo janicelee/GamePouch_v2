@@ -22,10 +22,6 @@ class TagCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setLabel(to title: String) {
-        label.text = title
-    }
-    
     private func configure() {
         addSubview(label)
         
@@ -38,5 +34,9 @@ class TagCell: UICollectionViewCell {
         label.snp.makeConstraints { make in
             make.top.bottom.leading.trailing.equalToSuperview()
         }
+    }
+    
+    func setLabel(to title: String) {
+        label.text = title
     }
 }

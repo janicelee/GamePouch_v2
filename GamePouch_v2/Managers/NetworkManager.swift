@@ -16,7 +16,7 @@ class NetworkManager {
     private let getGameURL = "thing?type=boardgame,boardgameexpansion&stats=1&id="
     private let hotnessListURL = "hot?type=boardgame"
     private let imageGalleryURL = "https://api.geekdo.com/api/images?ajax=1&gallery=all&nosession=1&objecttype=thing&pageid=1&showcount=36&size=thumb&sort=hot&objectid="
-    
+    private let searchURL = "search?type=boardgame,boardgameexpansion&query="
     private init() {}
     
     func getHotnessList(completed: @escaping (Result<[Game], GPError>) -> ()) {
@@ -83,7 +83,7 @@ class NetworkManager {
         task.resume()
     }
     
-    private func getGameInfo(id: String, completed: @escaping (Result<Game, GPError>) -> ()) {
+    func getGameInfo(id: String, completed: @escaping (Result<Game, GPError>) -> ()) {
         let endpoint = baseURL + getGameURL + id
         
         guard let url = URL(string: endpoint) else {
@@ -174,6 +174,41 @@ class NetworkManager {
                 }
                 completed(.success(result))
             } catch {
+                completed(.failure(.unableToParse))
+            }
+        }
+        task.resume()
+    }
+    
+    func search(for query: String, completed: @escaping(Result<[SearchResult], GPError>) -> ()) {
+        let endpoint = baseURL + searchURL + query
+        
+        guard let url = URL(string: endpoint) else {
+            completed(.failure(.invalidURL))
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            if let _ = error {
+                completed(.failure(.unableToComplete))
+                return
+            }
+            
+            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+                completed(.failure(.invalidResponse))
+                return
+            }
+            
+            guard let data = data else {
+                completed(.failure(.invalidData))
+                return
+            }
+            
+            let parser = SearchParser()
+
+            if parser.parse(from: data) {
+                completed(.success(parser.searchResults))
+            } else {
                 completed(.failure(.unableToParse))
             }
         }
