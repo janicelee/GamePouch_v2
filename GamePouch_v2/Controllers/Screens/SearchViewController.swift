@@ -49,10 +49,14 @@ class SearchViewController: UIViewController {
     }
     
     private func getSearchResults(for text: String) {
+        print("searching for: \(text)")
+        
         NetworkManager.shared.search(for: text) { [weak self] result in
             guard let self = self else { return }
             
             if text == self.lastSearchText {
+                
+                print("displaying results for: \(text)")
                 switch result {
                 case .success(let searchResults):
                     self.resultsTableController.searchResults = searchResults
@@ -93,6 +97,13 @@ extension SearchViewController: UITableViewDelegate {
 
 extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        let searchText = searchController.searchBar.text
+        
+        if let searchText = searchText?.trimmingCharacters(in: .whitespacesAndNewlines) {
+            lastSearchText = searchText
+            debouncedSearch!()
+        }
+        
         searchBar.resignFirstResponder()
     }
 }

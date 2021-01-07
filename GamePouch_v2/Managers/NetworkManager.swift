@@ -181,9 +181,11 @@ class NetworkManager {
     }
     
     func search(for query: String, completed: @escaping(Result<[SearchResult], GPError>) -> ()) {
-        let endpoint = baseURL + searchURL + query
+        let queryItems = [URLQueryItem(name: "type", value: "boardgame, boardgameexpansion"), URLQueryItem(name: "query", value: query)]
+        var urlComps = URLComponents(string: "https://www.boardgamegeek.com/xmlapi2/search")!
+        urlComps.queryItems = queryItems
         
-        guard let url = URL(string: endpoint) else {
+        guard let url = urlComps.url else {
             completed(.failure(.invalidURL))
             return
         }
