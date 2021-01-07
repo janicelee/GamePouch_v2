@@ -76,9 +76,13 @@ extension TagViewController: UICollectionViewDelegate, UICollectionViewDataSourc
 
 extension TagViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+
         let text = tags[indexPath.row]
-        let width = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 15)]).width + 26
-        let height = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 15)]).height + 10
+        var width = text.size(withAttributes: [.font: TagCell.font]).width + (TagCell.horizontalPadding * 2) + 1
+        let height = text.size(withAttributes: [.font: TagCell.font]).height + (TagCell.verticalPadding * 2) + 1
+
+        let collectionViewWidth = collectionView.frame.size.width
+        width = (width <= collectionViewWidth) ? width : collectionViewWidth
         return CGSize(width: width, height: height)
     }
 }
