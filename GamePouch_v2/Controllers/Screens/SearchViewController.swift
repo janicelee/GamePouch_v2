@@ -11,6 +11,7 @@ class SearchViewController: UIViewController {
     
     private var searchController: UISearchController!
     private var resultsTableController: SearchResultsTableController!
+    private var recentSearchTableController: RecentSearchTableController!
     
     private var lastSearchText : String?
     private var debouncedSearch: (() -> Void)?
@@ -43,9 +44,19 @@ class SearchViewController: UIViewController {
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search for a game"
         searchController.searchBar.delegate = self
-        definesPresentationContext = true
         
+        definesPresentationContext = true
         navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        
+        recentSearchTableController = RecentSearchTableController()
+        addChild(recentSearchTableController)
+        view.addSubview(recentSearchTableController.view)
+        recentSearchTableController.didMove(toParent: self)
+        
+        recentSearchTableController.view.snp.makeConstraints { make in
+            make.top.leading.trailing.bottom.equalToSuperview()
+        }
     }
     
     private func getSearchResults(for text: String) {

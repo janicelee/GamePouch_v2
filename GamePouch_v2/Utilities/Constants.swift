@@ -16,3 +16,8 @@ enum Images {
     static let time = UIImage(named: "icon-time")
     static let age = UIImage(named: "icon-age")
 }
+
+enum Layout {
+    static let smallPadding: CGFloat = 8
+    static let mediumPadding: CGFloat = 16
+}

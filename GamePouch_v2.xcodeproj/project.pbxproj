@@ -28,6 +28,7 @@
 		F73475772591C89800308880 /* TagCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73475762591C89800308880 /* TagCollectionViewFlowLayout.swift */; };
 		F75E5BEA257B111E00611A40 /* UITableView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75E5BE9257B111E00611A40 /* UITableView+Ext.swift */; };
 		F75E5BEF257B155800611A40 /* GameInfoParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75E5BEE257B155800611A40 /* GameInfoParser.swift */; };
+		F7707A5B25A712230076419A /* RecentSearchTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7707A5A25A712230076419A /* RecentSearchTableController.swift */; };
 		F771543D25785A7900FB1508 /* HotnessListParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F771543C25785A7900FB1508 /* HotnessListParser.swift */; };
 		F777D9DD25887CA900859D64 /* SmallIconGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = F777D9DC25887CA900859D64 /* SmallIconGroup.swift */; };
 		F779E7F72585D82B00AC829D /* LargeIconGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = F779E7F62585D82B00AC829D /* LargeIconGroup.swift */; };
@@ -97,6 +98,7 @@
 		F73475762591C89800308880 /* TagCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		F75E5BE9257B111E00611A40 /* UITableView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Ext.swift"; sourceTree = "<group>"; };
 		F75E5BEE257B155800611A40 /* GameInfoParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameInfoParser.swift; sourceTree = "<group>"; };
+		F7707A5A25A712230076419A /* RecentSearchTableController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSearchTableController.swift; sourceTree = "<group>"; };
 		F771543C25785A7900FB1508 /* HotnessListParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotnessListParser.swift; sourceTree = "<group>"; };
 		F777D9DC25887CA900859D64 /* SmallIconGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallIconGroup.swift; sourceTree = "<group>"; };
 		F779E7F62585D82B00AC829D /* LargeIconGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeIconGroup.swift; sourceTree = "<group>"; };
@@ -262,14 +264,33 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		F7707A6A25A716630076419A /* UICollectionViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				F734756625905FDF00308880 /* TagCell.swift */,
+				F7C11AB6259454C200A53778 /* ImageCell.swift */,
+			);
+			path = UICollectionViewCells;
+			sourceTree = "<group>";
+		};
+		F7707A6B25A716700076419A /* UITableViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				F7B9A7832579E9AF00E06A0F /* GameCell.swift */,
+				F78C8D9E25A326EE00A3DBE0 /* SearchResultCell.swift */,
+			);
+			path = UITableViewCells;
+			sourceTree = "<group>";
+		};
 		F771542B2578526C00FB1508 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				F78C8D8D25A318E500A3DBE0 /* Screens */,
 				F7336CA22576033A00C05848 /* TabBarController.swift */,
-				F78C8D8E25A325D500A3DBE0 /* SearchResultsTableController.swift */,
 				F7AF6B04259ABD9400BBE0CB /* TagViewController.swift */,
 				F7D4C96D259F36BB006E3157 /* GalleryImagesViewController.swift */,
+				F78C8D8E25A325D500A3DBE0 /* SearchResultsTableController.swift */,
+				F7707A5A25A712230076419A /* RecentSearchTableController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -309,10 +330,8 @@
 		F7B9A7762579E72E00E06A0F /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				F7B9A7832579E9AF00E06A0F /* GameCell.swift */,
-				F734756625905FDF00308880 /* TagCell.swift */,
-				F7C11AB6259454C200A53778 /* ImageCell.swift */,
-				F78C8D9E25A326EE00A3DBE0 /* SearchResultCell.swift */,
+				F7707A6A25A716630076419A /* UICollectionViewCells */,
+				F7707A6B25A716700076419A /* UITableViewCells */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -607,6 +626,7 @@
 				F7D8C74925837B8700237071 /* GameImageView.swift in Sources */,
 				F78C8D9F25A326EE00A3DBE0 /* SearchResultCell.swift in Sources */,
 				F78C8D8F25A325D500A3DBE0 /* SearchResultsTableController.swift in Sources */,
+				F7707A5B25A712230076419A /* RecentSearchTableController.swift in Sources */,
 				F73475772591C89800308880 /* TagCollectionViewFlowLayout.swift in Sources */,
 				F78C8D8625A3121E00A3DBE0 /* SearchResult.swift in Sources */,
 				F7336CA32576033A00C05848 /* TabBarController.swift in Sources */,

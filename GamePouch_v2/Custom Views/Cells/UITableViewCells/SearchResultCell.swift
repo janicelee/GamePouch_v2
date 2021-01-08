@@ -29,14 +29,11 @@ class SearchResultCell: UITableViewCell {
         label.textAlignment = .left
         label.numberOfLines = 0
         
-        let verticalPadding: CGFloat = 6
-        let edgePadding: CGFloat = 10
-        
         label.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(verticalPadding)
-            make.leading.equalToSuperview().offset(edgePadding)
-            make.trailing.equalToSuperview().offset(-edgePadding)
-            make.bottom.equalToSuperview().offset(-verticalPadding)
+            make.top.equalToSuperview().offset(Layout.smallPadding)
+            make.leading.equalToSuperview().offset(Layout.mediumPadding)
+            make.trailing.equalToSuperview().offset(-Layout.mediumPadding)
+            make.bottom.equalToSuperview().offset(-Layout.smallPadding)
         }
     }
     
