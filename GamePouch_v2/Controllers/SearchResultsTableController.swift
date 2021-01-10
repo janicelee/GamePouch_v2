@@ -7,8 +7,13 @@
 
 import UIKit
 
+protocol SearchResultsTableControllerDelegate: class {
+    func didSelectSearchResult(result: SearchResult)
+}
+
 class SearchResultsTableController: UITableViewController {
     
+    weak var delegate: SearchResultsTableControllerDelegate?
     var searchResults = [SearchResult]() {
         didSet {
             DispatchQueue.main.async {
@@ -22,7 +27,7 @@ class SearchResultsTableController: UITableViewController {
         tableView.register(SearchResultCell.self, forCellReuseIdentifier: SearchResultCell.reuseID)
     }
 
-    // MARK: - Table view data source
+    // MARK: - UITableViewDataSource
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return searchResults.count
@@ -34,5 +39,12 @@ class SearchResultsTableController: UITableViewController {
             cell.setLabel(to: title)
         }
         return cell
+    }
+    
+    // MARK: - UITableViewDelegate
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let searchResult = searchResults[indexPath.row]
+        delegate?.didSelectSearchResult(result: searchResult)
     }
 }

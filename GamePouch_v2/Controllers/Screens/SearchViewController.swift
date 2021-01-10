@@ -38,7 +38,8 @@ class SearchViewController: UIViewController {
         view.backgroundColor = .systemBackground
         
         resultsTableController = SearchResultsTableController()
-        resultsTableController.tableView.delegate = self
+        resultsTableController.delegate = self
+//        resultsTableController.tableView.delegate = self
         
         searchController = UISearchController(searchResultsController: resultsTableController)
         searchController.searchResultsUpdater = self
@@ -54,6 +55,7 @@ class SearchViewController: UIViewController {
         addChild(recentSearchTableController)
         view.addSubview(recentSearchTableController.view)
         recentSearchTableController.didMove(toParent: self)
+        recentSearchTableController.delegate = self
         
         recentSearchTableController.view.snp.makeConstraints { make in
             make.top.leading.trailing.bottom.equalToSuperview()
@@ -76,14 +78,14 @@ class SearchViewController: UIViewController {
         }
     }
     
-    private func save(searchResult: SearchResult) {
+    private func save(id: String, name: String) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let managedContext = appDelegate.persistentContainer.viewContext
         let entity = NSEntityDescription.entity(forEntityName: "Search", in: managedContext)!
         let search = NSManagedObject(entity: entity, insertInto: managedContext)
         
-        search.setValue(searchResult.id, forKey: "id")
-        search.setValue(searchResult.name, forKey: "name")
+        search.setValue(id, forKey: "id")
+        search.setValue(name, forKey: "name")
         search.setValue(Date(), forKey: "date")
         
         do {
@@ -110,6 +112,24 @@ class SearchViewController: UIViewController {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
     }
+    
+    private func displayGameInfo(id: String?, name: String?) {
+        guard let id = id, let name = name else {
+            return // TODO: display error
+        }
+        save(id: id, name: name)
+        NetworkManager.shared.getGameInfo(id: id) { result in
+            switch result {
+            case .success(let game):
+                DispatchQueue.main.async {
+                    let gameInfoViewController = GameInfoViewController(game: game)
+                    self.navigationController?.pushViewController(gameInfoViewController, animated: true)
+                }
+            case .failure(let error):
+                print(error.rawValue) // TODO: display error
+            }
+        }
+    }
 }
 
 // MARK: - UITableViewDelegate
@@ -117,7 +137,7 @@ class SearchViewController: UIViewController {
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let searchResult = resultsTableController.searchResults[indexPath.row]
-        save(searchResult: searchResult)
+        save(id: searchResult.id ?? "", name: searchResult.name ?? "")
         
         if let id = searchResult.id {
             NetworkManager.shared.getGameInfo(id: id) { result in
@@ -163,3 +183,21 @@ extension SearchViewController: UISearchResultsUpdating {
         }
     }
 }
+
+
+// MARK: - RecentSearchTableControllerDelegate
+
+extension SearchViewController: RecentSearchTableControllerDelegate {
+    func didSelectRecentSearch(id: String?, name: String?) {
+        displayGameInfo(id: id, name: name)
+    }
+}
+
+// MARK: - RecentSearchTableControllerDelegate
+
+extension SearchViewController: SearchResultsTableControllerDelegate {
+    func didSelectSearchResult(result: SearchResult) {
+        displayGameInfo(id: result.id, name: result.name)
+    }
+}
+

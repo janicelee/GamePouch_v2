@@ -8,8 +8,13 @@
 import UIKit
 import CoreData
 
+protocol RecentSearchTableControllerDelegate: class {
+    func didSelectRecentSearch(id: String?, name: String?)
+}
+
 class RecentSearchTableController: UITableViewController {
     
+    weak var delegate: RecentSearchTableControllerDelegate?
     var recentSearches: [NSManagedObject] = [] {
         didSet {
             DispatchQueue.main.async {
@@ -40,7 +45,7 @@ class RecentSearchTableController: UITableViewController {
         tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
     }
 
-    // MARK: - Table view data source
+    // MARK: - UITableViewDataSource
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return recentSearches.count
@@ -69,5 +74,15 @@ class RecentSearchTableController: UITableViewController {
             make.bottom.equalToSuperview().offset(-Layout.smallPadding)
         }
         return view
+    }
+    
+    // MARK: - UITableViewDelegate
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let recentSearch = recentSearches[indexPath.row]
+        let id = recentSearch.value(forKeyPath: "id") as? String ?? nil
+        let name = recentSearch.value(forKeyPath: "name") as? String ?? nil
+        
+        delegate?.didSelectRecentSearch(id: id, name: name)
     }
 }
