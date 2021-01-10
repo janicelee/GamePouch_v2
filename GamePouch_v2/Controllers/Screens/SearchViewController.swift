@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 class SearchViewController: UIViewController {
     
@@ -60,14 +61,10 @@ class SearchViewController: UIViewController {
     }
     
     private func getSearchResults(for text: String) {
-        print("searching for: \(text)")
-        
         NetworkManager.shared.search(for: text) { [weak self] result in
             guard let self = self else { return }
             
             if text == self.lastSearchText {
-                
-                print("displaying results for: \(text)")
                 switch result {
                 case .success(let searchResults):
                     self.resultsTableController.searchResults = searchResults
@@ -78,6 +75,41 @@ class SearchViewController: UIViewController {
             }
         }
     }
+    
+    private func save(searchResult: SearchResult) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let entity = NSEntityDescription.entity(forEntityName: "Search", in: managedContext)!
+        let search = NSManagedObject(entity: entity, insertInto: managedContext)
+        
+        search.setValue(searchResult.id, forKey: "id")
+        search.setValue(searchResult.name, forKey: "name")
+        search.setValue(Date(), forKey: "date")
+        
+        do {
+            try managedContext.save()
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+        }
+        
+        do {
+            let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Search")
+            let count = try managedContext.count(for: fetchRequest)
+            
+            if count > 5 {
+                let sort = NSSortDescriptor(key: "date", ascending: true)
+                fetchRequest.sortDescriptors = [sort]
+                fetchRequest.fetchLimit = 1
+                
+                let oldestSearch = try managedContext.fetch(fetchRequest)
+                if oldestSearch.count == 1 {
+                    managedContext.delete(oldestSearch[0])
+                }
+            }
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+    }
 }
 
 // MARK: - UITableViewDelegate
@@ -85,6 +117,7 @@ class SearchViewController: UIViewController {
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let searchResult = resultsTableController.searchResults[indexPath.row]
+        save(searchResult: searchResult)
         
         if let id = searchResult.id {
             NetworkManager.shared.getGameInfo(id: id) { result in
@@ -114,7 +147,6 @@ extension SearchViewController: UISearchBarDelegate {
             lastSearchText = searchText
             debouncedSearch!()
         }
-        
         searchBar.resignFirstResponder()
     }
 }
