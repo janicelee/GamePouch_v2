@@ -15,6 +15,8 @@ enum Images {
     static let difficulty = UIImage(named: "icon-difficulty")
     static let time = UIImage(named: "icon-time")
     static let age = UIImage(named: "icon-age")
+    static let filledHeart = UIImage(named: "icon-filled-heart")
+    static let emptyHeart = UIImage(named: "icon-empty-heart")
 }
 
 enum Layout {

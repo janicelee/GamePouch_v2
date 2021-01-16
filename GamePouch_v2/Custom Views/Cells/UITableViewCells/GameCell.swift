@@ -13,13 +13,13 @@ class GameCell: UITableViewCell {
     static let reuseID = "GameCell"
     
     let gameImageView = GameImageView(frame: .zero)
-    
     let largeIconView = UIView()
     let ratingIconGroup = LargeIconGroup(labelText: "N/A", iconImage: Images.rating)
     let rankIconGroup = LargeIconGroup(labelText: "N/A", iconImage: Images.rank)
     
     let primaryRowView = UIView()
     let titleLabel = TitleLabel(textAlignment: .left, fontSize: 16)
+    let favoriteButton = UIButton(frame: .zero)
     
     let secondaryRowView = UIView()
     let playersIconGroup = SmallIconGroup(labelText: "N/A", iconImage: Images.players)
@@ -27,7 +27,7 @@ class GameCell: UITableViewCell {
     let difficultyIconGroup = SmallIconGroup(labelText: "N/A", iconImage: Images.difficulty)
     let ageIconGroup = SmallIconGroup(labelText: "N/A", iconImage: Images.age)
     
-    let outerEdgePadding: CGFloat = 16
+    private var favoriteButtonPressed = false
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -39,6 +39,7 @@ class GameCell: UITableViewCell {
     }
     
     private func configure() {
+        contentView.isUserInteractionEnabled = false
         configureGameImageView()
         configureLargeIconView()
         configurePrimaryRowView()
@@ -50,8 +51,8 @@ class GameCell: UITableViewCell {
         
         gameImageView.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(outerEdgePadding)
-            make.height.equalTo(220)
+            make.leading.trailing.equalToSuperview().inset(Layout.mediumPadding)
+            make.height.equalTo(210)
         }
     }
     
@@ -82,7 +83,11 @@ class GameCell: UITableViewCell {
     
     private func configurePrimaryRowView() {
         addSubview(primaryRowView)
-        primaryRowView.addSubview(titleLabel)
+        [titleLabel, favoriteButton].forEach { primaryRowView.addSubview($0) }
+        
+        favoriteButton.setImage(Images.emptyHeart, for: .normal)
+        favoriteButton.imageView?.contentMode = .scaleAspectFit
+        favoriteButton.addTarget(self, action: #selector(favoriteButtonPressed(_:)), for: .touchUpInside)
         
         primaryRowView.snp.makeConstraints { make in
             make.top.equalTo(gameImageView.snp.bottom).offset(4)
@@ -91,7 +96,14 @@ class GameCell: UITableViewCell {
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.leading.top.bottom.trailing.equalToSuperview()
+            make.top.leading.bottom.equalToSuperview()
+            make.trailing.equalTo(favoriteButton.snp.leading).offset(-4)
+        }
+        
+        favoriteButton.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.trailing.equalToSuperview().inset(4)
+            make.width.equalTo(24)
         }
     }
     
@@ -165,5 +177,16 @@ class GameCell: UITableViewCell {
         if let imageURL = game.imageURL {
             gameImageView.setImage(from: imageURL)
         }
+    }
+    
+    @objc func favoriteButtonPressed(_ sender: UIButton) {
+        print("button")
+        
+        if favoriteButtonPressed {
+            favoriteButton.setImage(Images.emptyHeart, for: .normal)
+        } else {
+            favoriteButton.setImage(Images.filledHeart, for: .normal)
+        }
+        favoriteButtonPressed = !favoriteButtonPressed
     }
 }

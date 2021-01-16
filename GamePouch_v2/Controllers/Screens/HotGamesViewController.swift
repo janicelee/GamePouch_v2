@@ -80,6 +80,7 @@ extension HotGamesViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("log")
         let game = games[indexPath.row]
         let destination = GameInfoViewController(game: game)
         

@@ -132,31 +132,6 @@ class SearchViewController: UIViewController {
     }
 }
 
-// MARK: - UITableViewDelegate
-
-extension SearchViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let searchResult = resultsTableController.searchResults[indexPath.row]
-        save(id: searchResult.id ?? "", name: searchResult.name ?? "")
-        
-        if let id = searchResult.id {
-            NetworkManager.shared.getGameInfo(id: id) { result in
-                switch result {
-                case .success(let game):
-                    DispatchQueue.main.async {
-                        let gameInfoViewController = GameInfoViewController(game: game)
-                        self.navigationController?.pushViewController(gameInfoViewController, animated: true)
-                    }
-                case .failure(let error):
-                    print(error.rawValue)
-                    // display error
-                }
-            }
-        }
-        tableView.deselectRow(at: indexPath, animated: false)
-    }
-}
-
 // MARK: - UISearchBarDelegate
 
 extension SearchViewController: UISearchBarDelegate {
@@ -184,7 +159,6 @@ extension SearchViewController: UISearchResultsUpdating {
     }
 }
 
-
 // MARK: - RecentSearchTableControllerDelegate
 
 extension SearchViewController: RecentSearchTableControllerDelegate {
@@ -193,7 +167,7 @@ extension SearchViewController: RecentSearchTableControllerDelegate {
     }
 }
 
-// MARK: - RecentSearchTableControllerDelegate
+// MARK: - SearchResultsTableControllerDelegate
 
 extension SearchViewController: SearchResultsTableControllerDelegate {
     func didSelectSearchResult(result: SearchResult) {
