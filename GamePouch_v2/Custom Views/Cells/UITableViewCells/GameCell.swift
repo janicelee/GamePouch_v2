@@ -27,6 +27,7 @@ class GameCell: UITableViewCell {
     let difficultyIconGroup = SmallIconGroup(labelText: "N/A", iconImage: Images.difficulty)
     let ageIconGroup = SmallIconGroup(labelText: "N/A", iconImage: Images.age)
     
+    private var game: Game?
     private var favoriteButtonPressed = false
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -160,6 +161,7 @@ class GameCell: UITableViewCell {
     }
     
     func set(game: Game) {
+        self.game = game
         titleLabel.text = game.getTitle()
         ratingIconGroup.label.text = game.getRating()
         playersIconGroup.label.text = game.getNumPlayers()
@@ -180,13 +182,13 @@ class GameCell: UITableViewCell {
     }
     
     @objc func favoriteButtonPressed(_ sender: UIButton) {
-        print("button")
-        
         if favoriteButtonPressed {
             favoriteButton.setImage(Images.emptyHeart, for: .normal)
         } else {
             favoriteButton.setImage(Images.filledHeart, for: .normal)
         }
         favoriteButtonPressed = !favoriteButtonPressed
+        
+        PersistenceManager.saveFavorite(game: game!)
     }
 }

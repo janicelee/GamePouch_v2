@@ -33,7 +33,7 @@ class TagCell: UICollectionViewCell {
         
         layer.cornerRadius = 14
         layer.borderWidth = 2
-        layer.borderColor = UIColor.secondaryLabel.cgColor
+        layer.borderColor = UIColor.systemYellow.cgColor
     
         label.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(TagCell.verticalPadding)

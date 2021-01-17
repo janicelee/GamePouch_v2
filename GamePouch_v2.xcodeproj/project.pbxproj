@@ -49,6 +49,7 @@
 		F7D8C757258472BD00237071 /* TitleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D8C756258472BD00237071 /* TitleLabel.swift */; };
 		F7EC6268258CC14900FD536A /* GameInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EC6267258CC14900FD536A /* GameInfoViewController.swift */; };
 		F7EC6278258E136400FD536A /* VerticalLargeIconGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EC6277258E136400FD536A /* VerticalLargeIconGroup.swift */; };
+		F7ECBF7E25B3E15A00E40569 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7ECBF7D25B3E15A00E40569 /* PersistenceManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -121,6 +122,7 @@
 		F7D8C756258472BD00237071 /* TitleLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleLabel.swift; sourceTree = "<group>"; };
 		F7EC6267258CC14900FD536A /* GameInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameInfoViewController.swift; sourceTree = "<group>"; };
 		F7EC6277258E136400FD536A /* VerticalLargeIconGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalLargeIconGroup.swift; sourceTree = "<group>"; };
+		F7ECBF7D25B3E15A00E40569 /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 		F89B3CFA59EAEC376D890633 /* Pods-GamePouch_v2-GamePouch_v2UITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GamePouch_v2-GamePouch_v2UITests.release.xcconfig"; path = "Target Support Files/Pods-GamePouch_v2-GamePouch_v2UITests/Pods-GamePouch_v2-GamePouch_v2UITests.release.xcconfig"; sourceTree = "<group>"; };
 		FCDB4E9CCBCC12957ACC4F30 /* Pods-GamePouch_v2Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GamePouch_v2Tests.debug.xcconfig"; path = "Target Support Files/Pods-GamePouch_v2Tests/Pods-GamePouch_v2Tests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -235,6 +237,7 @@
 			isa = PBXGroup;
 			children = (
 				F7336CC4257721EF00C05848 /* NetworkManager.swift */,
+				F7ECBF7D25B3E15A00E40569 /* PersistenceManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -625,6 +628,7 @@
 				F7336C70257493F800C05848 /* GamePouch_v2.xcdatamodeld in Sources */,
 				F7336CCE257724E800C05848 /* GPError.swift in Sources */,
 				F7B9A7842579E9AF00E06A0F /* GameCell.swift in Sources */,
+				F7ECBF7E25B3E15A00E40569 /* PersistenceManager.swift in Sources */,
 				F7EC6268258CC14900FD536A /* GameInfoViewController.swift in Sources */,
 				F7AF6B05259ABD9400BBE0CB /* TagViewController.swift in Sources */,
 				F734756F2591C39300308880 /* TagCollectionView.swift in Sources */,

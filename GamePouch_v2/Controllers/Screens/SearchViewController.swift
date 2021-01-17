@@ -27,6 +27,8 @@ class SearchViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         if let selectedIndexPath = resultsTableController.tableView.indexPathForSelectedRow {
             resultsTableController.tableView.deselectRow(at: selectedIndexPath, animated: animated)
         }
@@ -39,7 +41,6 @@ class SearchViewController: UIViewController {
         
         resultsTableController = SearchResultsTableController()
         resultsTableController.delegate = self
-//        resultsTableController.tableView.delegate = self
         
         searchController = UISearchController(searchResultsController: resultsTableController)
         searchController.searchResultsUpdater = self
@@ -78,46 +79,11 @@ class SearchViewController: UIViewController {
         }
     }
     
-    private func save(id: String, name: String) {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let managedContext = appDelegate.persistentContainer.viewContext
-        let entity = NSEntityDescription.entity(forEntityName: "Search", in: managedContext)!
-        let search = NSManagedObject(entity: entity, insertInto: managedContext)
-        
-        search.setValue(id, forKey: "id")
-        search.setValue(name, forKey: "name")
-        search.setValue(Date(), forKey: "date")
-        
-        do {
-            try managedContext.save()
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-        }
-        
-        do {
-            let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Search")
-            let count = try managedContext.count(for: fetchRequest)
-            
-            if count > 5 {
-                let sort = NSSortDescriptor(key: "date", ascending: true)
-                fetchRequest.sortDescriptors = [sort]
-                fetchRequest.fetchLimit = 1
-                
-                let oldestSearch = try managedContext.fetch(fetchRequest)
-                if oldestSearch.count == 1 {
-                    managedContext.delete(oldestSearch[0])
-                }
-            }
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-        }
-    }
-    
     private func displayGameInfo(id: String?, name: String?) {
         guard let id = id, let name = name else {
             return // TODO: display error
         }
-        save(id: id, name: name)
+        PersistenceManager.saveSearch(id: id, name: name)
         NetworkManager.shared.getGameInfo(id: id) { result in
             switch result {
             case .success(let game):

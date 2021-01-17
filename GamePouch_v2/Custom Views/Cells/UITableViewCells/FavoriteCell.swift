@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 class FavoriteCell: UITableViewCell {
     
@@ -72,14 +73,15 @@ class FavoriteCell: UITableViewCell {
         }
     }
     
-    func set(game: Game) {
-        if let imageURL = game.thumbnailURL {
+    func set(favorite: NSManagedObject) {
+        titleLabel.text = favorite.value(forKeyPath: "title") as? String ?? ""
+        playersIconGroup.label.text = favorite.value(forKeyPath: "players") as? String ?? ""
+        timeIconGroup.label.text = favorite.value(forKeyPath: "playTime") as? String ?? ""
+        difficultyIconGroup.label.text = favorite.value(forKeyPath: "difficulty") as? String ?? ""
+        ageIconGroup.label.text = favorite.value(forKeyPath: "minAge") as? String ?? ""
+        
+        if let imageURL = favorite.value(forKey: "thumbnailURL") as? String {
             gameImageView.setImage(from: imageURL)
         }
-        titleLabel.text = game.getTitle()
-        playersIconGroup.label.text = game.getNumPlayers()
-        timeIconGroup.label.text = game.getPlayTime()
-        difficultyIconGroup.label.text = game.getDifficulty()
-        ageIconGroup.label.text = game.getMinAge()
     }
 }

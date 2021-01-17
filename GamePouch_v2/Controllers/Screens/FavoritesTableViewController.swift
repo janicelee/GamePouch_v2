@@ -6,10 +6,17 @@
 //
 
 import UIKit
+import CoreData
 
 class FavoritesTableViewController: UITableViewController {
     
-    var favorites: [Game] = [Game(id: "199792", thumbnailURL: "https://cf.geekdo-images.com/fjE7V5LNq31yVEW_yuqI-Q__thumb/img/Cf_mYxR_VvdjTEPXseSurni2JNI=/fit-in/200x150/filters:strip_icc()/pic3918905.png", imageURL: "https://cf.geekdo-images.com/fjE7V5LNq31yVEW_yuqI-Q__original/img/HQ1ti16wT9lqja5_h3gUfHUIcVI=/0x0/filters:format(png)/pic3918905.png", name: "Gloomhaven: Rise of Thanos", description: nil, yearPublished: nil, minPlayers: "1", maxPlayers: "4", minPlayTime: "60", maxPlayTime: "90", minAge: "12", categories: [], mechanics: [], rating: "150", rank: "2487", weight: "3.2")]
+    var favorites: [NSManagedObject] = [] {
+        didSet {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +27,18 @@ class FavoritesTableViewController: UITableViewController {
         tableView.rowHeight = 90
         tableView.separatorStyle = .none
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        PersistenceManager.fetchFavorites { [weak self] asyncFetchResult in
+            guard let self = self else { return }
+            
+            if let result = asyncFetchResult.finalResult {
+                self.favorites = result
+            }
+        }
+    }
 
     // MARK: - UITableViewDataSource
 
@@ -29,7 +48,7 @@ class FavoritesTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: FavoriteCell.reuseID, for: indexPath) as! FavoriteCell
-        cell.set(game: favorites[indexPath.row])
+        cell.set(favorite: favorites[indexPath.row])
         cell.selectionStyle = .none
         return cell
     }
