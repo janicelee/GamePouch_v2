@@ -183,12 +183,14 @@ class GameCell: UITableViewCell {
     
     @objc func favoriteButtonPressed(_ sender: UIButton) {
         if favoriteButtonPressed {
-            favoriteButton.setImage(Images.emptyHeart, for: .normal)
+            if let id = game?.id {
+                PersistenceManager.deleteFavorite(gameId: id)
+                favoriteButton.setImage(Images.emptyHeart, for: .normal)
+            }
         } else {
+            PersistenceManager.saveFavorite(game: game!)
             favoriteButton.setImage(Images.filledHeart, for: .normal)
         }
         favoriteButtonPressed = !favoriteButtonPressed
-        
-        PersistenceManager.saveFavorite(game: game!)
     }
 }

@@ -69,6 +69,35 @@ enum PersistenceManager {
         }
     }
     
+    static func deleteFavorite(favorite: NSManagedObject) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let managedContext = appDelegate.persistentContainer.viewContext
+
+        do {
+            managedContext.delete(favorite)
+            try managedContext.save()
+        } catch let error as NSError {
+            print("Could not delete id: \(favorite.value(forKeyPath: "id") as? String ?? "id unavailable,") \(error), \(error.userInfo)")
+        }
+    }
+    
+    static func deleteFavorite(gameId: String) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let managedContext = appDelegate.persistentContainer.viewContext
+
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Favorite")
+        let predicate = NSPredicate(format: "id = %@", gameId)
+        fetchRequest.predicate = predicate
+        
+        do {
+            let favorite = try managedContext.fetch(fetchRequest)
+            managedContext.delete(favorite[0])
+            try managedContext.save()
+        } catch let error as NSError {
+            print("Could not delete id: \(gameId), \(error), \(error.userInfo)")
+        }
+    }
+    
     static func fetchFavorites(completed: @escaping (NSAsynchronousFetchResult<NSManagedObject>) -> ()) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let managedContext = appDelegate.persistentContainer.viewContext
