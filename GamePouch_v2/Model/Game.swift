@@ -25,6 +25,7 @@ struct Game {
     var rating: String?
     var rank: String?
     var weight: String?
+    private var isFavorite: Bool?
     
     func getTitle() -> String {
         guard let name = name, isValid(name) else { return "N/A" }
@@ -89,6 +90,18 @@ struct Game {
             return "N/A"
         }
        return "\(weight)/5"
+    }
+
+    mutating func isInFavorites() -> Bool {
+        if isFavorite == nil {
+            guard let id = id else { return false }
+            isFavorite = PersistenceManager.isFavourite(id: id)
+        }
+        return isFavorite!
+    }
+    
+    mutating func setFavorite(to value: Bool) {
+        isFavorite = value
     }
     
     private func isValid(_ label: String) -> Bool {

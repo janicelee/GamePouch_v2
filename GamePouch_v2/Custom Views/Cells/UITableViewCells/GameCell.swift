@@ -28,7 +28,7 @@ class GameCell: UITableViewCell {
     let ageIconGroup = SmallIconGroup(labelText: "N/A", iconImage: Images.age)
     
     private var game: Game?
-    private var favoriteButtonPressed = false
+//    private var isFavorited = false
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -179,18 +179,24 @@ class GameCell: UITableViewCell {
         if let imageURL = game.imageURL {
             gameImageView.setImage(from: imageURL)
         }
+        
+        let image = self.game!.isInFavorites() ? Images.filledHeart : Images.emptyHeart
+        favoriteButton.setImage(image, for: .normal)
     }
     
     @objc func favoriteButtonPressed(_ sender: UIButton) {
-        if favoriteButtonPressed {
-            if let id = game?.id {
+        let isInFavorites = game!.isInFavorites()
+    
+        if isInFavorites {
+            if let id = game!.id {
+                game!.setFavorite(to: false)
                 PersistenceManager.deleteFavorite(gameId: id)
                 favoriteButton.setImage(Images.emptyHeart, for: .normal)
             }
         } else {
+            game!.setFavorite(to: true)
             PersistenceManager.saveFavorite(game: game!)
             favoriteButton.setImage(Images.filledHeart, for: .normal)
         }
-        favoriteButtonPressed = !favoriteButtonPressed
     }
 }
