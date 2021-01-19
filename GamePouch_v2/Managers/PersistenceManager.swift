@@ -18,12 +18,7 @@ enum PersistenceManager {
         let favorite = NSManagedObject(entity: entity, insertInto: managedContext)
         
         favorite.setValue(game.id ?? "", forKey: "id")
-        favorite.setValue(game.thumbnailURL ?? "", forKey: "thumbnailURL")
         favorite.setValue(game.getTitle(), forKey: "title")
-        favorite.setValue(game.getNumPlayers(), forKey: "players")
-        favorite.setValue(game.getPlayTime(), forKey: "playTime")
-        favorite.setValue(game.getDifficulty(), forKey: "difficulty")
-        favorite.setValue(game.getMinAge(), forKey: "minAge")
         favorite.setValue(Date(), forKey: "date")
         
         do {
