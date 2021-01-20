@@ -28,7 +28,6 @@ class GameCell: UITableViewCell {
     let ageIconGroup = SmallIconGroup(labelText: "N/A", iconImage: Images.age)
     
     private var game: Game?
-//    private var isFavorited = false
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -64,6 +63,9 @@ class GameCell: UITableViewCell {
         largeIconView.layer.cornerRadius = 6
         largeIconView.backgroundColor = UIColor.white.withAlphaComponent(0.86)
         
+        ratingIconGroup.label.textColor = .black
+        rankIconGroup.label.textColor = .black
+        
         largeIconView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(12)
             make.trailing.equalToSuperview().offset(-12)
@@ -76,7 +78,7 @@ class GameCell: UITableViewCell {
         }
         
         rankIconGroup.snp.makeConstraints { make in
-            make.leading.equalTo(ratingIconGroup.snp.trailing).offset(4)
+            make.leading.equalTo(ratingIconGroup.snp.trailing).offset(8)
             make.trailing.equalToSuperview().offset(-8)
             make.centerY.equalTo(ratingIconGroup.snp.centerY)
         }
@@ -126,12 +128,12 @@ class GameCell: UITableViewCell {
             make.centerY.equalToSuperview()
         }
         
-        playersIconGroup.label.snp.makeConstraints { make in
-            make.leading.equalTo(playersIconGroup.iconImageView.snp.trailing).offset(3).priority(999)
-        }
-        
         playersIconGroup.iconImageView.snp.makeConstraints { make in
             make.bottom.equalToSuperview().offset(-1).priority(999)
+        }
+        
+        playersIconGroup.label.snp.makeConstraints { make in
+            make.leading.equalTo(playersIconGroup.iconImageView.snp.trailing).offset(3).priority(999)
         }
 
         timeIconGroup.snp.makeConstraints { make in
@@ -184,18 +186,14 @@ class GameCell: UITableViewCell {
         favoriteButton.setImage(image, for: .normal)
     }
     
-    @objc func favoriteButtonPressed(_ sender: UIButton) {
+    @objc private func favoriteButtonPressed(_ sender: UIButton) {
         let isInFavorites = game!.isInFavorites()
     
         if isInFavorites {
-            if let id = game!.id {
-                game!.setFavorite(to: false)
-                PersistenceManager.deleteFavorite(gameId: id)
-                favoriteButton.setImage(Images.emptyHeart, for: .normal)
-            }
+            game!.setFavorite(to: false)
+            favoriteButton.setImage(Images.emptyHeart, for: .normal)
         } else {
             game!.setFavorite(to: true)
-            PersistenceManager.saveFavorite(game: game!)
             favoriteButton.setImage(Images.filledHeart, for: .normal)
         }
     }

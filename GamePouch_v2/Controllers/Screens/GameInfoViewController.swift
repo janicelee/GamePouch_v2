@@ -13,6 +13,7 @@ class GameInfoViewController: UIViewController {
     let scrollView = UIScrollView()
     let headerImageView = GameImageView(frame: .zero)
     let largeIconView = UIView()
+    let favoriteButton = UIButton(frame: .zero)
     let titleLabel = TitleLabel(textAlignment: .left, fontSize: 22)
     let yearLabel = UILabel()
     let rowStackView = UIStackView()
@@ -87,7 +88,7 @@ class GameInfoViewController: UIViewController {
         let rankIconGroup = LargeIconGroup(labelText: "N/A", iconImage: Images.rank)
 
         scrollView.addSubview(largeIconView)
-        [ratingIconGroup, rankIconGroup].forEach { largeIconView.addSubview($0) }
+        [ratingIconGroup, rankIconGroup, favoriteButton].forEach { largeIconView.addSubview($0) }
         
         ratingIconGroup.label.text = game.getRating()
         
@@ -97,6 +98,11 @@ class GameInfoViewController: UIViewController {
         } else {
             rankIconGroup.label.text = rank.text
         }
+        
+        let buttonImage = self.game!.isInFavorites() ? Images.filledHeart : Images.emptyHeart
+        favoriteButton.setImage(buttonImage, for: .normal)
+        favoriteButton.imageView?.contentMode = .scaleAspectFit
+        favoriteButton.addTarget(self, action: #selector(favoriteButtonPressed(_:)), for: .touchUpInside)
         
         largeIconView.snp.makeConstraints { make in
             make.top.equalTo(headerImageView.snp.bottom).offset(Layout.smallPadding)
@@ -112,7 +118,13 @@ class GameInfoViewController: UIViewController {
         
         rankIconGroup.snp.makeConstraints { make in
             make.leading.equalTo(ratingIconGroup.snp.trailing).offset(20)
-            make.centerY.equalTo(ratingIconGroup.snp.centerY)
+            make.centerY.equalTo(ratingIconGroup)
+        }
+        
+        favoriteButton.snp.makeConstraints { make in
+            make.centerY.equalTo(ratingIconGroup)
+            make.trailing.equalToSuperview().inset(4)
+            make.width.equalTo(26)
         }
     }
     
@@ -248,6 +260,18 @@ class GameInfoViewController: UIViewController {
         
         mechanicsViewController.view.snp.makeConstraints { make in
             make.top.leading.trailing.bottom.equalToSuperview()
+        }
+    }
+    
+    @objc private func favoriteButtonPressed(_ sender: UIButton) {
+        let isInFavorites = game.isInFavorites()
+        
+        if isInFavorites {
+            game.setFavorite(to: false)
+            favoriteButton.setImage(Images.emptyHeart, for: .normal)
+        } else {
+            game.setFavorite(to: true)
+            favoriteButton.setImage(Images.filledHeart, for: .normal)
         }
     }
     

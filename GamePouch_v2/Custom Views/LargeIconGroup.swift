@@ -32,7 +32,6 @@ class LargeIconGroup: UIView {
         addSubview(label)
         label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 15, weight: .bold)
-        label.textColor = .black
         
         label.snp.makeConstraints { make in
             make.leading.top.bottom.equalToSuperview()
@@ -44,9 +43,10 @@ class LargeIconGroup: UIView {
         iconImageView.contentMode = .scaleAspectFit
 
         iconImageView.snp.makeConstraints { make in
-            make.leading.equalTo(label.snp.trailing)
-            make.trailing.bottom.equalToSuperview()
-            make.width.height.equalTo(18)
+            make.leading.equalTo(label.snp.trailing).offset(2)
+            make.trailing.equalToSuperview()
+            make.centerY.equalTo(label).offset(-1)
+            make.width.height.equalTo(16)
         }
     }
 }

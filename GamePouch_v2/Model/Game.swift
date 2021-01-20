@@ -102,6 +102,13 @@ struct Game {
     
     mutating func setFavorite(to value: Bool) {
         isFavorite = value
+        
+        if value {
+            PersistenceManager.saveFavorite(game: self)
+        } else {
+            guard let id = id else { return } // TODO: show error?
+            PersistenceManager.deleteFavorite(gameId: id)
+        }
     }
     
     private func isValid(_ label: String) -> Bool {

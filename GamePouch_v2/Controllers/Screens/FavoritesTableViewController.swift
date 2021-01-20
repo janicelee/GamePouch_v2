@@ -78,6 +78,15 @@ class FavoritesTableViewController: UITableViewController {
         cell.selectionStyle = .none
         return cell
     }
+    
+    // MARK: - UITableViewDelegate
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let favorite = favorites[indexPath.row]
+        let destination = GameInfoViewController(game: favorite)
+        
+        navigationController?.pushViewController(destination, animated: true)
+    }
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
@@ -87,7 +96,6 @@ class FavoritesTableViewController: UITableViewController {
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
-    
 
     /*
     // Override to support rearranging the table view.
@@ -95,13 +103,4 @@ class FavoritesTableViewController: UITableViewController {
 
     }
     */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
 }
