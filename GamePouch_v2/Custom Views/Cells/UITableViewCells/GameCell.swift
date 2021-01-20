@@ -67,13 +67,11 @@ class GameCell: UITableViewCell {
         rankIconGroup.label.textColor = .black
         
         largeIconView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(12)
-            make.trailing.equalToSuperview().offset(-12)
+            make.top.trailing.equalToSuperview().inset(12)
         }
         
         ratingIconGroup.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(4)
-            make.bottom.equalToSuperview().offset(-4)
+            make.top.bottom.equalToSuperview().inset(4)
             make.leading.equalToSuperview().offset(8)
         }
         

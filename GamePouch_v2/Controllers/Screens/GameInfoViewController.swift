@@ -106,13 +106,11 @@ class GameInfoViewController: UIViewController {
         
         largeIconView.snp.makeConstraints { make in
             make.top.equalTo(headerImageView.snp.bottom).offset(Layout.smallPadding)
-            make.leading.equalTo(view).offset(horizontalPadding)
-            make.trailing.equalTo(view).offset(-horizontalPadding)
+            make.leading.trailing.equalTo(view).inset(horizontalPadding)
         }
         
         ratingIconGroup.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(4)
-            make.bottom.equalToSuperview().offset(-4)
+            make.top.bottom.equalToSuperview().inset(4)
             make.leading.equalToSuperview()
         }
         
@@ -138,8 +136,7 @@ class GameInfoViewController: UIViewController {
         
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(largeIconView.snp.bottom).offset(Layout.mediumPadding)
-            make.leading.equalTo(view).offset(horizontalPadding)
-            make.trailing.equalTo(view).offset(-horizontalPadding)
+            make.leading.trailing.equalTo(view).inset(horizontalPadding)
         }
 
     }
@@ -179,8 +176,7 @@ class GameInfoViewController: UIViewController {
         
         rowStackView.snp.makeConstraints { make in
             make.top.equalTo(yearLabel.snp.bottom).offset(Layout.mediumPadding)
-            make.leading.equalTo(view).offset(Layout.smallPadding)
-            make.trailing.equalTo(view).offset(-Layout.smallPadding)
+            make.leading.trailing.equalTo(view).inset(Layout.smallPadding)
         }
     }
     
@@ -198,8 +194,7 @@ class GameInfoViewController: UIViewController {
         
         descriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(rowStackView.snp.bottom).offset(Layout.mediumPadding)
-            make.leading.equalTo(view).offset(horizontalPadding)
-            make.trailing.equalTo(view).offset(-horizontalPadding)
+            make.leading.trailing.equalTo(view).inset(horizontalPadding)
         }
     }
     
@@ -233,8 +228,7 @@ class GameInfoViewController: UIViewController {
         
         categoriesContainerView.snp.makeConstraints { make in
             make.top.equalTo(galleryImagesContainerView.snp.bottom).offset(Layout.mediumPadding)
-            make.leading.equalTo(view).offset(horizontalPadding)
-            make.trailing.equalTo(view).offset(-horizontalPadding)
+            make.leading.trailing.equalTo(view).inset(horizontalPadding)
         }
         
         categoriesViewController.view.snp.makeConstraints { make in
@@ -253,8 +247,7 @@ class GameInfoViewController: UIViewController {
         
         mechanicsContainerView.snp.makeConstraints { make in
             make.top.equalTo(categoriesContainerView.snp.bottom).offset(Layout.mediumPadding)
-            make.leading.equalTo(view).offset(horizontalPadding)
-            make.trailing.equalTo(view).offset(-horizontalPadding)
+            make.leading.trailing.equalTo(view).inset(horizontalPadding)
             make.bottom.equalToSuperview()
         }
         

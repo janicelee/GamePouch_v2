@@ -57,10 +57,8 @@ class RecentSearchTableController: UITableViewController {
         view.addSubview(label)
         
         label.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(Layout.smallPadding)
-            make.leading.equalToSuperview().offset(Layout.mediumPadding)
-            make.trailing.equalToSuperview().offset(-Layout.mediumPadding)
-            make.bottom.equalToSuperview().offset(-Layout.smallPadding)
+            make.top.bottom.equalToSuperview().inset(Layout.smallPadding)
+            make.leading.trailing.equalToSuperview().inset(Layout.mediumPadding)
         }
         return view
     }

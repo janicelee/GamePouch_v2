@@ -36,10 +36,8 @@ class TagCell: UICollectionViewCell {
         layer.borderColor = UIColor.systemYellow.cgColor
     
         label.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(TagCell.verticalPadding)
-            make.bottom.equalToSuperview().offset(-TagCell.verticalPadding)
-            make.leading.equalToSuperview().offset(TagCell.horizontalPadding)
-            make.trailing.equalToSuperview().offset(-TagCell.horizontalPadding)
+            make.top.bottom.equalToSuperview().inset(TagCell.verticalPadding)
+            make.leading.trailing.equalToSuperview().inset(TagCell.horizontalPadding)
         }
     }
     

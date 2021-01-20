@@ -51,16 +51,15 @@ class FavoriteCell: UITableViewCell {
         secondColumn.spacing = Layout.smallPadding
         
         gameImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(Layout.smallPadding)
+            make.top.bottom.equalToSuperview().inset(Layout.smallPadding)
             make.leading.equalToSuperview().offset(Layout.mediumPadding)
-            make.bottom.equalToSuperview().offset(-Layout.smallPadding)
             make.width.equalTo(80)
         }
         
         infoContainerView.snp.makeConstraints { make in
             make.top.equalTo(gameImageView)
             make.leading.equalTo(gameImageView.snp.trailing).offset(Layout.smallPadding)
-            make.trailing.equalToSuperview().offset(-Layout.mediumPadding)
+            make.trailing.equalToSuperview().inset(Layout.mediumPadding)
         }
         
         firstColumn.snp.makeConstraints { make in

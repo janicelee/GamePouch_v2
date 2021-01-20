@@ -30,10 +30,8 @@ class SearchResultCell: UITableViewCell {
         label.numberOfLines = 0
         
         label.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(Layout.smallPadding)
-            make.leading.equalToSuperview().offset(Layout.mediumPadding)
-            make.trailing.equalToSuperview().offset(-Layout.mediumPadding)
-            make.bottom.equalToSuperview().offset(-Layout.smallPadding)
+            make.top.bottom.equalToSuperview().inset(Layout.smallPadding)
+            make.leading.trailing.equalToSuperview().offset(Layout.mediumPadding)
         }
     }
     
