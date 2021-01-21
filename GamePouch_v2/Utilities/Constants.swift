@@ -24,3 +24,4 @@ enum Layout {
     static let mediumPadding: CGFloat = 12
     static let largePadding: CGFloat = 16
 }
+

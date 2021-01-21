@@ -13,7 +13,7 @@ class GameInfoViewController: UIViewController {
     let scrollView = UIScrollView()
     let headerImageView = GameImageView(frame: .zero)
     let largeIconView = UIView()
-    let favoriteButton = UIButton(frame: .zero)
+    let favoriteButton = FavoriteButton()
     let titleLabel = TitleLabel(textAlignment: .left, fontSize: 22)
     let yearLabel = UILabel()
     let rowStackView = UIStackView()
@@ -101,7 +101,6 @@ class GameInfoViewController: UIViewController {
         
         let buttonImage = self.game!.isInFavorites() ? Images.filledHeart : Images.emptyHeart
         favoriteButton.setImage(buttonImage, for: .normal)
-        favoriteButton.imageView?.contentMode = .scaleAspectFit
         favoriteButton.addTarget(self, action: #selector(favoriteButtonPressed(_:)), for: .touchUpInside)
         
         largeIconView.snp.makeConstraints { make in
@@ -120,9 +119,9 @@ class GameInfoViewController: UIViewController {
         }
         
         favoriteButton.snp.makeConstraints { make in
-            make.centerY.equalTo(ratingIconGroup)
+            make.top.bottom.equalToSuperview()
             make.trailing.equalToSuperview().inset(4)
-            make.width.equalTo(26)
+            make.width.equalTo(34)
         }
     }
     

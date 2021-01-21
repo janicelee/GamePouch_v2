@@ -19,7 +19,7 @@ class GameCell: UITableViewCell {
     
     let primaryRowView = UIView()
     let titleLabel = TitleLabel(textAlignment: .left, fontSize: 16)
-    let favoriteButton = UIButton(frame: .zero)
+    let favoriteButton = FavoriteButton()
     
     let secondaryRowView = UIView()
     let playersIconGroup = SmallIconGroup(labelText: "N/A", iconImage: Images.players)
@@ -87,7 +87,6 @@ class GameCell: UITableViewCell {
         [titleLabel, favoriteButton].forEach { primaryRowView.addSubview($0) }
         
         favoriteButton.setImage(Images.emptyHeart, for: .normal)
-        favoriteButton.imageView?.contentMode = .scaleAspectFit
         favoriteButton.addTarget(self, action: #selector(favoriteButtonPressed(_:)), for: .touchUpInside)
         
         primaryRowView.snp.makeConstraints { make in
@@ -102,9 +101,8 @@ class GameCell: UITableViewCell {
         }
         
         favoriteButton.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.trailing.equalToSuperview().inset(4)
-            make.width.equalTo(24)
+            make.top.trailing.bottom.equalToSuperview()
+            make.width.equalTo(34)
         }
     }
     
