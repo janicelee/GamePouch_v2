@@ -116,7 +116,7 @@ class GameCell: UITableViewCell {
         }
         
         secondaryRowView.snp.makeConstraints { make in
-            make.top.equalTo(primaryRowView.snp.bottom)
+            make.top.equalTo(primaryRowView.snp.bottom).offset(2)
             make.leading.trailing.equalTo(gameImageView)
             make.height.equalTo(20)
         }
@@ -136,7 +136,7 @@ class GameCell: UITableViewCell {
 
         timeIconGroup.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.leading.equalTo(playersIconGroup.snp.trailing).offset(14)
+            make.leading.equalTo(playersIconGroup.snp.trailing).offset(Layout.mediumPadding)
         }
         
         timeIconGroup.label.snp.makeConstraints { make in
@@ -145,7 +145,7 @@ class GameCell: UITableViewCell {
 
         difficultyIconGroup.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.leading.equalTo(timeIconGroup.snp.trailing).offset(14)
+            make.leading.equalTo(timeIconGroup.snp.trailing).offset(Layout.mediumPadding)
         }
         
         difficultyIconGroup.label.snp.makeConstraints { make in
@@ -154,7 +154,7 @@ class GameCell: UITableViewCell {
 
         ageIconGroup.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.leading.equalTo(difficultyIconGroup.snp.trailing).offset(14)
+            make.leading.equalTo(difficultyIconGroup.snp.trailing).offset(Layout.mediumPadding)
         }
         
         secondaryRowView.updateConstraints()
