@@ -105,7 +105,7 @@ class GameInfoViewController: UIViewController {
         favoriteButton.addTarget(self, action: #selector(favoriteButtonPressed(_:)), for: .touchUpInside)
         
         largeIconView.snp.makeConstraints { make in
-            make.top.equalTo(headerImageView.snp.bottom).offset(Layout.smallPadding)
+            make.top.equalTo(headerImageView.snp.bottom).offset(Layout.mediumPadding)
             make.leading.trailing.equalTo(view).inset(horizontalPadding)
         }
         
@@ -175,7 +175,7 @@ class GameInfoViewController: UIViewController {
         ageIconGroup.label.text = "\(game.getMinAge())\nYears"
         
         rowStackView.snp.makeConstraints { make in
-            make.top.equalTo(yearLabel.snp.bottom).offset(Layout.mediumPadding)
+            make.top.equalTo(yearLabel.snp.bottom).offset(Layout.largePadding)
             make.leading.trailing.equalTo(view).inset(Layout.smallPadding)
         }
     }
@@ -193,7 +193,7 @@ class GameInfoViewController: UIViewController {
         descriptionLabel.addGestureRecognizer(tapGesture)
         
         descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(rowStackView.snp.bottom).offset(Layout.mediumPadding)
+            make.top.equalTo(rowStackView.snp.bottom).offset(Layout.largePadding)
             make.leading.trailing.equalTo(view).inset(horizontalPadding)
         }
     }
@@ -207,7 +207,7 @@ class GameInfoViewController: UIViewController {
         galleryImagesViewController.didMove(toParent: self)
         
         galleryImagesContainerView.snp.makeConstraints { make in
-            make.top.equalTo(descriptionLabel.snp.bottom).offset(Layout.mediumPadding)
+            make.top.equalTo(descriptionLabel.snp.bottom).offset(Layout.largePadding)
             make.leading.equalTo(view).offset(horizontalPadding)
             make.trailing.equalTo(view).offset(-horizontalPadding)
             make.height.equalTo(view.snp.height).multipliedBy(0.3)
@@ -227,7 +227,7 @@ class GameInfoViewController: UIViewController {
         categoriesViewController.didMove(toParent: self )
         
         categoriesContainerView.snp.makeConstraints { make in
-            make.top.equalTo(galleryImagesContainerView.snp.bottom).offset(Layout.mediumPadding)
+            make.top.equalTo(galleryImagesContainerView.snp.bottom).offset(Layout.largePadding)
             make.leading.trailing.equalTo(view).inset(horizontalPadding)
         }
         
@@ -246,7 +246,7 @@ class GameInfoViewController: UIViewController {
         mechanicsViewController.didMove(toParent: self )
         
         mechanicsContainerView.snp.makeConstraints { make in
-            make.top.equalTo(categoriesContainerView.snp.bottom).offset(Layout.mediumPadding)
+            make.top.equalTo(categoriesContainerView.snp.bottom).offset(Layout.largePadding)
             make.leading.trailing.equalTo(view).inset(horizontalPadding)
             make.bottom.equalToSuperview()
         }

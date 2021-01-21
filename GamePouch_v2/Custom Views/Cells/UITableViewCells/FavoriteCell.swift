@@ -52,14 +52,14 @@ class FavoriteCell: UITableViewCell {
         
         gameImageView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(Layout.smallPadding)
-            make.leading.equalToSuperview().offset(Layout.mediumPadding)
+            make.leading.equalToSuperview().offset(Layout.largePadding)
             make.width.equalTo(80)
         }
         
         infoContainerView.snp.makeConstraints { make in
             make.top.equalTo(gameImageView)
             make.leading.equalTo(gameImageView.snp.trailing).offset(Layout.smallPadding)
-            make.trailing.equalToSuperview().inset(Layout.mediumPadding)
+            make.trailing.equalToSuperview().inset(Layout.largePadding)
         }
         
         firstColumn.snp.makeConstraints { make in
@@ -68,7 +68,7 @@ class FavoriteCell: UITableViewCell {
         
         secondColumn.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
-            make.leading.equalTo(firstColumn.snp.trailing).offset(Layout.mediumPadding + 8)
+            make.leading.equalTo(firstColumn.snp.trailing).offset(Layout.largePadding + 8)
         }
     }
     

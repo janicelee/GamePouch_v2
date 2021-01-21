@@ -58,7 +58,7 @@ class RecentSearchTableController: UITableViewController {
         
         label.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(Layout.smallPadding)
-            make.leading.trailing.equalToSuperview().inset(Layout.mediumPadding)
+            make.leading.trailing.equalToSuperview().inset(Layout.largePadding)
         }
         return view
     }

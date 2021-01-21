@@ -31,7 +31,7 @@ class SearchResultCell: UITableViewCell {
         
         label.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(Layout.smallPadding)
-            make.leading.trailing.equalToSuperview().offset(Layout.mediumPadding)
+            make.leading.trailing.equalToSuperview().offset(Layout.largePadding)
         }
     }
     

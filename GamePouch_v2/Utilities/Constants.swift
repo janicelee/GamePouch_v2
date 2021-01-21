@@ -21,5 +21,6 @@ enum Images {
 
 enum Layout {
     static let smallPadding: CGFloat = 8
-    static let mediumPadding: CGFloat = 16
+    static let mediumPadding: CGFloat = 12
+    static let largePadding: CGFloat = 16
 }
