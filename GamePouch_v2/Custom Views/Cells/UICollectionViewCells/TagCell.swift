@@ -33,7 +33,7 @@ class TagCell: UICollectionViewCell {
         
         layer.cornerRadius = 14
         layer.borderWidth = 2
-        layer.borderColor = UIColor.systemYellow.cgColor
+        layer.borderColor = UIColor.systemGray.cgColor
     
         label.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(TagCell.verticalPadding)
@@ -41,7 +41,17 @@ class TagCell: UICollectionViewCell {
         }
     }
     
-    func setLabel(to title: String) {
+    func setLabel(to title: String, type: TagType) {
         label.text = title
+        layer.borderColor = getBorderColor(type: type)
+    }
+    
+    private func getBorderColor(type: TagType) -> CGColor {
+        switch type {
+        case .categories:
+            return UIColor.systemTeal.cgColor
+        case .mechanics:
+            return UIColor.systemYellow.cgColor
+        }
     }
 }

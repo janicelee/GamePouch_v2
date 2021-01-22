@@ -220,7 +220,7 @@ class GameInfoViewController: UIViewController {
     private func configureCategoriesSection() {
         scrollView.addSubview(categoriesContainerView)
         
-        let categoriesViewController = TagViewController(title: "Categories", tags: game.categories)
+        let categoriesViewController = TagViewController(type: TagType.categories, tags: game.categories)
         addChild(categoriesViewController)
         categoriesContainerView.addSubview(categoriesViewController.view)
         categoriesViewController.didMove(toParent: self )
@@ -239,7 +239,7 @@ class GameInfoViewController: UIViewController {
         let mechanicsContainerView = UIView()
         scrollView.addSubview(mechanicsContainerView)
         
-        let mechanicsViewController = TagViewController(title: "Mechanics", tags: game.mechanics)
+        let mechanicsViewController = TagViewController(type: TagType.mechanics, tags: game.mechanics)
         addChild(mechanicsViewController)
         mechanicsContainerView.addSubview(mechanicsViewController.view)
         mechanicsViewController.didMove(toParent: self )
