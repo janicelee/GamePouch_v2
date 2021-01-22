@@ -89,7 +89,7 @@ class FavoritesTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let cell = cell as! GameCell
+        let cell = cell as! FavoriteCell
         cell.resetImage()
     }
 

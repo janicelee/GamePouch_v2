@@ -53,7 +53,7 @@ class FavoriteCell: UITableViewCell {
         gameImageView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(Layout.smallPadding)
             make.leading.equalToSuperview().offset(Layout.largePadding)
-            make.width.equalTo(80)
+            make.width.equalTo(76)
         }
         
         infoContainerView.snp.makeConstraints { make in
@@ -90,5 +90,9 @@ class FavoriteCell: UITableViewCell {
         if let thumbnailURL = game.thumbnailURL {
             gameImageView.setImage(from: thumbnailURL)
         }
+    }
+    
+    func resetImage() {
+        gameImageView.image = Images.placeholder
     }
 }
