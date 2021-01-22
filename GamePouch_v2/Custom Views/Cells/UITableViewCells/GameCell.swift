@@ -158,6 +158,18 @@ class GameCell: UITableViewCell {
         secondaryRowView.updateConstraints()
     }
     
+    @objc private func favoriteButtonPressed(_ sender: UIButton) {
+        let isInFavorites = game!.isInFavorites()
+    
+        if isInFavorites {
+            game!.setFavorite(to: false)
+            favoriteButton.setImage(Images.emptyHeart, for: .normal)
+        } else {
+            game!.setFavorite(to: true)
+            favoriteButton.setImage(Images.filledHeart, for: .normal)
+        }
+    }
+    
     func set(game: Game) {
         self.game = game
         titleLabel.text = game.getTitle()
@@ -171,7 +183,7 @@ class GameCell: UITableViewCell {
         if let attString = rank.attributedString {
             rankIconGroup.label.attributedText = attString
         } else {
-            rankIconGroup.label.text = rank.text 
+            rankIconGroup.label.text = rank.text
         }
         
         if let imageURL = game.imageURL {
@@ -182,15 +194,7 @@ class GameCell: UITableViewCell {
         favoriteButton.setImage(image, for: .normal)
     }
     
-    @objc private func favoriteButtonPressed(_ sender: UIButton) {
-        let isInFavorites = game!.isInFavorites()
-    
-        if isInFavorites {
-            game!.setFavorite(to: false)
-            favoriteButton.setImage(Images.emptyHeart, for: .normal)
-        } else {
-            game!.setFavorite(to: true)
-            favoriteButton.setImage(Images.filledHeart, for: .normal)
-        }
+    func resetImage() {
+        gameImageView.image = Images.placeholder
     }
 }

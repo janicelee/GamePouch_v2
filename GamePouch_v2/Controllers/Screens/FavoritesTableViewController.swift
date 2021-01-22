@@ -87,6 +87,11 @@ class FavoritesTableViewController: UITableViewController {
         
         navigationController?.pushViewController(destination, animated: true)
     }
+    
+    override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let cell = cell as! GameCell
+        cell.resetImage()
+    }
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {

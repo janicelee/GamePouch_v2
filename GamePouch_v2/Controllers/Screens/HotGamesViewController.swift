@@ -86,4 +86,9 @@ extension HotGamesViewController: UITableViewDelegate, UITableViewDataSource {
         
         navigationController?.pushViewController(destination, animated: true)
     }
+    
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let cell = cell as! GameCell
+        cell.resetImage()
+    }
 }
