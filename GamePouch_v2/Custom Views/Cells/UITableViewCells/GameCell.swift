@@ -27,6 +27,11 @@ class GameCell: UITableViewCell {
     let difficultyIconGroup = SmallIconGroup(labelText: "N/A", iconImage: Images.difficulty)
     let ageIconGroup = SmallIconGroup(labelText: "N/A", iconImage: Images.age)
     
+    private let gameImageViewHeight = 210
+    private let primaryRowViewHeight = 28
+    private let favoriteButtonWidth = 34
+    private let secondaryRowViewHeight = 20
+    
     private var game: Game?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -52,7 +57,7 @@ class GameCell: UITableViewCell {
         gameImageView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.leading.trailing.equalToSuperview().inset(Layout.largePadding)
-            make.height.equalTo(210)
+            make.height.equalTo(gameImageViewHeight)
         }
     }
     
@@ -92,7 +97,7 @@ class GameCell: UITableViewCell {
         primaryRowView.snp.makeConstraints { make in
             make.top.equalTo(gameImageView.snp.bottom).offset(4)
             make.leading.trailing.equalTo(gameImageView)
-            make.height.equalTo(28)
+            make.height.equalTo(primaryRowViewHeight)
         }
         
         titleLabel.snp.makeConstraints { make in
@@ -102,7 +107,7 @@ class GameCell: UITableViewCell {
         
         favoriteButton.snp.makeConstraints { make in
             make.top.trailing.bottom.equalToSuperview()
-            make.width.equalTo(34)
+            make.width.equalTo(favoriteButtonWidth)
         }
     }
     
@@ -116,7 +121,7 @@ class GameCell: UITableViewCell {
         secondaryRowView.snp.makeConstraints { make in
             make.top.equalTo(primaryRowView.snp.bottom).offset(2)
             make.leading.trailing.equalTo(gameImageView)
-            make.height.equalTo(20)
+            make.height.equalTo(secondaryRowViewHeight)
         }
         
         playersIconGroup.snp.makeConstraints { make in

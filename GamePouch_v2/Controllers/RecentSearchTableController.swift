@@ -15,6 +15,9 @@ protocol RecentSearchTableControllerDelegate: class {
 class RecentSearchTableController: UITableViewController {
     
     weak var delegate: RecentSearchTableControllerDelegate?
+    
+    private let headerHeight: CGFloat = 50
+    
     var recentSearches: [NSManagedObject] = [] {
         didSet {
             DispatchQueue.main.async {
@@ -48,7 +51,7 @@ class RecentSearchTableController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: 50))
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: headerHeight))
         view.backgroundColor = .systemBackground
         
         let label = UILabel()

@@ -12,6 +12,8 @@ class HotGamesViewController: UIViewController {
     private let refreshControl = UIRefreshControl()
     private let tableView = UITableView()
     private var games: [Game] = []
+    
+    private let rowHeight: CGFloat = 290
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +36,7 @@ class HotGamesViewController: UIViewController {
     private func configureTableView() {
         view.addSubview(tableView)
         tableView.frame = view.bounds
-        tableView.rowHeight = 290
+        tableView.rowHeight = rowHeight
         
         tableView.delegate = self
         tableView.dataSource = self

@@ -10,6 +10,8 @@ import CoreData
 
 class FavoritesTableViewController: UITableViewController {
     
+    private let rowHeight: CGFloat = 90
+    
     var favorites: [Game] = [] {
         didSet {
             DispatchQueue.main.async {
@@ -24,7 +26,7 @@ class FavoritesTableViewController: UITableViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         
         tableView.register(FavoriteCell.self, forCellReuseIdentifier: FavoriteCell.reuseID)
-        tableView.rowHeight = 90
+        tableView.rowHeight = rowHeight
         tableView.separatorStyle = .none
     }
     

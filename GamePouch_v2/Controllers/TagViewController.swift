@@ -49,15 +49,13 @@ class TagViewController: UIViewController {
         collectionView.register(TagCell.self, forCellWithReuseIdentifier: TagCell.reuseID)
         collectionView.backgroundColor = .systemBackground
         containerView.addSubview(collectionView)
-        
-        let verticalPadding: CGFloat = 8
-        
+  
         titleLabel.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
         }
         
         containerView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(verticalPadding)
+            make.top.equalTo(titleLabel.snp.bottom).offset(Layout.smallPadding)
             make.leading.trailing.bottom.equalToSuperview()
         }
         

@@ -8,6 +8,8 @@
 import UIKit
 
 class GameImageView: UIImageView {
+    
+    private let cornerRadius: CGFloat = 10
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -19,7 +21,7 @@ class GameImageView: UIImageView {
     }
     
     private func configure() {
-        layer.cornerRadius = 10
+        layer.cornerRadius = cornerRadius
         clipsToBounds = true
         image = Images.placeholder
         contentMode = .scaleAspectFill

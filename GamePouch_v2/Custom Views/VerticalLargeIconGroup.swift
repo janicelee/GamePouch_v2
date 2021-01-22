@@ -12,6 +12,8 @@ class VerticalLargeIconGroup: UIView {
     let iconImageView = UIImageView()
     let label = UILabel()
     
+    private let iconImageWidth = 22
+    
     required init(labelText: String, iconImage: UIImage?) {
         label.text = labelText
         iconImageView.image = iconImage
@@ -34,7 +36,7 @@ class VerticalLargeIconGroup: UIView {
         
         iconImageView.snp.makeConstraints { make in
             make.top.centerX.equalToSuperview()
-            make.width.height.equalTo(22)
+            make.width.height.equalTo(iconImageWidth)
         }
     }
     

@@ -12,6 +12,8 @@ class SmallIconGroup: UIView {
     let iconImageView = UIImageView()
     let label = UILabel()
     
+    private let iconImageWidth = 16
+    
     required init(labelText: String, iconImage: UIImage?) {
         label.text = labelText
         iconImageView.image = iconImage
@@ -35,7 +37,7 @@ class SmallIconGroup: UIView {
         iconImageView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.bottom.equalToSuperview().priority(998)
-            make.width.height.equalTo(16)
+            make.width.height.equalTo(iconImageWidth)
         }
     }
     

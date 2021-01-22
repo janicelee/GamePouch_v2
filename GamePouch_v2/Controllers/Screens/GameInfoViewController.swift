@@ -23,7 +23,8 @@ class GameInfoViewController: UIViewController {
     let galleryImagesContainerView = UIView()
     let categoriesContainerView = UIView()
     
-    let horizontalPadding: CGFloat = 20
+    private let headerImageViewHeight = 300
+    private let horizontalPadding: CGFloat = 20
     
     var game: Game!
     var descriptionExpanded = false
@@ -69,7 +70,7 @@ class GameInfoViewController: UIViewController {
     
     private func configureHeaderImageView() {
         scrollView.addSubview(headerImageView)
-        
+
         headerImageView.layer.cornerRadius = 0
         
         if let imageURL = game.imageURL {
@@ -79,7 +80,7 @@ class GameInfoViewController: UIViewController {
         headerImageView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.leading.trailing.equalTo(view)
-            make.height.equalTo(300)
+            make.height.equalTo(headerImageViewHeight)
         }
     }
     

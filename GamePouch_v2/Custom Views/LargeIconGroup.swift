@@ -12,6 +12,8 @@ class LargeIconGroup: UIView {
     let label = UILabel()
     let iconImageView = UIImageView()
     
+    private let iconImageWidth = 16
+    
     required init(labelText: String, iconImage: UIImage?) {
         label.text = labelText
         iconImageView.image = iconImage
@@ -46,7 +48,7 @@ class LargeIconGroup: UIView {
             make.leading.equalTo(label.snp.trailing).offset(2)
             make.trailing.equalToSuperview()
             make.centerY.equalTo(label).offset(-1)
-            make.width.height.equalTo(16)
+            make.width.height.equalTo(iconImageWidth)
         }
     }
 }
