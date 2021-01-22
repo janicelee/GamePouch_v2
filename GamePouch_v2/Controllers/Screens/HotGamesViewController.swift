@@ -39,7 +39,6 @@ class HotGamesViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(GameCell.self, forCellReuseIdentifier: GameCell.reuseID)
-        tableView.removeExcessCells()
         
         if #available(iOS 10.0, *) {
             tableView.refreshControl = refreshControl
