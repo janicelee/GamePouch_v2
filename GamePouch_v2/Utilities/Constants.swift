@@ -17,7 +17,13 @@ enum Images {
     static let age = UIImage(named: "icon-age")
     static let filledHeart = UIImage(named: "icon-filled-heart")
     static let emptyHeart = UIImage(named: "icon-empty-heart")
+    
+    static let tabBarGlyphConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .bold)
+    static let hotGamesGlyph = UIImage(systemName: "flame", withConfiguration: tabBarGlyphConfig)
+    static let searchGlyph = UIImage(systemName: "magnifyingglass", withConfiguration: tabBarGlyphConfig)
+    static let favoritesGlyph = UIImage(systemName: "heart", withConfiguration: tabBarGlyphConfig)
 }
+
 
 enum Layout {
     static let smallPadding: CGFloat = 8

@@ -16,19 +16,19 @@ class TabBarController: UITabBarController {
     
     private func createHotGamesNavigationController() -> UINavigationController {
         let hotgamesViewController = HotGamesViewController()
-        hotgamesViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .topRated, tag: 0)
+        hotgamesViewController.tabBarItem = UITabBarItem(title: "Hot", image: Images.hotGamesGlyph, tag: 0)
         return UINavigationController(rootViewController: hotgamesViewController)
     }
     
     private func createSearchNavigationController() -> UINavigationController {
         let searchViewController = SearchViewController()
-        searchViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 1)
+        searchViewController.tabBarItem = UITabBarItem(title: "Search", image: Images.searchGlyph, tag: 1)
         return UINavigationController(rootViewController: searchViewController)
     }
     
     private func createFavoritesNavigationController() -> UINavigationController {
         let favoritesViewController = FavoritesTableViewController()
-        favoritesViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 2)
+        favoritesViewController.tabBarItem = UITabBarItem(title: "Favorites", image: Images.favoritesGlyph, tag: 2)
         return UINavigationController(rootViewController: favoritesViewController)
     }
 }
