@@ -31,3 +31,7 @@ enum Layout {
     static let largePadding: CGFloat = 16
 }
 
+enum Colors {
+    static let mainText = UIColor.systemRed
+}
+
