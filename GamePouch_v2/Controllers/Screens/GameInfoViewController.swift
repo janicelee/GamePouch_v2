@@ -121,7 +121,7 @@ class GameInfoViewController: UIViewController {
         
         favoriteButton.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
-            make.trailing.equalToSuperview().inset(4)
+            make.trailing.equalToSuperview().inset(2)
             make.width.equalTo(34)
         }
     }
@@ -166,7 +166,6 @@ class GameInfoViewController: UIViewController {
             $0.label.numberOfLines = 2
         }
         
-        rowStackView.backgroundColor = .systemBackground
         rowStackView.distribution = .fillEqually
         
         playersIconGroup.label.text = "\(game.getNumPlayers())\nPlayers"
@@ -221,7 +220,7 @@ class GameInfoViewController: UIViewController {
     private func configureCategoriesSection() {
         scrollView.addSubview(categoriesContainerView)
         
-        let categoriesViewController = TagViewController(type: TagType.categories, tags: game.categories)
+        let categoriesViewController = TagViewController(title: "Categories", tags: game.categories, borderColor: Colors.teal)
         addChild(categoriesViewController)
         categoriesContainerView.addSubview(categoriesViewController.view)
         categoriesViewController.didMove(toParent: self )
@@ -240,7 +239,7 @@ class GameInfoViewController: UIViewController {
         let mechanicsContainerView = UIView()
         scrollView.addSubview(mechanicsContainerView)
         
-        let mechanicsViewController = TagViewController(type: TagType.mechanics, tags: game.mechanics)
+        let mechanicsViewController = TagViewController(title: "Mechanics", tags: game.mechanics, borderColor: Colors.yellow)
         addChild(mechanicsViewController)
         mechanicsContainerView.addSubview(mechanicsViewController.view)
         mechanicsViewController.didMove(toParent: self )

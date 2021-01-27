@@ -5,7 +5,6 @@
 //  Created by Janice Lee on 2020-12-01.
 //
 
-import Foundation
 import UIKit
 
 struct Game {

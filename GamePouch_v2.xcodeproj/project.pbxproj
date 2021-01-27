@@ -30,10 +30,10 @@
 		F736EDD425AECA5E00D40A42 /* FavoriteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F736EDD325AECA5E00D40A42 /* FavoriteCell.swift */; };
 		F75E5BEF257B155800611A40 /* GameInfoParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75E5BEE257B155800611A40 /* GameInfoParser.swift */; };
 		F7707A5B25A712230076419A /* RecentSearchTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7707A5A25A712230076419A /* RecentSearchTableController.swift */; };
-		F771278725BADF230041A80A /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F771278625BADF230041A80A /* String+Ext.swift */; };
 		F771543D25785A7900FB1508 /* HotnessListParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F771543C25785A7900FB1508 /* HotnessListParser.swift */; };
 		F777D9DD25887CA900859D64 /* SmallIconGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = F777D9DC25887CA900859D64 /* SmallIconGroup.swift */; };
 		F779E7F72585D82B00AC829D /* LargeIconGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = F779E7F62585D82B00AC829D /* LargeIconGroup.swift */; };
+		F77A469125C0F8820036E6F1 /* UIColor+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77A469025C0F8820036E6F1 /* UIColor+Ext.swift */; };
 		F78C8D8125A30BBF00A3DBE0 /* SearchParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78C8D8025A30BBF00A3DBE0 /* SearchParser.swift */; };
 		F78C8D8625A3121E00A3DBE0 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78C8D8525A3121E00A3DBE0 /* SearchResult.swift */; };
 		F78C8D8F25A325D500A3DBE0 /* SearchResultsTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78C8D8E25A325D500A3DBE0 /* SearchResultsTableController.swift */; };
@@ -104,10 +104,10 @@
 		F736EDD325AECA5E00D40A42 /* FavoriteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteCell.swift; sourceTree = "<group>"; };
 		F75E5BEE257B155800611A40 /* GameInfoParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameInfoParser.swift; sourceTree = "<group>"; };
 		F7707A5A25A712230076419A /* RecentSearchTableController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSearchTableController.swift; sourceTree = "<group>"; };
-		F771278625BADF230041A80A /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
 		F771543C25785A7900FB1508 /* HotnessListParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotnessListParser.swift; sourceTree = "<group>"; };
 		F777D9DC25887CA900859D64 /* SmallIconGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallIconGroup.swift; sourceTree = "<group>"; };
 		F779E7F62585D82B00AC829D /* LargeIconGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeIconGroup.swift; sourceTree = "<group>"; };
+		F77A469025C0F8820036E6F1 /* UIColor+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Ext.swift"; sourceTree = "<group>"; };
 		F78C8D8025A30BBF00A3DBE0 /* SearchParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchParser.swift; sourceTree = "<group>"; };
 		F78C8D8525A3121E00A3DBE0 /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 		F78C8D8E25A325D500A3DBE0 /* SearchResultsTableController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsTableController.swift; sourceTree = "<group>"; };
@@ -268,7 +268,7 @@
 		F75E5BE8257B109700611A40 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				F771278625BADF230041A80A /* String+Ext.swift */,
+				F77A469025C0F8820036E6F1 /* UIColor+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -647,6 +647,7 @@
 				F7D8C74925837B8700237071 /* GameImageView.swift in Sources */,
 				F78C8D9F25A326EE00A3DBE0 /* SearchResultCell.swift in Sources */,
 				F736EDCF25AEC6D300D40A42 /* FavoritesTableViewController.swift in Sources */,
+				F77A469125C0F8820036E6F1 /* UIColor+Ext.swift in Sources */,
 				F78C8D8F25A325D500A3DBE0 /* SearchResultsTableController.swift in Sources */,
 				F7707A5B25A712230076419A /* RecentSearchTableController.swift in Sources */,
 				F73475772591C89800308880 /* TagCollectionViewFlowLayout.swift in Sources */,
@@ -655,7 +656,6 @@
 				F7D4C96E259F36BB006E3157 /* GalleryImagesViewController.swift in Sources */,
 				F7EC6278258E136400FD536A /* VerticalLargeIconGroup.swift in Sources */,
 				F7B47E0125B93E6C003597B4 /* FavoriteButton.swift in Sources */,
-				F771278725BADF230041A80A /* String+Ext.swift in Sources */,
 				F7336C68257493F700C05848 /* SceneDelegate.swift in Sources */,
 				F7C11AB7259454C200A53778 /* ImageCell.swift in Sources */,
 				F7D8C74E25837C2F00237071 /* Constants.swift in Sources */,

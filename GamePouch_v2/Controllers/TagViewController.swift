@@ -7,22 +7,18 @@
 
 import UIKit
 
-enum TagType: String {
-    case categories, mechanics
-}
-
 class TagViewController: UIViewController {
     
     let tags: [String]
-    let tagType: TagType
     let titleLabel = TitleLabel(textAlignment: .left, fontSize: 22)
+    let tagBorderColor: UIColor
     let containerView = UIView()
     var collectionView: TagCollectionView!
     
-    init(type: TagType, tags: [String]) {
-        self.tagType = type
-        titleLabel.text = tagType.rawValue.capitalizingFirstLetter()
+    init(title: String, tags: [String], borderColor: UIColor) {
         self.tags = tags
+        titleLabel.text = title
+        tagBorderColor = borderColor
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -72,7 +68,7 @@ extension TagViewController: UICollectionViewDelegate, UICollectionViewDataSourc
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TagCell.reuseID, for: indexPath) as! TagCell
-        cell.setLabel(to: tags[indexPath.row], type: tagType)
+        cell.setLabel(to: tags[indexPath.row], borderColor: tagBorderColor)
         return cell
     }
 }

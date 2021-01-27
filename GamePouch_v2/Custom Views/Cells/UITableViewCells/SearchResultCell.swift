@@ -28,7 +28,7 @@ class SearchResultCell: UITableViewCell {
         label.font = UIFont.systemFont(ofSize: 16)
         label.textAlignment = .left
         label.numberOfLines = 0
-        label.textColor = Colors.mainText
+        label.textColor = Colors.purple
         
         label.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(Layout.smallPadding)

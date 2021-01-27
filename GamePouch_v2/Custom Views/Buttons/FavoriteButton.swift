@@ -20,6 +20,6 @@ class FavoriteButton: UIButton {
     
     private func configure() {
         imageView?.contentMode = .scaleAspectFit
-        imageEdgeInsets = UIEdgeInsets(top: 6, left: 6, bottom: 6, right: 6)
+        imageEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
     }
 }

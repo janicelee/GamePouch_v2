@@ -18,12 +18,11 @@ enum Images {
     static let filledHeart = UIImage(named: "icon-filled-heart")
     static let emptyHeart = UIImage(named: "icon-empty-heart")
     
-    static let tabBarGlyphConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .bold)
+    static let tabBarGlyphConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
     static let hotGamesGlyph = UIImage(systemName: "flame", withConfiguration: tabBarGlyphConfig)
     static let searchGlyph = UIImage(systemName: "magnifyingglass", withConfiguration: tabBarGlyphConfig)
     static let favoritesGlyph = UIImage(systemName: "heart", withConfiguration: tabBarGlyphConfig)
 }
-
 
 enum Layout {
     static let smallPadding: CGFloat = 8
@@ -32,6 +31,8 @@ enum Layout {
 }
 
 enum Colors {
-    static let mainText = UIColor.systemRed
+    static let purple = UIColor(hex: "#974af0ff")
+    static let yellow = UIColor.systemYellow
+    static let teal = UIColor.systemTeal
 }
 

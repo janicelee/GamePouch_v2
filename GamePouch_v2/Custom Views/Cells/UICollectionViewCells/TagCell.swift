@@ -41,17 +41,8 @@ class TagCell: UICollectionViewCell {
         }
     }
     
-    func setLabel(to title: String, type: TagType) {
+    func setLabel(to title: String, borderColor: UIColor) {
         label.text = title
-        layer.borderColor = getBorderColor(type: type)
-    }
-    
-    private func getBorderColor(type: TagType) -> CGColor {
-        switch type {
-        case .categories:
-            return UIColor.systemTeal.cgColor
-        case .mechanics:
-            return UIColor.systemYellow.cgColor
-        }
+        layer.borderColor = borderColor.cgColor
     }
 }
