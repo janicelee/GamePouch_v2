@@ -13,10 +13,7 @@ class NetworkManager {
     private let cache = NSCache<NSString, UIImage>()
     
     private let baseURL = "https://www.boardgamegeek.com/xmlapi2/"
-    private let getGameURL = "thing?type=boardgame,boardgameexpansion&stats=1&id="
-    private let hotnessListURL = "hot?type=boardgame"
-    private let imageGalleryURL = "https://api.geekdo.com/api/images?ajax=1&gallery=all&nosession=1&objecttype=thing&pageid=1&showcount=36&size=thumb&sort=hot&objectid="
-    private let searchURL = "search?type=boardgame,boardgameexpansion&query="
+    private let imageGalleryBaseURL = "https://api.geekdo.com/api/"
     private init() {}
     
     func getHotnessList(completed: @escaping (Result<[Game], GPError>) -> ()) {
@@ -49,9 +46,11 @@ class NetworkManager {
     }
     
     private func getHotnessListIds(completed: @escaping (Result<[String], GPError>) -> ()) {
-        let endpoint = baseURL + hotnessListURL
+        let queryItems = [URLQueryItem(name: "type", value: "boardgame")]
+        var urlComps = URLComponents(string: baseURL + "hot")!
+        urlComps.queryItems = queryItems
         
-        guard let url = URL(string: endpoint) else {
+        guard let url = urlComps.url else {
             completed(.failure(.invalidURL))
             return
         }
@@ -84,9 +83,13 @@ class NetworkManager {
     }
     
     func getGameInfo(id: String, completed: @escaping (Result<Game, GPError>) -> ()) {
-        let endpoint = baseURL + getGameURL + id
+        let queryItems = [URLQueryItem(name: "type", value: "boardgame, boardgameexpansion"),
+                          URLQueryItem(name: "stats", value: "1"),
+                          URLQueryItem(name: "id", value: id)]
+        var urlComps = URLComponents(string: baseURL + "thing")!
+        urlComps.queryItems = queryItems
         
-        guard let url = URL(string: endpoint) else {
+        guard let url = urlComps.url else {
             completed(.failure(.invalidURL))
             return
         }
@@ -141,9 +144,20 @@ class NetworkManager {
     }
     
     func getImageGalleryURLs(for id: String, completed: @escaping (Result<[String], GPError>) -> ()) {
-        let endpoint = imageGalleryURL + id
+        let queryItems = [URLQueryItem(name: "ajax", value: "1"),
+                          URLQueryItem(name: "gallery", value: "all"),
+                          URLQueryItem(name: "nosession", value: "1"),
+                          URLQueryItem(name: "objecttype", value: "thing"),
+                          URLQueryItem(name: "pageid", value: "1"),
+                          URLQueryItem(name: "showcount", value: "36"),
+                          URLQueryItem(name: "size", value: "thumb"),
+                          URLQueryItem(name: "sort", value: "hot"),
+                          URLQueryItem(name: "objectid", value: id),
+        ]
+        var urlComps = URLComponents(string: imageGalleryBaseURL + "images")!
+        urlComps.queryItems = queryItems
         
-        guard let url = URL(string: endpoint) else {
+        guard let url = urlComps.url else {
             completed(.failure(.invalidURL))
             return
         }
@@ -182,7 +196,7 @@ class NetworkManager {
     
     func search(for query: String, completed: @escaping(Result<[SearchResult], GPError>) -> ()) {
         let queryItems = [URLQueryItem(name: "type", value: "boardgame, boardgameexpansion"), URLQueryItem(name: "query", value: query)]
-        var urlComps = URLComponents(string: "https://www.boardgamegeek.com/xmlapi2/search")!
+        var urlComps = URLComponents(string: baseURL + "search")!
         urlComps.queryItems = queryItems
         
         guard let url = urlComps.url else {
