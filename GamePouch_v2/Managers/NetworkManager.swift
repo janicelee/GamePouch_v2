@@ -16,6 +16,33 @@ class NetworkManager {
     private let imageGalleryBaseURL = "https://api.geekdo.com/api/"
     private init() {}
     
+    
+    private func sendRequest(urlComponents: URLComponents, completed: @escaping (Result<Data, GPError>) -> ()) {
+        guard let url = urlComponents.url else {
+            completed(.failure(.invalidURL))
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            if let _ = error {
+                completed(.failure(.unableToComplete))
+                return
+            }
+            
+            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+                completed(.failure(.invalidResponse))
+                return
+            }
+            
+            guard let data = data else {
+                completed(.failure(.invalidData))
+                return
+            }
+            completed(.success(data))
+        }
+        task.resume()
+    }
+    
     func getHotnessList(completed: @escaping (Result<[Game], GPError>) -> ()) {
         NetworkManager.shared.getHotnessListIds { result in
             switch result {
@@ -50,36 +77,21 @@ class NetworkManager {
         var urlComps = URLComponents(string: baseURL + "hot")!
         urlComps.queryItems = queryItems
         
-        guard let url = urlComps.url else {
-            completed(.failure(.invalidURL))
-            return
-        }
-        
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            if let _ = error {
-                completed(.failure(.unableToComplete))
-                return
-            }
-            
-            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-                completed(.failure(.invalidResponse))
-                return
-            }
-            
-            guard let data = data else {
-                completed(.failure(.invalidData))
-                return
-            }
-            
-            let parser = HotnessListParser()
-            
-            if parser.parse(from: data) {
-                completed(.success(parser.gameIds))
-            } else {
-                completed(.failure(.unableToParse))
+        sendRequest(urlComponents: urlComps) { result in
+            switch result {
+            case .success(let data):
+                let parser = HotnessListParser()
+
+                if parser.parse(from: data) {
+                    completed(.success(parser.gameIds))
+                } else {
+                    completed(.failure(.unableToParse))
+                }
+            case .failure(let error):
+                print(error.rawValue)
+                // TODO: handle error
             }
         }
-        task.resume()
     }
     
     func getGameInfo(id: String, completed: @escaping (Result<Game, GPError>) -> ()) {
@@ -89,36 +101,22 @@ class NetworkManager {
         var urlComps = URLComponents(string: baseURL + "thing")!
         urlComps.queryItems = queryItems
         
-        guard let url = urlComps.url else {
-            completed(.failure(.invalidURL))
-            return
-        }
         
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            if let _ = error {
-                completed(.failure(.unableToComplete))
-                return
-            }
-            
-            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-                completed(.failure(.invalidResponse))
-                return
-            }
-            
-            guard let data = data else {
-                completed(.failure(.invalidData))
-                return
-            }
-            
-            let parser = GameInfoParser()
+        sendRequest(urlComponents: urlComps) { result in
+            switch result {
+            case .success(let data):
+                let parser = GameInfoParser()
 
-            if parser.parse(from: data) {
-                completed(.success(parser.game))
-            } else {
-                completed(.failure(.unableToParse))
+                if parser.parse(from: data) {
+                    completed(.success(parser.game))
+                } else {
+                    completed(.failure(.unableToParse))
+                }
+            case .failure(let error):
+                print(error.rawValue)
+                // TODO: handle error
             }
         }
-        task.resume()
     }
     
     func downloadImage(from urlString: String, completed: @escaping (UIImage) -> ()) {
@@ -127,20 +125,20 @@ class NetworkManager {
             completed(image)
             return
         }
-    
-        guard let url = URL(string: urlString) else { return }
         
-        let task = URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
-            guard let self = self,
-                  error == nil,
-                  let response = response as? HTTPURLResponse,
-                  response.statusCode == 200,
-                  let data = data,
-                  let image = UIImage(data: data) else { return }
-            self.cache.setObject(image, forKey: cacheKey)
-            completed(image)
+        let urlComps = URLComponents(string: urlString)!
+        
+        sendRequest(urlComponents: urlComps) { result in
+            switch result {
+            case .success(let data):
+                guard let image = UIImage(data: data) else { return }
+                self.cache.setObject(image, forKey: cacheKey)
+                completed(image)
+            case .failure(let error):
+                print(error.rawValue)
+                // TODO: handle error (might not need to since images have placeholders)
             }
-        task.resume()
+        }
     }
     
     func getImageGalleryURLs(for id: String, completed: @escaping (Result<[String], GPError>) -> ()) {
@@ -157,41 +155,26 @@ class NetworkManager {
         var urlComps = URLComponents(string: imageGalleryBaseURL + "images")!
         urlComps.queryItems = queryItems
         
-        guard let url = urlComps.url else {
-            completed(.failure(.invalidURL))
-            return
-        }
-        
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            if let _ = error {
-                completed(.failure(.unableToComplete))
-                return
-            }
-            
-            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-                completed(.failure(.invalidResponse))
-                return
-            }
-            
-            guard let data = data else {
-                completed(.failure(.invalidData))
-                return
-            }
-            
-            do {
-                let decoder = JSONDecoder()
-                let galleryImages = try decoder.decode(GalleryImages.self, from: data)
-                var result: [String] = []
-                
-                for galleryImage in galleryImages.images {
-                    result.append(galleryImage.imageurl_lg)
+        sendRequest(urlComponents: urlComps) { result in
+            switch result {
+            case .success(let data):
+                do {
+                    let decoder = JSONDecoder()
+                    let galleryImages = try decoder.decode(GalleryImages.self, from: data)
+                    var result: [String] = []
+                    
+                    for galleryImage in galleryImages.images {
+                        result.append(galleryImage.imageurl_lg)
+                    }
+                    completed(.success(result))
+                } catch {
+                    completed(.failure(.unableToParse))
                 }
-                completed(.success(result))
-            } catch {
-                completed(.failure(.unableToParse))
+            case .failure(let error):
+                print(error.rawValue)
+                // TODO: handle error
             }
         }
-        task.resume()
     }
     
     func search(for query: String, completed: @escaping(Result<[SearchResult], GPError>) -> ()) {
@@ -199,35 +182,20 @@ class NetworkManager {
         var urlComps = URLComponents(string: baseURL + "search")!
         urlComps.queryItems = queryItems
         
-        guard let url = urlComps.url else {
-            completed(.failure(.invalidURL))
-            return
-        }
-        
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            if let _ = error {
-                completed(.failure(.unableToComplete))
-                return
-            }
-            
-            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-                completed(.failure(.invalidResponse))
-                return
-            }
-            
-            guard let data = data else {
-                completed(.failure(.invalidData))
-                return
-            }
-            
-            let parser = SearchParser()
+        sendRequest(urlComponents: urlComps) { result in
+            switch result {
+            case .success(let data):
+                let parser = SearchParser()
 
-            if parser.parse(from: data) {
-                completed(.success(parser.searchResults))
-            } else {
-                completed(.failure(.unableToParse))
+                if parser.parse(from: data) {
+                    completed(.success(parser.searchResults))
+                } else {
+                    completed(.failure(.unableToParse))
+                }
+            case .failure(let error):
+                print(error.rawValue)
+                // TODO: handle error
             }
         }
-        task.resume()
     }
 }
