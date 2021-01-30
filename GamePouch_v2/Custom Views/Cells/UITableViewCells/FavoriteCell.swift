@@ -18,12 +18,12 @@ class FavoriteCell: UITableViewCell {
     let statsView = UIView()
     
     let firstColumn = UIStackView()
-    let playersIconGroup = SmallIconGroup(labelText: "N/A", iconImage: Images.players)
-    let timeIconGroup = SmallIconGroup(labelText: "N/A", iconImage: Images.time)
+    let playersIconGroup = SecondaryIconGroupView(labelText: "N/A", iconImage: Images.players)
+    let timeIconGroup = SecondaryIconGroupView(labelText: "N/A", iconImage: Images.time)
     
     let secondColumn = UIStackView()
-    let difficultyIconGroup = SmallIconGroup(labelText: "N/A", iconImage: Images.difficulty)
-    let ageIconGroup = SmallIconGroup(labelText: "N/A", iconImage: Images.age)
+    let difficultyIconGroup = SecondaryIconGroupView(labelText: "N/A", iconImage: Images.difficulty)
+    let ageIconGroup = SecondaryIconGroupView(labelText: "N/A", iconImage: Images.age)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

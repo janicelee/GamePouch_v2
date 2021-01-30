@@ -14,18 +14,18 @@ class GameCell: UITableViewCell {
     
     let gameImageView = GameImageView(frame: .zero)
     let largeIconView = UIView()
-    let ratingIconGroup = LargeIconGroup(labelText: "N/A", iconImage: Images.rating)
-    let rankIconGroup = LargeIconGroup(labelText: "N/A", iconImage: Images.rank)
+    let ratingIconGroup = PrimaryIconGroupView(labelText: "N/A", iconImage: Images.rating)
+    let rankIconGroup = PrimaryIconGroupView(labelText: "N/A", iconImage: Images.rank)
     
     let primaryRowView = UIView()
     let titleLabel = TitleLabel(textAlignment: .left, fontSize: 16)
     let favoriteButton = FavoriteButton()
     
     let secondaryRowView = UIView()
-    let playersIconGroup = SmallIconGroup(labelText: "N/A", iconImage: Images.players)
-    let timeIconGroup = SmallIconGroup(labelText: "N/A", iconImage: Images.time)
-    let difficultyIconGroup = SmallIconGroup(labelText: "N/A", iconImage: Images.difficulty)
-    let ageIconGroup = SmallIconGroup(labelText: "N/A", iconImage: Images.age)
+    let playersIconGroup = SecondaryIconGroupView(labelText: "N/A", iconImage: Images.players)
+    let timeIconGroup = SecondaryIconGroupView(labelText: "N/A", iconImage: Images.time)
+    let difficultyIconGroup = SecondaryIconGroupView(labelText: "N/A", iconImage: Images.difficulty)
+    let ageIconGroup = SecondaryIconGroupView(labelText: "N/A", iconImage: Images.age)
     
     private let gameImageViewHeight = 210
     private let primaryRowViewHeight = 28
