@@ -42,7 +42,6 @@ class GameInfoViewController: UIViewController {
         super.viewDidLoad()
         self.navigationItem.largeTitleDisplayMode = .never
         configure()
-        downloadGalleryImages()
     }
     
     private func configure() {
@@ -200,7 +199,7 @@ class GameInfoViewController: UIViewController {
     private func configureGalleryImagesSection() {
         scrollView.addSubview(galleryImagesContainerView)
         
-        galleryImagesViewController = GalleryImagesViewController(title: "Images", imageURLs: [])
+        galleryImagesViewController = GalleryImagesViewController(title: "Images", id: game.id!)
         addChild(galleryImagesViewController)
         galleryImagesContainerView.addSubview(galleryImagesViewController.view)
         galleryImagesViewController.didMove(toParent: self)
@@ -264,21 +263,6 @@ class GameInfoViewController: UIViewController {
         } else {
             game.setFavorite(to: true)
             favoriteButton.setImage(Images.filledHeart, for: .normal)
-        }
-    }
-    
-    private func downloadGalleryImages() {
-        guard let id = game.id else { return }
-        
-        NetworkManager.shared.getImageGalleryURLs(for: id) { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let urls):
-                self.galleryImagesViewController.imageURLs = urls
-            case .failure(let error):
-                print(error.rawValue)
-            }
         }
     }
     

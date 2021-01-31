@@ -9,7 +9,7 @@ import UIKit
 
 class GalleryImagesViewController: UIViewController {
     
-    var imageURLs: [String] {
+    var imageURLs: [String] = [] {
         didSet {
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
@@ -21,10 +21,10 @@ class GalleryImagesViewController: UIViewController {
     let containerView = UIView()
     var collectionView: UICollectionView!
 
-    init(title: String, imageURLs: [String]) {
-        titleLabel.text = title
-        self.imageURLs = imageURLs
+    init(title: String, id: String) {
         super.init(nibName: nil, bundle: nil)
+        titleLabel.text = title
+        downloadGalleryImages(id: id)
     }
     
     required init?(coder: NSCoder) {
@@ -61,6 +61,19 @@ class GalleryImagesViewController: UIViewController {
 
         collectionView.snp.makeConstraints { make in
             make.top.leading.trailing.bottom.equalToSuperview()
+        }
+    }
+    
+    private func downloadGalleryImages(id: String) {
+        NetworkManager.shared.getImageGalleryURLs(for: id) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let urls):
+                self.imageURLs = urls
+            case .failure(let error):
+                print(error.rawValue) // TODO: handle error
+            }
         }
     }
 }
