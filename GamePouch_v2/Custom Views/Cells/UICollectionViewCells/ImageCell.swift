@@ -21,15 +21,19 @@ class ImageCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func set(imageURL: String) {
-        imageView.setImage(from: imageURL)
-    }
-    
     private func configure() {
         addSubview(imageView)
         
         imageView.snp.makeConstraints { make in
             make.top.bottom.leading.trailing.equalToSuperview()
         }
+    }
+    
+    func set(imageURL: String) {
+        imageView.setImage(from: imageURL)
+    }
+    
+    func resetImage() {
+        imageView.image = Images.placeholder
     }
 }

@@ -78,7 +78,9 @@ class GalleryImagesViewController: UIViewController {
     }
 }
 
-extension GalleryImagesViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+// MARK: - UICollectionViewDataSource
+
+extension GalleryImagesViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return imageURLs.count
     }
@@ -89,6 +91,17 @@ extension GalleryImagesViewController: UICollectionViewDelegate, UICollectionVie
         return cell
     }
 }
+
+// MARK: - UICollectionViewDelegate
+
+extension GalleryImagesViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let cell = cell as! ImageCell
+        cell.resetImage()
+    }
+}
+
+// MARK: - UICollectionViewDelegateFlowLayout
 
 extension GalleryImagesViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
