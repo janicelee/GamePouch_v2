@@ -16,7 +16,6 @@ class NetworkManager {
     private let imageGalleryBaseURL = "https://api.geekdo.com/api/"
     private init() {}
     
-    
     private func sendRequest(urlComponents: URLComponents, completed: @escaping (Result<Data, GPError>) -> ()) {
         guard let url = urlComponents.url else {
             completed(.failure(.invalidURL))

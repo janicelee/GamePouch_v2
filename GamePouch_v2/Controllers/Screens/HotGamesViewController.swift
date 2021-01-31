@@ -7,16 +7,14 @@
 
 import UIKit
 
-class HotGamesViewController: UIViewController {
+class HotGamesViewController: UITableViewController {
     
-    private let refreshControl = UIRefreshControl()
-    private let tableView = UITableView()
     private var games: [Game] = []
-    
     private let rowHeight: CGFloat = 290
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         configureViewController()
         configureTableView()
         getHotnessList()
@@ -34,7 +32,6 @@ class HotGamesViewController: UIViewController {
     }
     
     private func configureTableView() {
-        view.addSubview(tableView)
         tableView.frame = view.bounds
         tableView.rowHeight = rowHeight
         
@@ -42,12 +39,8 @@ class HotGamesViewController: UIViewController {
         tableView.dataSource = self
         tableView.register(GameCell.self, forCellReuseIdentifier: GameCell.reuseID)
         
-        if #available(iOS 10.0, *) {
-            tableView.refreshControl = refreshControl
-        } else {
-            tableView.addSubview(refreshControl)
-        }
-        refreshControl.addTarget(self, action: #selector(getHotnessList), for: .valueChanged)
+        refreshControl = UIRefreshControl()
+        refreshControl!.addTarget(self, action: #selector(getHotnessList), for: .valueChanged)
     }
     
     @objc private func getHotnessList() {
@@ -60,36 +53,39 @@ class HotGamesViewController: UIViewController {
                 
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
-                    self.refreshControl.endRefreshing()
+                    self.refreshControl!.endRefreshing()
                 }
             case .failure(let error):
                 print(error.rawValue)
             }
         }
     }
-}
-
-extension HotGamesViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    
+    // MARK: - UITableViewDataSource
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return games.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: GameCell.reuseID) as! GameCell
         cell.set(game: games[indexPath.row])
         cell.selectionStyle = .none
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    // MARK: - UITableViewDelegate
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let game = games[indexPath.row]
         let destination = GameInfoViewController(game: game)
         
         navigationController?.pushViewController(destination, animated: true)
     }
     
-    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let cell = cell as! GameCell
         cell.resetImage()
     }
 }
+
