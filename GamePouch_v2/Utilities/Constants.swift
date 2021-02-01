@@ -36,3 +36,8 @@ enum Colors {
     static let teal = UIColor.systemTeal
 }
 
+enum Fonts {
+    static let superscript: CGFloat = 10
+    static let medium: CGFloat = 15
+}
+

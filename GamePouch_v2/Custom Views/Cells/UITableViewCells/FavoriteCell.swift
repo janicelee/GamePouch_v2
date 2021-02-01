@@ -77,8 +77,8 @@ class FavoriteCell: UITableViewCell {
 //        ratingIconGroup.label.text = game.getRating()
         playersIconGroup.label.text = game.getNumPlayers()
         timeIconGroup.label.text = game.getPlayTime()
-        difficultyIconGroup.label.text = game.getDifficulty()
-        ageIconGroup.label.text = game.getMinAge()
+        difficultyIconGroup.label.text = game.getDifficultyDisplayText()
+        ageIconGroup.label.text = game.getMinAgeDisplayText()
         
 //        let rank = game.getRank()
 //        if let attString = rank.attributedString {

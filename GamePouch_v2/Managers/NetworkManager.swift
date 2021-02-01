@@ -100,7 +100,6 @@ class NetworkManager {
         var urlComps = URLComponents(string: baseURL + "thing")!
         urlComps.queryItems = queryItems
         
-        
         sendRequest(urlComponents: urlComps) { result in
             switch result {
             case .success(let data):

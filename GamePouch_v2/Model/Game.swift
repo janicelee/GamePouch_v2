@@ -27,46 +27,46 @@ struct Game {
     private var isFavorite: Bool?
     
     func getTitle() -> String {
-        guard let name = name, isValid(name) else { return "N/A" }
+        guard let name = name, isValidDisplayText(name) else { return "N/A" }
         return name
     }
     
     func getDescription() -> String {
-        guard let description = description, isValid(description) else { return "N/A" }
+        guard let description = description, isValidDisplayText(description) else { return "N/A" }
         return description
     }
     
     func getYearPublished() -> String {
-        guard let yearPublished = yearPublished, isValid(yearPublished) else { return "N/A" }
+        guard let yearPublished = yearPublished, isValidDisplayText(yearPublished) else { return "N/A" }
         return yearPublished
     }
     
     func getNumPlayers() -> String {
-        guard let minPlayers = minPlayers, let maxPlayers = maxPlayers, isValid(minPlayers), isValid(maxPlayers) else {
+        guard let minPlayers = minPlayers, let maxPlayers = maxPlayers, isValidDisplayText(minPlayers), isValidDisplayText(maxPlayers) else {
            return "N/A"
         }
         return "\(minPlayers)-\(maxPlayers)"
     }
     
     func getPlayTime() -> String {
-        guard let minPlayTime = minPlayTime, let maxPlayTime = maxPlayTime, isValid(minPlayTime), isValid(maxPlayTime) else {
+        guard let minPlayTime = minPlayTime, let maxPlayTime = maxPlayTime, isValidDisplayText(minPlayTime), isValidDisplayText(maxPlayTime) else {
             return "N/A"
         }
         return "\(minPlayTime)-\(maxPlayTime)"
     }
     
-    func getMinAge() -> String {
-        guard let minAge = minAge, isValid(minAge) else { return "N/A" }
+    func getMinAgeDisplayText() -> String {
+        guard let minAge = minAge, isValidDisplayText(minAge) else { return "N/A" }
         return "\(minAge)+"
     }
     
     func getRating() -> String {
-        guard let rating = rating, isValid(rating) else { return "N/A" }
+        guard let rating = rating, isValidDisplayText(rating) else { return "N/A" }
         return rating
     }
     
-    func getRank() -> (text: String, attributedString: NSMutableAttributedString?)  {
-        guard let rank = rank, isValid(rank), let rankInt = Int(rank) else { return ("N/A", nil) }
+    func getRankDisplayText() -> (text: String, attributedString: NSMutableAttributedString?)  {
+        guard let rank = rank, isValidDisplayText(rank), let rankInt = Int(rank) else { return ("N/A", nil) }
         
         let formatter = NumberFormatter()
         formatter.numberStyle = .ordinal
@@ -75,8 +75,8 @@ struct Game {
         guard var result = formatter.string(from: rankNSNumber) else { return ("N/A", nil) }
         result = result.replacingOccurrences(of: ",", with: "")
         
-        let font: UIFont? = UIFont.systemFont(ofSize: 15, weight: .bold)
-        let fontSuper: UIFont? = UIFont.systemFont(ofSize: 10, weight: .bold)
+        let font: UIFont? = UIFont.systemFont(ofSize: Fonts.medium, weight: .bold)
+        let fontSuper: UIFont? = UIFont.systemFont(ofSize: Fonts.superscript, weight: .bold)
         let attString: NSMutableAttributedString = NSMutableAttributedString(string: result, attributes: [.font: font!])
         let location = result.count - 2
         
@@ -84,11 +84,9 @@ struct Game {
         return (result, attString)
     }
     
-    func getDifficulty() -> String {
-        guard let weight = weight, isValid(weight) else {
-            return "N/A"
-        }
-       return "\(weight)/5"
+    func getDifficultyDisplayText() -> String {
+        guard let weight = weight, isValidDisplayText(weight) else { return "N/A" }
+        return "\(weight)/5"
     }
     
     mutating func isInFavorites(skipCache: Bool) -> Bool {
@@ -103,10 +101,10 @@ struct Game {
         return isInFavorites(skipCache: false)
     }
     
-    mutating func setFavorite(to value: Bool) {
-        isFavorite = value
+    mutating func setFavorite(to isFavorite: Bool) {
+        self.isFavorite = isFavorite
         
-        if value {
+        if isFavorite {
             PersistenceManager.saveFavorite(game: self)
         } else {
             guard let id = id else { return } // TODO: show error?
@@ -114,7 +112,7 @@ struct Game {
         }
     }
     
-    private func isValid(_ label: String) -> Bool {
+    private func isValidDisplayText(_ label: String) -> Bool {
         return !label.isEmpty && label != "0" && label != "0.0" && label != "Not Ranked"
     }
 }

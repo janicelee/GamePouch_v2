@@ -97,7 +97,7 @@ class GameInfoViewController: UIViewController {
         
         ratingIconGroup.label.text = game.getRating()
         
-        let rank = game.getRank()
+        let rank = game.getRankDisplayText()
         if let attString = rank.attributedString {
             rankIconGroup.label.attributedText = attString
         } else {
@@ -173,8 +173,8 @@ class GameInfoViewController: UIViewController {
         
         playersIconGroup.label.text = "\(game.getNumPlayers())\nPlayers"
         timeIconGroup.label.text = "\(game.getPlayTime())\nMinutes"
-        difficultyIconGroup.label.text = "\(game.getDifficulty())\nDifficulty"
-        ageIconGroup.label.text = "\(game.getMinAge())\nYears"
+        difficultyIconGroup.label.text = "\(game.getDifficultyDisplayText())\nDifficulty"
+        ageIconGroup.label.text = "\(game.getMinAgeDisplayText())\nYears"
         
         rowStackView.snp.makeConstraints { make in
             make.top.equalTo(yearLabel.snp.bottom).offset(Layout.largePadding)
