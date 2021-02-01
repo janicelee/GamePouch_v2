@@ -9,14 +9,19 @@ import UIKit
 import CoreData
 
 enum PersistenceManager {
+    static let searchEntity = "Search"
+    
+    static func getManagedContext() -> NSManagedObjectContext? {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return nil }
+        return appDelegate.persistentContainer.viewContext
+    }
     
     // MARK: - Search Result Methods
     
     static func saveSearch(id: String, name: String) {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let managedContext = appDelegate.persistentContainer.viewContext
+        guard let managedContext = getManagedContext() else { return }
         
-        let entity = NSEntityDescription.entity(forEntityName: "Search", in: managedContext)!
+        let entity = NSEntityDescription.entity(forEntityName: searchEntity, in: managedContext)!
         let search = NSManagedObject(entity: entity, insertInto: managedContext)
 
         search.setValue(id, forKey: "id")
@@ -26,11 +31,12 @@ enum PersistenceManager {
         do {
             try managedContext.save()
         } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            print("Could not save search. \(error), \(error.userInfo)")
         }
-
+        
+        // If there are more than five saved searches, delete the oldest search
         do {
-            let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Search")
+            let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: searchEntity)
             let count = try managedContext.count(for: fetchRequest)
 
             if count > 5 {
@@ -41,18 +47,18 @@ enum PersistenceManager {
                 let oldestSearch = try managedContext.fetch(fetchRequest)
                 if oldestSearch.count == 1 {
                     managedContext.delete(oldestSearch[0])
+                    try managedContext.save()
                 }
             }
         } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
+            print("Error occurred while maintaining max number of saved searches. \(error), \(error.userInfo)")
         }
     }
     
     static func fetchRecentSearches() -> [NSManagedObject] {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return [] }
-        let managedContext = appDelegate.persistentContainer.viewContext
+        guard let managedContext = getManagedContext() else { return [] }
         
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Search")
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: searchEntity)
         let sort = NSSortDescriptor(key: "date", ascending: false)
         fetchRequest.sortDescriptors = [sort]
     
@@ -60,7 +66,7 @@ enum PersistenceManager {
             let recentSearches = try managedContext.fetch(fetchRequest)
             return recentSearches
         } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
+            print("Could not fetch recent searches. \(error), \(error.userInfo)")
         }
         return []
     }
@@ -68,8 +74,7 @@ enum PersistenceManager {
     // MARK: - Favorite Methods
     
     static func saveFavorite(game: Game) {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let managedContext = appDelegate.persistentContainer.viewContext
+        guard let managedContext = getManagedContext() else { return }
         
         let entity = NSEntityDescription.entity(forEntityName: "Favorite", in: managedContext)!
         let favorite = NSManagedObject(entity: entity, insertInto: managedContext)
@@ -81,13 +86,12 @@ enum PersistenceManager {
         do {
             try managedContext.save()
         } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            print("Could not save favorite. \(error), \(error.userInfo)")
         }
     }
     
     static func deleteFavorite(gameId: String) {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let managedContext = appDelegate.persistentContainer.viewContext
+        guard let managedContext = getManagedContext() else { return }
 
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Favorite")
         fetchRequest.predicate = NSPredicate(format: "id = %@", gameId)
@@ -97,13 +101,12 @@ enum PersistenceManager {
             managedContext.delete(favorite[0])
             try managedContext.save()
         } catch let error as NSError {
-            print("Could not delete id: \(gameId), error: \(error), \(error.userInfo)")
+            print("Could not delete favorite with id: \(gameId), error: \(error), \(error.userInfo)")
         }
     }
     
     static func isFavourite(id: String) -> Bool {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return false }
-        let managedContext = appDelegate.persistentContainer.viewContext
+        guard let managedContext = getManagedContext() else { return false }
 
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Favorite")
         fetchRequest.predicate = NSPredicate(format: "id = %@", id)
@@ -112,14 +115,13 @@ enum PersistenceManager {
             let count = try managedContext.fetch(fetchRequest).count
             return (count < 1) ? false : true
         } catch let error as NSError {
-            print("Could not fetch info for this favourite, id: \(id), error: \(error), \(error.userInfo)")
+            print("Could not determine if this id is in favorites: \(id), error: \(error), \(error.userInfo)")
         }
         return false
     }
     
     static func fetchFavorites(completed: @escaping (NSAsynchronousFetchResult<NSManagedObject>) -> ()) {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let managedContext = appDelegate.persistentContainer.viewContext
+        guard let managedContext = getManagedContext() else { return }
         
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Favorite")
         let sort = NSSortDescriptor(key: "date", ascending: false)
@@ -131,7 +133,7 @@ enum PersistenceManager {
         do {
             try managedContext.execute(asyncFetchRequest)
         } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
+            print("Could not fetch favorites. \(error), \(error.userInfo)")
         }
     }
 }
