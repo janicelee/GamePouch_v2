@@ -22,4 +22,9 @@ class FavoriteButton: UIButton {
         imageView?.contentMode = .scaleAspectFit
         imageEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
     }
+    
+    func set(active: Bool) {
+        let image = active ? Images.filledHeart : Images.emptyHeart
+        setImage(image, for: .normal)
+    }
 }

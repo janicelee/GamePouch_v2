@@ -91,7 +91,6 @@ class GameCell: UITableViewCell {
         addSubview(primaryRowView)
         [titleLabel, favoriteButton].forEach { primaryRowView.addSubview($0) }
         
-        favoriteButton.setImage(Images.emptyHeart, for: .normal)
         favoriteButton.addTarget(self, action: #selector(favoriteButtonPressed(_:)), for: .touchUpInside)
         
         primaryRowView.snp.makeConstraints { make in
@@ -168,11 +167,10 @@ class GameCell: UITableViewCell {
     
         if isInFavorites {
             game!.setFavorite(to: false)
-            favoriteButton.setImage(Images.emptyHeart, for: .normal)
         } else {
             game!.setFavorite(to: true)
-            favoriteButton.setImage(Images.filledHeart, for: .normal)
         }
+        favoriteButton.set(active: !isInFavorites)
     }
     
     func set(game: Game) {
@@ -195,8 +193,7 @@ class GameCell: UITableViewCell {
             gameImageView.setImage(from: imageURL)
         }
         
-        let image = self.game!.isInFavorites() ? Images.filledHeart : Images.emptyHeart
-        favoriteButton.setImage(image, for: .normal)
+        favoriteButton.set(active: self.game!.isInFavorites())
     }
     
     func resetImage() {

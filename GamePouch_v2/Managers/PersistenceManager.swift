@@ -65,7 +65,7 @@ enum PersistenceManager {
         return []
     }
     
-    // MARK: - Favourite Methods
+    // MARK: - Favorite Methods
     
     static func saveFavorite(game: Game) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }

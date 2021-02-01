@@ -13,7 +13,7 @@ class NetworkManager {
     private let cache = NSCache<NSString, UIImage>()
     
     private let baseURL = "https://www.boardgamegeek.com/xmlapi2/"
-    private let imageGalleryBaseURL = "https://api.geekdo.com/api/"
+    private let galleryImageBaseURL = "https://api.geekdo.com/api/"
     private init() {}
     
     private func sendRequest(urlComponents: URLComponents, completed: @escaping (Result<Data, GPError>) -> ()) {
@@ -151,7 +151,7 @@ class NetworkManager {
                           URLQueryItem(name: "sort", value: "hot"),
                           URLQueryItem(name: "objectid", value: id),
         ]
-        var urlComps = URLComponents(string: imageGalleryBaseURL + "images")!
+        var urlComps = URLComponents(string: galleryImageBaseURL + "images")!
         urlComps.queryItems = queryItems
         
         sendRequest(urlComponents: urlComps) { result in

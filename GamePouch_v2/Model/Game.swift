@@ -90,13 +90,17 @@ struct Game {
         }
        return "\(weight)/5"
     }
-
-    mutating func isInFavorites() -> Bool {
-        if isFavorite == nil {
+    
+    mutating func isInFavorites(skipCache: Bool) -> Bool {
+        if isFavorite == nil || skipCache {
             guard let id = id else { return false }
             isFavorite = PersistenceManager.isFavourite(id: id)
         }
         return isFavorite!
+    }
+
+    mutating func isInFavorites() -> Bool {
+        return isInFavorites(skipCache: false)
     }
     
     mutating func setFavorite(to value: Bool) {

@@ -44,6 +44,11 @@ class GameInfoViewController: UIViewController {
         configure()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.favoriteButton.set(active: self.game.isInFavorites(skipCache: true))
+    }
+    
     private func configure() {
         view.backgroundColor = .systemBackground
         
@@ -99,8 +104,7 @@ class GameInfoViewController: UIViewController {
             rankIconGroup.label.text = rank.text
         }
         
-        let buttonImage = self.game!.isInFavorites() ? Images.filledHeart : Images.emptyHeart
-        favoriteButton.setImage(buttonImage, for: .normal)
+        favoriteButton.set(active: game.isInFavorites())
         favoriteButton.addTarget(self, action: #selector(favoriteButtonPressed(_:)), for: .touchUpInside)
         
         largeIconView.snp.makeConstraints { make in
@@ -256,14 +260,8 @@ class GameInfoViewController: UIViewController {
     
     @objc private func favoriteButtonPressed(_ sender: UIButton) {
         let isInFavorites = game.isInFavorites()
-        
-        if isInFavorites {
-            game.setFavorite(to: false)
-            favoriteButton.setImage(Images.emptyHeart, for: .normal)
-        } else {
-            game.setFavorite(to: true)
-            favoriteButton.setImage(Images.filledHeart, for: .normal)
-        }
+        game.setFavorite(to: !isInFavorites)
+        favoriteButton.set(active: !isInFavorites)
     }
     
     @objc private func labelTapped(_ sender: UITapGestureRecognizer) {
