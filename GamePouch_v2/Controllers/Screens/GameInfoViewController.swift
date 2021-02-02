@@ -89,8 +89,8 @@ class GameInfoViewController: UIViewController {
     }
     
     private func configureLargeIconView() {
-        let ratingIconGroup = PrimaryIconGroupView(labelText: "N/A", iconImage: Images.rating)
-        let rankIconGroup = PrimaryIconGroupView(labelText: "N/A", iconImage: Images.rank)
+        let ratingIconGroup = PrimaryIconGroupView(label: "N/A", icon: Images.rating)
+        let rankIconGroup = PrimaryIconGroupView(label: "N/A", icon: Images.rank)
 
         scrollView.addSubview(largeIconView)
         [ratingIconGroup, rankIconGroup, favoriteButton].forEach { largeIconView.addSubview($0) }
@@ -159,10 +159,10 @@ class GameInfoViewController: UIViewController {
     }
     
     private func configureRowStackView() {
-        let playersIconGroup = GameInfoIconGroupView(labelText: "N/A", iconImage: Images.players)
-        let timeIconGroup = GameInfoIconGroupView(labelText: "N/A", iconImage: Images.time)
-        let difficultyIconGroup = GameInfoIconGroupView(labelText: "N/A", iconImage: Images.difficulty)
-        let ageIconGroup = GameInfoIconGroupView(labelText: "N/A", iconImage: Images.age)
+        let playersIconGroup = GameInfoIconGroupView(label: "N/A", icon: Images.players)
+        let timeIconGroup = GameInfoIconGroupView(label: "N/A", icon: Images.time)
+        let difficultyIconGroup = GameInfoIconGroupView(label: "N/A", icon: Images.difficulty)
+        let ageIconGroup = GameInfoIconGroupView(label: "N/A", icon: Images.age)
         
         scrollView.addSubview(rowStackView)
         [playersIconGroup, timeIconGroup, difficultyIconGroup, ageIconGroup].forEach { rowStackView.addArrangedSubview($0)

@@ -9,6 +9,8 @@ import UIKit
 
 class FavoriteButton: UIButton {
     
+    private let imageInset: CGFloat = 4
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
@@ -20,7 +22,7 @@ class FavoriteButton: UIButton {
     
     private func configure() {
         imageView?.contentMode = .scaleAspectFit
-        imageEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
+        imageEdgeInsets = UIEdgeInsets(top: imageInset, left: imageInset, bottom: imageInset, right: imageInset)
     }
     
     func set(active: Bool) {

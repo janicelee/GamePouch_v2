@@ -12,9 +12,9 @@ class IconGroupView: UIView {
     let label = UILabel()
     let iconImageView = UIImageView()
     
-    required init(labelText: String, iconImage: UIImage?) {
-        self.label.text = labelText
-        self.iconImageView.image = iconImage
+    required init(label: String, icon: UIImage?) {
+        self.label.text = label
+        self.iconImageView.image = icon
         
         super.init(frame: .zero)
         configure()

@@ -9,10 +9,14 @@ import UIKit
 import SnapKit
 
 class TagCell: UICollectionViewCell {
+    
     static let reuseID = "TagCell"
-    static let verticalPadding: CGFloat = 4
+    static let font = UIFont.systemFont(ofSize: FontSize.medium)
     static let horizontalPadding: CGFloat = 12
-    static let font = UIFont.systemFont(ofSize: 15)
+    static let verticalPadding: CGFloat = 4
+    
+    private let cornerRadius: CGFloat = 14
+    private let borderWidth: CGFloat = 2
     
     let label = UILabel()
     
@@ -31,8 +35,8 @@ class TagCell: UICollectionViewCell {
         label.font = TagCell.font
         label.textAlignment = .center
         
-        layer.cornerRadius = 14
-        layer.borderWidth = 2
+        layer.cornerRadius = cornerRadius
+        layer.borderWidth = borderWidth
         layer.borderColor = UIColor.systemGray.cgColor
     
         label.snp.makeConstraints { make in

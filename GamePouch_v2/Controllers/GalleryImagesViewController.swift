@@ -97,7 +97,7 @@ extension GalleryImagesViewController: UICollectionViewDataSource {
 extension GalleryImagesViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let cell = cell as! ImageCell
-        cell.resetImage()
+        cell.clearImage()
     }
 }
 

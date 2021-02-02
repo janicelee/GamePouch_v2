@@ -8,6 +8,7 @@
 import UIKit
 
 class ImageCell: UICollectionViewCell {
+    
     static let reuseID = "ImageCell"
     
     let imageView = GameImageView(frame: .zero)
@@ -33,7 +34,7 @@ class ImageCell: UICollectionViewCell {
         imageView.setImage(from: imageURL)
     }
     
-    func resetImage() {
+    func clearImage() {
         imageView.image = Images.placeholder
     }
 }

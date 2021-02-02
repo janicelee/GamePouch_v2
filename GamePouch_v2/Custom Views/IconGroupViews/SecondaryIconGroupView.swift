@@ -9,22 +9,24 @@ import UIKit
 
 class SecondaryIconGroupView: IconGroupView {
     
+    private let width: CGFloat = 16
+    
     override func configure() {
         super.configure()
         
         label.textAlignment = .left
-        label.font = UIFont.systemFont(ofSize: 13, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: FontSize.small, weight: .bold)
         label.textColor = .secondaryLabel
-        
-        label.snp.makeConstraints { make in
-            make.leading.equalTo(iconImageView.snp.trailing).priority(998)
-            make.top.bottom.trailing.equalToSuperview()
-        }
         
         iconImageView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.bottom.equalToSuperview().priority(998)
-            make.width.height.equalTo(16)
+            make.width.height.equalTo(width)
+        }
+        
+        label.snp.makeConstraints { make in
+            make.leading.equalTo(iconImageView.snp.trailing).priority(998)
+            make.top.bottom.trailing.equalToSuperview()
         }
     }
 }

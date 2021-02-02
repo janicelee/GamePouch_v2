@@ -25,6 +25,7 @@ enum Images {
 }
 
 enum Layout {
+    static let xsPadding: CGFloat = 4
     static let smallPadding: CGFloat = 8
     static let mediumPadding: CGFloat = 12
     static let largePadding: CGFloat = 16
@@ -36,8 +37,9 @@ enum Colors {
     static let teal = UIColor.systemTeal
 }
 
-enum Fonts {
+enum FontSize {
     static let superscript: CGFloat = 10
-    static let medium: CGFloat = 15
+    static let small: CGFloat = 13
+    static let medium: CGFloat = 16
 }
 

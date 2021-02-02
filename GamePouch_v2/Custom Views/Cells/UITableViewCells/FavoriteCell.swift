@@ -13,17 +13,18 @@ class FavoriteCell: UITableViewCell {
     static let reuseID = "FavoriteCell"
     
     let gameImageView = GameImageView(frame: .zero)
-    let infoContainerView = UIStackView()
-    let titleLabel = TitleLabel(textAlignment: .left, fontSize: 16)
-    let statsView = UIView()
     
-    let firstColumn = UIStackView()
-    let playersIconGroup = SecondaryIconGroupView(labelText: "N/A", iconImage: Images.players)
-    let timeIconGroup = SecondaryIconGroupView(labelText: "N/A", iconImage: Images.time)
+    let containerView = UIStackView()
+    let titleLabel = TitleLabel(textAlignment: .left, fontSize: FontSize.medium)
+    let gameAttributesView = UIView()
     
-    let secondColumn = UIStackView()
-    let difficultyIconGroup = SecondaryIconGroupView(labelText: "N/A", iconImage: Images.difficulty)
-    let ageIconGroup = SecondaryIconGroupView(labelText: "N/A", iconImage: Images.age)
+    let leftColumn = UIStackView()
+    let playersIconGroup = SecondaryIconGroupView(label: "N/A", icon: Images.players)
+    let timeIconGroup = SecondaryIconGroupView(label: "N/A", icon: Images.time)
+    
+    let rightColumn = UIStackView()
+    let difficultyIconGroup = SecondaryIconGroupView(label: "N/A", icon: Images.difficulty)
+    let ageIconGroup = SecondaryIconGroupView(label: "N/A", icon: Images.age)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -35,20 +36,20 @@ class FavoriteCell: UITableViewCell {
     }
     
     private func configure() {
-        [gameImageView, infoContainerView].forEach { addSubview($0) }
-        [titleLabel, statsView].forEach { infoContainerView.addArrangedSubview($0) }
-        [firstColumn, secondColumn].forEach { statsView.addSubview($0) }
-        [playersIconGroup, difficultyIconGroup].forEach { firstColumn.addArrangedSubview($0) }
-        [timeIconGroup, ageIconGroup].forEach { secondColumn.addArrangedSubview($0) }
+        [gameImageView, containerView].forEach { addSubview($0) }
+        [titleLabel, gameAttributesView].forEach { containerView.addArrangedSubview($0) }
+        [leftColumn, rightColumn].forEach { gameAttributesView.addSubview($0) }
+        [playersIconGroup, difficultyIconGroup].forEach { leftColumn.addArrangedSubview($0) }
+        [timeIconGroup, ageIconGroup].forEach { rightColumn.addArrangedSubview($0) }
         
-        infoContainerView.axis = .vertical
-        infoContainerView.spacing = Layout.smallPadding
+        containerView.axis = .vertical
+        containerView.spacing = Layout.smallPadding
         
-        firstColumn.axis = .vertical
-        firstColumn.spacing = Layout.smallPadding
+        leftColumn.axis = .vertical
+        leftColumn.spacing = Layout.smallPadding
         
-        secondColumn.axis = .vertical
-        secondColumn.spacing = Layout.smallPadding
+        rightColumn.axis = .vertical
+        rightColumn.spacing = Layout.smallPadding
         
         gameImageView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(Layout.smallPadding).priority(999)
@@ -56,19 +57,19 @@ class FavoriteCell: UITableViewCell {
             make.width.equalTo(74)
         }
         
-        infoContainerView.snp.makeConstraints { make in
+        containerView.snp.makeConstraints { make in
             make.top.equalTo(gameImageView)
             make.leading.equalTo(gameImageView.snp.trailing).offset(Layout.smallPadding)
             make.trailing.equalToSuperview().inset(Layout.largePadding)
         }
         
-        firstColumn.snp.makeConstraints { make in
+        leftColumn.snp.makeConstraints { make in
             make.top.leading.bottom.equalToSuperview()
         }
         
-        secondColumn.snp.makeConstraints { make in
+        rightColumn.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
-            make.leading.equalTo(firstColumn.snp.trailing).offset(Layout.largePadding + 8)
+            make.leading.equalTo(leftColumn.snp.trailing).offset(Layout.largePadding + 8)
         }
     }
     
@@ -92,7 +93,7 @@ class FavoriteCell: UITableViewCell {
         }
     }
     
-    func resetImage() {
+    func clearImage() {
         gameImageView.image = Images.placeholder
     }
 }

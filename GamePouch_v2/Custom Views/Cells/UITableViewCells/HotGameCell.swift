@@ -1,5 +1,5 @@
 //
-//  GameCell.swift
+//  HotGameCell.swift
 //  GamePouch_v2
 //
 //  Created by Janice Lee on 2020-12-03.
@@ -8,28 +8,28 @@
 import UIKit
 import SnapKit
 
-class GameCell: UITableViewCell {
+class HotGameCell: UITableViewCell {
     
     static let reuseID = "GameCell"
     
     let gameImageView = GameImageView(frame: .zero)
-    let largeIconView = UIView()
-    let ratingIconGroup = PrimaryIconGroupView(labelText: "N/A", iconImage: Images.rating)
-    let rankIconGroup = PrimaryIconGroupView(labelText: "N/A", iconImage: Images.rank)
+    let ratingAndRankView = UIView()
+    let ratingIconGroup = PrimaryIconGroupView(label: "N/A", icon: Images.rating)
+    let rankIconGroup = PrimaryIconGroupView(label: "N/A", icon: Images.rank)
     
-    let primaryRowView = UIView()
-    let titleLabel = TitleLabel(textAlignment: .left, fontSize: 16)
+    let titleContainerView = UIView()
+    let titleLabel = TitleLabel(textAlignment: .left, fontSize: FontSize.medium)
     let favoriteButton = FavoriteButton()
     
-    let secondaryRowView = UIView()
-    let playersIconGroup = SecondaryIconGroupView(labelText: "N/A", iconImage: Images.players)
-    let timeIconGroup = SecondaryIconGroupView(labelText: "N/A", iconImage: Images.time)
-    let difficultyIconGroup = SecondaryIconGroupView(labelText: "N/A", iconImage: Images.difficulty)
-    let ageIconGroup = SecondaryIconGroupView(labelText: "N/A", iconImage: Images.age)
+    let gameAttributesView = UIView()
+    let playersIconGroup = SecondaryIconGroupView(label: "N/A", icon: Images.players)
+    let timeIconGroup = SecondaryIconGroupView(label: "N/A", icon: Images.time)
+    let difficultyIconGroup = SecondaryIconGroupView(label: "N/A", icon: Images.difficulty)
+    let ageIconGroup = SecondaryIconGroupView(label: "N/A", icon: Images.age)
     
     private let gameImageViewHeight = 210
     private let primaryRowViewHeight = 28
-    private let favoriteButtonWidth = 34
+    private let favoriteButtonWidth = 32
     private let secondaryRowViewHeight = 20
     
     private var game: Game?
@@ -46,9 +46,9 @@ class GameCell: UITableViewCell {
     private func configure() {
         contentView.isUserInteractionEnabled = false
         configureGameImageView()
-        configureLargeIconView()
-        configurePrimaryRowView()
-        configureSecondaryRowView()
+        configureRatingandRankView()
+        configureTitleContainerView()
+        configureGameAttributesView()
     }
     
     private func configureGameImageView() {
@@ -61,71 +61,75 @@ class GameCell: UITableViewCell {
         }
     }
     
-    private func configureLargeIconView() {
-        gameImageView.addSubview(largeIconView)
-        [ratingIconGroup, rankIconGroup].forEach { largeIconView.addSubview($0) }
+    private func configureRatingandRankView() {
+        gameImageView.addSubview(ratingAndRankView)
+        [ratingIconGroup, rankIconGroup].forEach { ratingAndRankView.addSubview($0) }
         
-        largeIconView.layer.cornerRadius = 6
-        largeIconView.backgroundColor = UIColor.white.withAlphaComponent(0.86)
+        ratingAndRankView.layer.cornerRadius = 6
+        ratingAndRankView.backgroundColor = UIColor.white.withAlphaComponent(0.86)
         
         ratingIconGroup.label.textColor = .black
         rankIconGroup.label.textColor = .black
         
-        largeIconView.snp.makeConstraints { make in
-            make.top.trailing.equalToSuperview().inset(12)
+        ratingAndRankView.snp.makeConstraints { make in
+            make.top.trailing.equalToSuperview().inset(Layout.mediumPadding)
         }
         
         ratingIconGroup.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview().inset(4)
-            make.leading.equalToSuperview().offset(8)
+            make.top.bottom.equalToSuperview().inset(Layout.xsPadding)
+            make.leading.equalToSuperview().offset(Layout.smallPadding)
         }
         
         rankIconGroup.snp.makeConstraints { make in
-            make.leading.equalTo(ratingIconGroup.snp.trailing).offset(8)
-            make.trailing.equalToSuperview().offset(-8)
+            make.leading.equalTo(ratingIconGroup.snp.trailing).offset(Layout.smallPadding)
+            make.trailing.equalToSuperview().inset(Layout.smallPadding)
             make.centerY.equalTo(ratingIconGroup.snp.centerY)
         }
     }
     
-    private func configurePrimaryRowView() {
-        addSubview(primaryRowView)
-        [titleLabel, favoriteButton].forEach { primaryRowView.addSubview($0) }
+    private func configureTitleContainerView() {
+        addSubview(titleContainerView)
+        [titleLabel, favoriteButton].forEach { titleContainerView.addSubview($0) }
         
         favoriteButton.addTarget(self, action: #selector(favoriteButtonPressed(_:)), for: .touchUpInside)
         
-        primaryRowView.snp.makeConstraints { make in
-            make.top.equalTo(gameImageView.snp.bottom).offset(4)
+        titleContainerView.snp.makeConstraints { make in
+            make.top.equalTo(gameImageView.snp.bottom).offset(Layout.xsPadding)
             make.leading.trailing.equalTo(gameImageView)
             make.height.equalTo(primaryRowViewHeight)
         }
         
         titleLabel.snp.makeConstraints { make in
             make.top.leading.bottom.equalToSuperview()
-            make.trailing.equalTo(favoriteButton.snp.leading).offset(-4)
         }
         
         favoriteButton.snp.makeConstraints { make in
+            make.leading.equalTo(titleLabel.snp.trailing).offset(Layout.xsPadding)
             make.top.trailing.bottom.equalToSuperview()
             make.width.equalTo(favoriteButtonWidth)
         }
     }
     
-    private func configureSecondaryRowView() {
-        addSubview(secondaryRowView)
+    private func configureGameAttributesView() {
+        addSubview(gameAttributesView)
         
         [playersIconGroup, timeIconGroup, difficultyIconGroup, ageIconGroup].forEach {
-            secondaryRowView.addSubview($0)
+            gameAttributesView.addSubview($0)
+            $0.snp.makeConstraints { make in
+                make.centerY.equalToSuperview()
+            }
         }
         
-        secondaryRowView.snp.makeConstraints { make in
-            make.top.equalTo(primaryRowView.snp.bottom).offset(2)
+        gameAttributesView.snp.makeConstraints { make in
+            make.top.equalTo(titleContainerView.snp.bottom).offset(2)
             make.leading.trailing.equalTo(gameImageView)
             make.height.equalTo(secondaryRowViewHeight)
         }
         
+        // Icons require slight offset tweaking for uniformity 
+        
         playersIconGroup.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(2)
-            make.centerY.equalToSuperview()
         }
         
         playersIconGroup.iconImageView.snp.makeConstraints { make in
@@ -137,7 +141,6 @@ class GameCell: UITableViewCell {
         }
 
         timeIconGroup.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
             make.leading.equalTo(playersIconGroup.snp.trailing).offset(Layout.largePadding)
         }
         
@@ -146,7 +149,6 @@ class GameCell: UITableViewCell {
         }
 
         difficultyIconGroup.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
             make.leading.equalTo(timeIconGroup.snp.trailing).offset(Layout.largePadding)
         }
         
@@ -155,21 +157,16 @@ class GameCell: UITableViewCell {
         }
 
         ageIconGroup.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
             make.leading.equalTo(difficultyIconGroup.snp.trailing).offset(Layout.largePadding)
         }
         
-        secondaryRowView.updateConstraints()
+        gameAttributesView.updateConstraints()
     }
     
     @objc private func favoriteButtonPressed(_ sender: UIButton) {
         let isInFavorites = game!.isInFavorites()
-    
-        if isInFavorites {
-            game!.setFavorite(to: false)
-        } else {
-            game!.setFavorite(to: true)
-        }
+        
+        game!.setFavorite(to: !isInFavorites)
         favoriteButton.set(active: !isInFavorites)
     }
     
@@ -196,7 +193,7 @@ class GameCell: UITableViewCell {
         favoriteButton.set(active: self.game!.isInFavorites())
     }
     
-    func resetImage() {
+    func clearImage() {
         gameImageView.image = Images.placeholder
     }
 }

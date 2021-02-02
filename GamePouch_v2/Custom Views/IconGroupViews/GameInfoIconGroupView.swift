@@ -9,21 +9,24 @@ import UIKit
 
 class GameInfoIconGroupView: IconGroupView {
     
+    private let width: CGFloat = 22
+    private let verticalOffset: CGFloat = 4
+    
     override func configure() {
         super.configure()
         
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 13, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: FontSize.small, weight: .bold)
         label.textColor = .secondaryLabel
-        
-        label.snp.makeConstraints { make in
-            make.top.equalTo(iconImageView.snp.bottom).offset(4)
-            make.leading.trailing.bottom.equalToSuperview()
-        }
         
         iconImageView.snp.makeConstraints { make in
             make.top.centerX.equalToSuperview()
-            make.width.height.equalTo(22)
+            make.width.height.equalTo(width)
+        }
+        
+        label.snp.makeConstraints { make in
+            make.top.equalTo(iconImageView.snp.bottom).offset(verticalOffset)
+            make.leading.trailing.bottom.equalToSuperview()
         }
     }
 }

@@ -11,7 +11,8 @@ class TagCollectionViewFlowLayout: UICollectionViewFlowLayout {
     
     // Left align cells in collection view:
     // Uses max y position of the new element to determine when new line is needed
-    // Origin x position of new element is set to left section inset when element is placed on new line, otherwise increments by the element's width + min item spacing 
+    // Origin x position of new element is set to left section inset when element is placed on new line, otherwise set to increase by minimumInteritemSpacing from the previous element's width
+    
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         let attributes = super.layoutAttributesForElements(in: rect)
 

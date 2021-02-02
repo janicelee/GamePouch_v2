@@ -25,7 +25,7 @@ class SearchResultCell: UITableViewCell {
     private func configure() {
         self.addSubview(label)
         
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.font = UIFont.systemFont(ofSize: FontSize.medium)
         label.textAlignment = .left
         label.numberOfLines = 0
         label.textColor = Colors.purple

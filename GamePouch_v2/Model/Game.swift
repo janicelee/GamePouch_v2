@@ -75,8 +75,8 @@ struct Game {
         guard var result = formatter.string(from: rankNSNumber) else { return ("N/A", nil) }
         result = result.replacingOccurrences(of: ",", with: "")
         
-        let font: UIFont? = UIFont.systemFont(ofSize: Fonts.medium, weight: .bold)
-        let fontSuper: UIFont? = UIFont.systemFont(ofSize: Fonts.superscript, weight: .bold)
+        let font: UIFont? = UIFont.systemFont(ofSize: FontSize.medium, weight: .bold)
+        let fontSuper: UIFont? = UIFont.systemFont(ofSize: FontSize.superscript, weight: .bold)
         let attString: NSMutableAttributedString = NSMutableAttributedString(string: result, attributes: [.font: font!])
         let location = result.count - 2
         

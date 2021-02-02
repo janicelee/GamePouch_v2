@@ -37,7 +37,7 @@ class HotGamesViewController: UITableViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(GameCell.self, forCellReuseIdentifier: GameCell.reuseID)
+        tableView.register(HotGameCell.self, forCellReuseIdentifier: HotGameCell.reuseID)
         
         refreshControl = UIRefreshControl()
         refreshControl!.addTarget(self, action: #selector(getHotnessList), for: .valueChanged)
@@ -68,7 +68,7 @@ class HotGamesViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: GameCell.reuseID) as! GameCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: HotGameCell.reuseID) as! HotGameCell
         cell.set(game: games[indexPath.row])
         cell.selectionStyle = .none
         return cell
@@ -84,8 +84,8 @@ class HotGamesViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let cell = cell as! GameCell
-        cell.resetImage()
+        let cell = cell as! HotGameCell
+        cell.clearImage()
     }
 }
 
