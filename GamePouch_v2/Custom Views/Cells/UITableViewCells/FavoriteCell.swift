@@ -81,8 +81,9 @@ class FavoriteCell: UITableViewCell {
         titleLabel.text = game.getTitle()
         ratingIconGroup.label.text = game.getRating()
 
-        if let rank = game.getRank() {
-            rankIconGroup.label.attributedText = rank.toOrdinalString(fontSize: FontSize.medium, superscriptFontSize: FontSize.superscript, weight: .bold)
+        if let rank = game.getRank(),
+           let attString = rank.toOrdinalString(fontSize: FontSize.medium, superscriptFontSize: FontSize.superscript, weight: .bold) {
+            rankIconGroup.label.attributedText = attString
         } else {
             rankIconGroup.label.text = "N/A"
         }
