@@ -65,23 +65,9 @@ struct Game {
         return rating
     }
     
-    func getRankDisplayText() -> (text: String, attributedString: NSMutableAttributedString?)  {
-        guard let rank = rank, isValidDisplayText(rank), let rankInt = Int(rank) else { return ("N/A", nil) }
-        
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .ordinal
-        
-        let rankNSNumber = NSNumber(value: rankInt)
-        guard var result = formatter.string(from: rankNSNumber) else { return ("N/A", nil) }
-        result = result.replacingOccurrences(of: ",", with: "")
-        
-        let font: UIFont? = UIFont.systemFont(ofSize: FontSize.medium, weight: .bold)
-        let fontSuper: UIFont? = UIFont.systemFont(ofSize: FontSize.superscript, weight: .bold)
-        let attString: NSMutableAttributedString = NSMutableAttributedString(string: result, attributes: [.font: font!])
-        let location = result.count - 2
-        
-        attString.setAttributes([.font: fontSuper!,.baselineOffset: 5], range: NSRange(location: location, length: 2))
-        return (result, attString)
+    func getRank() -> Int?  {
+        guard let rank = rank, isValidDisplayText(rank), let num = Int(rank) else { return nil }
+        return num
     }
     
     func getDifficultyDisplayText() -> String {

@@ -179,11 +179,10 @@ class HotGameCell: UITableViewCell {
         difficultyIconGroup.label.text = game.getDifficultyDisplayText()
         ageIconGroup.label.text = game.getMinAgeDisplayText()
         
-        let rank = game.getRankDisplayText()
-        if let attString = rank.attributedString {
-            rankIconGroup.label.attributedText = attString
+        if let rank = game.getRank() {
+            rankIconGroup.label.attributedText = rank.toOrdinalString(fontSize: FontSize.medium, superscriptFontSize: FontSize.superscript, weight: .bold)
         } else {
-            rankIconGroup.label.text = rank.text
+            rankIconGroup.label.text = "N/A"
         }
         
         if let imageURL = game.imageURL {
