@@ -13,18 +13,10 @@ class FavoriteCell: UITableViewCell {
     static let reuseID = "FavoriteCell"
     
     let gameImageView = GameImageView(frame: .zero)
-    
-    let containerView = UIStackView()
+    let containerView = UIView()
     let titleLabel = TitleLabel(textAlignment: .left, fontSize: FontSize.medium)
-    let gameAttributesView = UIView()
-    
-    let leftColumn = UIStackView()
-    let playersIconGroup = SecondaryIconGroupView(label: "N/A", icon: Images.players)
-    let timeIconGroup = SecondaryIconGroupView(label: "N/A", icon: Images.time)
-    
-    let rightColumn = UIStackView()
-    let difficultyIconGroup = SecondaryIconGroupView(label: "N/A", icon: Images.difficulty)
-    let ageIconGroup = SecondaryIconGroupView(label: "N/A", icon: Images.age)
+    let ratingIconGroup = SecondaryAttributesIconGroup(label: "N/A", icon: Images.rating)
+    let rankIconGroup = SecondaryAttributesIconGroup(label: "N/A", icon: Images.rank)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -37,24 +29,12 @@ class FavoriteCell: UITableViewCell {
     
     private func configure() {
         [gameImageView, containerView].forEach { addSubview($0) }
-        [titleLabel, gameAttributesView].forEach { containerView.addArrangedSubview($0) }
-        [leftColumn, rightColumn].forEach { gameAttributesView.addSubview($0) }
-        [playersIconGroup, difficultyIconGroup].forEach { leftColumn.addArrangedSubview($0) }
-        [timeIconGroup, ageIconGroup].forEach { rightColumn.addArrangedSubview($0) }
-        
-        containerView.axis = .vertical
-        containerView.spacing = Layout.smallPadding
-        
-        leftColumn.axis = .vertical
-        leftColumn.spacing = Layout.smallPadding
-        
-        rightColumn.axis = .vertical
-        rightColumn.spacing = Layout.smallPadding
-        
+        [titleLabel, ratingIconGroup, rankIconGroup].forEach { containerView.addSubview($0) }
+
         gameImageView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(Layout.smallPadding).priority(999)
             make.leading.equalToSuperview().offset(Layout.largePadding)
-            make.width.equalTo(74)
+            make.width.equalTo(60)
         }
         
         containerView.snp.makeConstraints { make in
@@ -63,30 +43,50 @@ class FavoriteCell: UITableViewCell {
             make.trailing.equalToSuperview().inset(Layout.largePadding)
         }
         
-        leftColumn.snp.makeConstraints { make in
-            make.top.leading.bottom.equalToSuperview()
+        titleLabel.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
         }
         
-        rightColumn.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.leading.equalTo(leftColumn.snp.trailing).offset(Layout.largePadding + 8)
+        ratingIconGroup.label.font = UIFont.systemFont(ofSize: FontSize.medium, weight: .bold)
+        
+        ratingIconGroup.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(Layout.smallPadding)
+            make.leading.equalToSuperview().offset(2)
+            make.bottom.equalToSuperview()
+        }
+        
+        ratingIconGroup.label.snp.makeConstraints { make in
+            make.leading.equalTo(ratingIconGroup.iconImageView.snp.trailing).offset(2)
+        }
+        
+        ratingIconGroup.iconImageView.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().offset(-3).priority(999)
+        }
+        
+        rankIconGroup.snp.makeConstraints { make in
+            make.top.equalTo(ratingIconGroup)
+            make.leading.equalTo(ratingIconGroup.snp.trailing).offset(Layout.mediumPadding)
+        }
+        
+        rankIconGroup.label.snp.makeConstraints { make in
+            make.leading.equalTo(rankIconGroup.iconImageView.snp.trailing).offset(2)
+        }
+        
+        rankIconGroup.iconImageView.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().offset(-2).priority(999)
         }
     }
     
     func set(game: Game) {
         titleLabel.text = game.getTitle()
-//        ratingIconGroup.label.text = game.getRating()
-        playersIconGroup.label.text = game.getNumPlayers()
-        timeIconGroup.label.text = game.getPlayTime()
-        difficultyIconGroup.label.text = game.getDifficultyDisplayText()
-        ageIconGroup.label.text = game.getMinAgeDisplayText()
-        
-//        let rank = game.getRank()
-//        if let attString = rank.attributedString {
-//            rankIconGroup.label.attributedText = attString
-//        } else {
-//            rankIconGroup.label.text = rank.text
-//        }
+        ratingIconGroup.label.text = game.getRating()
+
+        let rank = game.getRankDisplayText()
+        if let attString = rank.attributedString {
+            rankIconGroup.label.attributedText = attString
+        } else {
+            rankIconGroup.label.text = rank.text
+        }
         
         if let thumbnailURL = game.thumbnailURL {
             gameImageView.setImage(from: thumbnailURL)

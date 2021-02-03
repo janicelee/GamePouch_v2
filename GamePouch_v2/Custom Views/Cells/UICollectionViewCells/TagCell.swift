@@ -11,7 +11,7 @@ import SnapKit
 class TagCell: UICollectionViewCell {
     
     static let reuseID = "TagCell"
-    static let font = UIFont.systemFont(ofSize: FontSize.medium)
+    static let font = UIFont.systemFont(ofSize: FontSize.small)
     static let horizontalPadding: CGFloat = 12
     static let verticalPadding: CGFloat = 4
     

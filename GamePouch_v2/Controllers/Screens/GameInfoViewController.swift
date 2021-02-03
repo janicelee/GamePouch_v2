@@ -89,8 +89,8 @@ class GameInfoViewController: UIViewController {
     }
     
     private func configureLargeIconView() {
-        let ratingIconGroup = PrimaryIconGroupView(label: "N/A", icon: Images.rating)
-        let rankIconGroup = PrimaryIconGroupView(label: "N/A", icon: Images.rank)
+        let ratingIconGroup = MainAttributesIconGroup(label: "N/A", icon: Images.rating)
+        let rankIconGroup = MainAttributesIconGroup(label: "N/A", icon: Images.rank)
 
         scrollView.addSubview(largeIconView)
         [ratingIconGroup, rankIconGroup, favoriteButton].forEach { largeIconView.addSubview($0) }
@@ -184,7 +184,7 @@ class GameInfoViewController: UIViewController {
     
     private func configureDescriptionLabel() {
         descriptionLabel.text = game.getDescription()
-        descriptionLabel.font = UIFont.systemFont(ofSize: 15)
+        descriptionLabel.font = UIFont.systemFont(ofSize: FontSize.small)
         descriptionLabel.numberOfLines = 6
         descriptionLabel.lineBreakMode = .byTruncatingTail
         descriptionLabel.isUserInteractionEnabled = true

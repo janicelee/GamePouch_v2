@@ -39,7 +39,7 @@ enum Colors {
 
 enum FontSize {
     static let superscript: CGFloat = 10
-    static let small: CGFloat = 13
+    static let small: CGFloat = 14
     static let medium: CGFloat = 16
 }
 

@@ -10,7 +10,7 @@ import CoreData
 
 class FavoritesTableViewController: UITableViewController {
     
-    private let rowHeight: CGFloat = 90
+    private let rowHeight: CGFloat = 70
     
     var favorites: [Game] = [] {
         didSet {

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PrimaryIconGroupView: IconGroupView {
+class MainAttributesIconGroup: IconGroupView {
     
     private let width: CGFloat = 16
     private let horizontalOffset: CGFloat = 2
