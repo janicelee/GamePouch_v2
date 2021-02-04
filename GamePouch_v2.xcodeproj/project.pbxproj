@@ -298,23 +298,23 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		F7707A6A25A716630076419A /* UICollectionViewCells */ = {
+		F7707A6A25A716630076419A /* CollectionViewCells */ = {
 			isa = PBXGroup;
 			children = (
 				F734756625905FDF00308880 /* TagCell.swift */,
 				F7C11AB6259454C200A53778 /* ImageCell.swift */,
 			);
-			path = UICollectionViewCells;
+			path = CollectionViewCells;
 			sourceTree = "<group>";
 		};
-		F7707A6B25A716700076419A /* UITableViewCells */ = {
+		F7707A6B25A716700076419A /* TableViewCells */ = {
 			isa = PBXGroup;
 			children = (
 				F7B9A7832579E9AF00E06A0F /* HotGameCell.swift */,
 				F78C8D9E25A326EE00A3DBE0 /* SearchResultCell.swift */,
 				F736EDD325AECA5E00D40A42 /* FavoriteCell.swift */,
 			);
-			path = UITableViewCells;
+			path = TableViewCells;
 			sourceTree = "<group>";
 		};
 		F771542B2578526C00FB1508 /* Controllers */ = {
@@ -374,8 +374,8 @@
 		F7B9A7762579E72E00E06A0F /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				F7707A6A25A716630076419A /* UICollectionViewCells */,
-				F7707A6B25A716700076419A /* UITableViewCells */,
+				F7707A6A25A716630076419A /* CollectionViewCells */,
+				F7707A6B25A716700076419A /* TableViewCells */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
