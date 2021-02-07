@@ -15,7 +15,9 @@ class GameInfoParser: NSObject {
     func parse(from data: Data) -> Bool {
         let parser = XMLParser(data: data)
         parser.delegate = self
-        return parser.parse()
+        
+        // Sometimes malformed XML causes uncaught failure in parsing, so we check if id exists
+        return parser.parse() && game.id != nil
     }
 }
 
@@ -23,7 +25,7 @@ extension GameInfoParser: XMLParserDelegate {
     
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
         if elementName == "item" {
-            game.id =  attributeDict["id"]
+            game.id = attributeDict["id"]
         } else if elementName == "thumbnail" || elementName == "image" || elementName == "description" {
             self.elementName = elementName
         } else if elementName == "name" && attributeDict["type"] == "primary" {

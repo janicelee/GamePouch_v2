@@ -51,11 +51,15 @@ class NetworkManager {
                 
                 for (index, id) in ids.enumerated() {
                     group.enter()
-                    
+            
                     NetworkManager.shared.getGameInfo(id: id) { result in
                         switch result {
                         case .success(let game):
                             games.insert(game, at: index)
+                            
+                            if id == "330149" {
+                                print(game.id)
+                            }
                         case .failure(let error):
                             print("Failed to get data for game id: \(id), error: \(error.rawValue)")
                         }
