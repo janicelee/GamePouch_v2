@@ -56,10 +56,6 @@ class NetworkManager {
                         switch result {
                         case .success(let game):
                             games.insert(game, at: index)
-                            
-                            if id == "330149" {
-                                print(game.id)
-                            }
                         case .failure(let error):
                             print("Failed to get data for game id: \(id), error: \(error.rawValue)")
                         }
