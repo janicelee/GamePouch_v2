@@ -56,7 +56,7 @@ class HotGameCell: UITableViewCell {
         
         gameImageView.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(Layout.largePadding)
+            make.leading.trailing.equalToSuperview().inset(Layout.xLargePadding)
             make.height.equalTo(gameImageViewHeight)
         }
     }
@@ -72,17 +72,17 @@ class HotGameCell: UITableViewCell {
         rankIconGroup.label.textColor = .black
         
         ratingAndRankView.snp.makeConstraints { make in
-            make.top.trailing.equalToSuperview().inset(Layout.mediumPadding)
+            make.top.trailing.equalToSuperview().inset(Layout.largePadding)
         }
         
         ratingIconGroup.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview().inset(Layout.xsPadding)
-            make.leading.equalToSuperview().offset(Layout.smallPadding)
+            make.top.bottom.equalToSuperview().inset(Layout.smallPadding)
+            make.leading.equalToSuperview().offset(Layout.mediumPadding)
         }
         
         rankIconGroup.snp.makeConstraints { make in
-            make.leading.equalTo(ratingIconGroup.snp.trailing).offset(Layout.smallPadding)
-            make.trailing.equalToSuperview().inset(Layout.smallPadding)
+            make.leading.equalTo(ratingIconGroup.snp.trailing).offset(Layout.mediumPadding)
+            make.trailing.equalToSuperview().inset(Layout.mediumPadding)
             make.centerY.equalTo(ratingIconGroup.snp.centerY)
         }
     }
@@ -94,7 +94,7 @@ class HotGameCell: UITableViewCell {
         favoriteButton.addTarget(self, action: #selector(favoriteButtonPressed(_:)), for: .touchUpInside)
         
         titleContainerView.snp.makeConstraints { make in
-            make.top.equalTo(gameImageView.snp.bottom).offset(Layout.xsPadding)
+            make.top.equalTo(gameImageView.snp.bottom).offset(Layout.smallPadding)
             make.leading.trailing.equalTo(gameImageView)
             make.height.equalTo(primaryRowViewHeight)
         }
@@ -104,7 +104,7 @@ class HotGameCell: UITableViewCell {
         }
         
         favoriteButton.snp.makeConstraints { make in
-            make.leading.equalTo(titleLabel.snp.trailing).offset(Layout.xsPadding)
+            make.leading.equalTo(titleLabel.snp.trailing).offset(Layout.smallPadding)
             make.top.trailing.bottom.equalToSuperview()
             make.width.equalTo(favoriteButtonWidth)
         }
@@ -141,7 +141,7 @@ class HotGameCell: UITableViewCell {
         }
 
         timeIconGroup.snp.makeConstraints { make in
-            make.leading.equalTo(playersIconGroup.snp.trailing).offset(Layout.largePadding)
+            make.leading.equalTo(playersIconGroup.snp.trailing).offset(Layout.xLargePadding)
         }
         
         timeIconGroup.label.snp.makeConstraints { make in
@@ -149,7 +149,7 @@ class HotGameCell: UITableViewCell {
         }
 
         difficultyIconGroup.snp.makeConstraints { make in
-            make.leading.equalTo(timeIconGroup.snp.trailing).offset(Layout.largePadding)
+            make.leading.equalTo(timeIconGroup.snp.trailing).offset(Layout.xLargePadding)
         }
         
         difficultyIconGroup.label.snp.makeConstraints { make in
@@ -157,7 +157,7 @@ class HotGameCell: UITableViewCell {
         }
 
         ageIconGroup.snp.makeConstraints { make in
-            make.leading.equalTo(difficultyIconGroup.snp.trailing).offset(Layout.largePadding)
+            make.leading.equalTo(difficultyIconGroup.snp.trailing).offset(Layout.xLargePadding)
         }
         
         gameAttributesView.updateConstraints()

@@ -14,11 +14,10 @@ protocol RecentSearchTableControllerDelegate: class {
 
 class RecentSearchTableController: UITableViewController {
     
-    weak var delegate: RecentSearchTableControllerDelegate?
-    
     private let headerHeight: CGFloat = 50
     
-    var recentSearches: [NSManagedObject] = [] {
+    weak var delegate: RecentSearchTableControllerDelegate?
+    var recentSearches: [SearchResult] = [] {
         didSet {
             DispatchQueue.main.async {
                 self.tableView.reloadData()
@@ -46,7 +45,7 @@ class RecentSearchTableController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultCell.reuseID, for: indexPath) as! SearchResultCell
         let recentSearch = recentSearches[indexPath.row]
-        cell.setLabel(to: recentSearch.value(forKeyPath: "name") as? String ?? "")
+        cell.setLabel(to: recentSearch.name ?? "")
         return cell
     }
     
@@ -55,13 +54,13 @@ class RecentSearchTableController: UITableViewController {
         view.backgroundColor = .systemBackground
         
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: FontSize.large, weight: .bold)
         label.text = "Recent"
         view.addSubview(label)
         
         label.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview().inset(Layout.smallPadding)
-            make.leading.trailing.equalToSuperview().inset(Layout.largePadding)
+            make.top.bottom.equalToSuperview().inset(Layout.mediumPadding)
+            make.leading.trailing.equalToSuperview().inset(Layout.xLargePadding)
         }
         return view
     }
@@ -70,8 +69,8 @@ class RecentSearchTableController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let recentSearch = recentSearches[indexPath.row]
-        let id = recentSearch.value(forKeyPath: "id") as? String ?? nil
-        let name = recentSearch.value(forKeyPath: "name") as? String ?? nil
+        let id = recentSearch.id ?? nil
+        let name = recentSearch.name ?? nil
         
         delegate?.didSelectRecentSearch(id: id, name: name)
     }

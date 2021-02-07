@@ -9,16 +9,16 @@ import UIKit
 
 class TagViewController: UIViewController {
     
-    let tags: [String]
-    let titleLabel = TitleLabel(textAlignment: .left, fontSize: 22)
-    let tagBorderColor: UIColor
-    let containerView = UIView()
-    var collectionView: TagCollectionView!
+    private let tags: [String]
+    private let titleLabel = TitleLabel(textAlignment: .left, fontSize: FontSize.xLarge)
+    private let tagBorderColor: UIColor
+    
+    private var collectionView: TagCollectionView!
     
     init(title: String, tags: [String], borderColor: UIColor) {
         self.tags = tags
-        titleLabel.text = title
-        tagBorderColor = borderColor
+        self.titleLabel.text = title
+        self.tagBorderColor = borderColor
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -32,8 +32,8 @@ class TagViewController: UIViewController {
     }
     
     private func configure() {
-        view.addSubview(titleLabel)
-        view.addSubview(containerView)
+        let containerView = UIView()
+        [titleLabel, containerView].forEach { view.addSubview($0) }
         
         let flowLayout = TagCollectionViewFlowLayout()
         flowLayout.minimumInteritemSpacing = 6
@@ -51,7 +51,7 @@ class TagViewController: UIViewController {
         }
         
         containerView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(Layout.smallPadding)
+            make.top.equalTo(titleLabel.snp.bottom).offset(Layout.mediumPadding)
             make.leading.trailing.bottom.equalToSuperview()
         }
         

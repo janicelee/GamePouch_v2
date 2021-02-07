@@ -13,10 +13,14 @@ class FavoriteCell: UITableViewCell {
     static let reuseID = "FavoriteCell"
     
     let gameImageView = GameImageView(frame: .zero)
-    let containerView = UIView()
+    let attributesContainerView = UIView()
     let titleLabel = TitleLabel(textAlignment: .left, fontSize: FontSize.medium)
     let ratingIconGroup = SecondaryAttributesIconGroup(label: "N/A", icon: Images.rating)
     let rankIconGroup = SecondaryAttributesIconGroup(label: "N/A", icon: Images.rank)
+    
+    private let cellWidth: CGFloat = 60
+    private let attributeFontSize = FontSize.medium
+    private let attributeFontWeight = UIFont.Weight.semibold
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -28,52 +32,59 @@ class FavoriteCell: UITableViewCell {
     }
     
     private func configure() {
-        [gameImageView, containerView].forEach { addSubview($0) }
-        [titleLabel, ratingIconGroup, rankIconGroup].forEach { containerView.addSubview($0) }
+        [gameImageView, attributesContainerView].forEach { addSubview($0) }
+        [titleLabel, ratingIconGroup, rankIconGroup].forEach { attributesContainerView.addSubview($0) }
 
         gameImageView.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview().inset(Layout.smallPadding).priority(999)
-            make.leading.equalToSuperview().offset(Layout.largePadding)
-            make.width.equalTo(60)
+            make.top.bottom.equalToSuperview().inset(Layout.mediumPadding)
+            make.leading.equalToSuperview().offset(Layout.xLargePadding)
+            make.width.equalTo(cellWidth)
         }
         
-        containerView.snp.makeConstraints { make in
+        attributesContainerView.snp.makeConstraints { make in
             make.top.equalTo(gameImageView)
-            make.leading.equalTo(gameImageView.snp.trailing).offset(Layout.smallPadding)
-            make.trailing.equalToSuperview().inset(Layout.largePadding)
+            make.leading.equalTo(gameImageView.snp.trailing).offset(Layout.mediumPadding)
+            make.trailing.equalToSuperview().inset(Layout.xLargePadding)
         }
         
         titleLabel.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
         }
         
-        ratingIconGroup.label.font = UIFont.systemFont(ofSize: FontSize.medium, weight: .bold)
+        configureRatingIconGroup()
+        configureRankIconGroup()
+    }
+    
+    private func configureRatingIconGroup() {
+        ratingIconGroup.label.font = UIFont.systemFont(ofSize: attributeFontSize, weight: attributeFontWeight)
         
         ratingIconGroup.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(Layout.smallPadding)
-            make.leading.equalToSuperview().offset(2)
+            make.top.equalTo(titleLabel.snp.bottom).offset(Layout.mediumPadding)
+            make.leading.equalToSuperview().offset(Layout.xsPadding)
             make.bottom.equalToSuperview()
-        }
-        
-        ratingIconGroup.label.snp.makeConstraints { make in
-            make.leading.equalTo(ratingIconGroup.iconImageView.snp.trailing).offset(2)
         }
         
         ratingIconGroup.iconImageView.snp.makeConstraints { make in
             make.bottom.equalToSuperview().offset(-3).priority(999)
         }
         
+        ratingIconGroup.label.snp.makeConstraints { make in
+            make.leading.equalTo(ratingIconGroup.iconImageView.snp.trailing).offset(Layout.xsPadding)
+        }
+    }
+    
+    private func configureRankIconGroup() {
         rankIconGroup.snp.makeConstraints { make in
             make.top.equalTo(ratingIconGroup)
-            make.leading.equalTo(ratingIconGroup.snp.trailing).offset(Layout.mediumPadding)
-        }
-        
-        rankIconGroup.label.snp.makeConstraints { make in
-            make.leading.equalTo(rankIconGroup.iconImageView.snp.trailing).offset(2)
+            make.leading.equalTo(ratingIconGroup.snp.trailing).offset(Layout.largePadding)
         }
         
         rankIconGroup.iconImageView.snp.makeConstraints { make in
             make.bottom.equalToSuperview().offset(-2).priority(999)
+        }
+        
+        rankIconGroup.label.snp.makeConstraints { make in
+            make.leading.equalTo(rankIconGroup.iconImageView.snp.trailing).offset(Layout.xsPadding)
         }
     }
     
@@ -82,7 +93,7 @@ class FavoriteCell: UITableViewCell {
         ratingIconGroup.label.text = game.getRating()
 
         if let rank = game.getRank(),
-           let attString = rank.toOrdinalString(fontSize: FontSize.medium, superscriptFontSize: FontSize.superscript, weight: .bold) {
+           let attString = rank.toOrdinalString(fontSize: attributeFontSize, superscriptFontSize: FontSize.superscript, weight: attributeFontWeight) {
             rankIconGroup.label.attributedText = attString
         } else {
             rankIconGroup.label.text = "N/A"

@@ -55,7 +55,7 @@ enum PersistenceManager {
         }
     }
     
-    static func fetchRecentSearches() -> [NSManagedObject] {
+    static func fetchRecentSearches() -> [SearchResult] {
         guard let managedContext = getManagedContext() else { return [] }
         
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: searchEntity)
@@ -64,11 +64,23 @@ enum PersistenceManager {
     
         do {
             let recentSearches = try managedContext.fetch(fetchRequest)
-            return recentSearches
+            return parseRecentSearches(searches: recentSearches)
         } catch let error as NSError {
             print("Could not fetch recent searches. \(error), \(error.userInfo)")
         }
         return []
+    }
+    
+    static func parseRecentSearches(searches: [NSManagedObject]) -> [SearchResult] {
+        var searchResults: [SearchResult] = []
+        
+        searches.forEach {
+            if let id = $0.value(forKeyPath: "name") as? String,
+               let name = $0.value(forKeyPath: "name") as? String {
+                searchResults.append(SearchResult(id: id, name: name))
+            }
+        }
+        return searchResults
     }
     
     // MARK: - Favorite Methods

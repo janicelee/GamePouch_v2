@@ -22,7 +22,7 @@ extension Int {
         let attString: NSMutableAttributedString = NSMutableAttributedString(string: result, attributes: [.font: font!])
         let location = result.count - 2
         
-        attString.setAttributes([.font: fontSuper!,.baselineOffset: 5], range: NSRange(location: location, length: 2))
+        attString.setAttributes([.font: fontSuper!,.baselineOffset: fontSize - 11], range: NSRange(location: location, length: 2))
         return attString
     }
 }

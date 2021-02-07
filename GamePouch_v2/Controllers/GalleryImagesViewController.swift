@@ -17,7 +17,7 @@ class GalleryImagesViewController: UIViewController {
         }
     }
 
-    let titleLabel = TitleLabel(textAlignment: .left, fontSize: 22)
+    let titleLabel = TitleLabel(textAlignment: .left, fontSize: FontSize.xLarge)
     let containerView = UIView()
     var collectionView: UICollectionView!
 
@@ -37,8 +37,7 @@ class GalleryImagesViewController: UIViewController {
     }
     
     private func configure() {
-        view.addSubview(titleLabel)
-        view.addSubview(containerView)
+        [titleLabel, containerView].forEach { view.addSubview($0) }
         
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
@@ -55,7 +54,7 @@ class GalleryImagesViewController: UIViewController {
         }
 
         containerView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(Layout.smallPadding)
+            make.top.equalTo(titleLabel.snp.bottom).offset(Layout.mediumPadding)
             make.leading.trailing.bottom.equalToSuperview()
         }
 

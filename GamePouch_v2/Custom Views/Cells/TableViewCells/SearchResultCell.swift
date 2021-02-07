@@ -31,8 +31,8 @@ class SearchResultCell: UITableViewCell {
         label.textColor = Colors.purple
         
         label.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview().inset(Layout.smallPadding)
-            make.leading.trailing.equalToSuperview().inset(Layout.largePadding)
+            make.top.bottom.equalToSuperview().inset(Layout.mediumPadding)
+            make.leading.trailing.equalToSuperview().inset(Layout.xLargePadding)
         }
     }
     
