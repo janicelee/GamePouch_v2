@@ -30,6 +30,7 @@ enum Layout {
     static let mediumPadding: CGFloat = 8
     static let largePadding: CGFloat = 12
     static let xLargePadding: CGFloat = 16
+    static let xxLargePadding: CGFloat = 20
 }
 
 enum Colors {

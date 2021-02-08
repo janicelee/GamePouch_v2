@@ -12,11 +12,11 @@ class GameInfoViewController: UIViewController {
     
     let scrollView = UIScrollView()
     let headerImageView = GameImageView(frame: .zero)
-    let largeIconView = UIView()
+    let mainAttributesView = UIView()
     let favoriteButton = FavoriteButton()
     let titleLabel = TitleLabel(textAlignment: .left, fontSize: FontSize.xLarge)
     let yearLabel = UILabel()
-    let rowStackView = UIStackView()
+    let secondaryAttributesStackView: GameAttributesStackView!
     let descriptionLabel = UILabel()
     
     var galleryImagesViewController: GalleryImagesViewController!
@@ -24,14 +24,15 @@ class GameInfoViewController: UIViewController {
     let categoriesContainerView = UIView()
     
     private let headerImageViewHeight = 300
-    private let horizontalPadding: CGFloat = 20
+    private let favoriteButtonWidth: CGFloat = 34
     
     var game: Game!
     var descriptionExpanded = false
     
     init(game: Game) {
-        super.init(nibName: nil, bundle: nil)
         self.game = game
+        self.secondaryAttributesStackView = GameAttributesStackView(game: game)
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -54,10 +55,10 @@ class GameInfoViewController: UIViewController {
         
         configureScrollView()
         configureHeaderImageView()
-        configureLargeIconView()
+        configureMainAttributesView()
         configureTitleLabel()
         configureYearLabel()
-        configureRowStackView()
+        configureSecondaryAttributesStackView()
         configureDescriptionLabel()
         configureGalleryImagesSection()
         configureCategoriesSection()
@@ -74,7 +75,6 @@ class GameInfoViewController: UIViewController {
     
     private func configureHeaderImageView() {
         scrollView.addSubview(headerImageView)
-
         headerImageView.layer.cornerRadius = 0
         
         if let imageURL = game.imageURL {
@@ -88,12 +88,12 @@ class GameInfoViewController: UIViewController {
         }
     }
     
-    private func configureLargeIconView() {
+    private func configureMainAttributesView() {
         let ratingIconGroup = MainAttributesIconGroup(label: "N/A", icon: Images.rating)
         let rankIconGroup = MainAttributesIconGroup(label: "N/A", icon: Images.rank)
 
-        scrollView.addSubview(largeIconView)
-        [ratingIconGroup, rankIconGroup, favoriteButton].forEach { largeIconView.addSubview($0) }
+        scrollView.addSubview(mainAttributesView)
+        [ratingIconGroup, rankIconGroup, favoriteButton].forEach { mainAttributesView.addSubview($0) }
         
         ratingIconGroup.label.text = game.getRating()
         
@@ -107,25 +107,25 @@ class GameInfoViewController: UIViewController {
         favoriteButton.set(active: game.isInFavorites())
         favoriteButton.addTarget(self, action: #selector(favoriteButtonPressed(_:)), for: .touchUpInside)
         
-        largeIconView.snp.makeConstraints { make in
+        mainAttributesView.snp.makeConstraints { make in
             make.top.equalTo(headerImageView.snp.bottom).offset(Layout.largePadding)
-            make.leading.trailing.equalTo(view).inset(horizontalPadding)
+            make.leading.trailing.equalTo(view).inset(Layout.xxLargePadding)
         }
         
         ratingIconGroup.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview().inset(4)
+            make.top.bottom.equalToSuperview().inset(Layout.smallPadding)
             make.leading.equalToSuperview()
         }
         
         rankIconGroup.snp.makeConstraints { make in
-            make.leading.equalTo(ratingIconGroup.snp.trailing).offset(20)
+            make.leading.equalTo(ratingIconGroup.snp.trailing).offset(Layout.xxLargePadding)
             make.centerY.equalTo(ratingIconGroup)
         }
         
         favoriteButton.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
-            make.trailing.equalToSuperview().inset(2)
-            make.width.equalTo(34)
+            make.trailing.equalToSuperview().inset(Layout.xsPadding)
+            make.width.equalTo(favoriteButtonWidth)
         }
     }
     
@@ -138,8 +138,8 @@ class GameInfoViewController: UIViewController {
         titleLabel.minimumScaleFactor = 0.9
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(largeIconView.snp.bottom).offset(Layout.largePadding)
-            make.leading.trailing.equalTo(view).inset(horizontalPadding)
+            make.top.equalTo(mainAttributesView.snp.bottom).offset(Layout.largePadding)
+            make.leading.trailing.equalTo(view).inset(Layout.xxLargePadding)
         }
 
     }
@@ -148,55 +148,40 @@ class GameInfoViewController: UIViewController {
         scrollView.addSubview(yearLabel)
         
         yearLabel.text = game.getYearPublished()
-        yearLabel.font = UIFont.systemFont(ofSize: 14, weight: .bold)
+        yearLabel.font = UIFont.systemFont(ofSize: FontSize.small, weight: .bold)
         yearLabel.textColor = .secondaryLabel
         
         yearLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(Layout.mediumPadding)
-            make.leading.equalTo(view).offset(horizontalPadding + 2)
-            make.trailing.equalTo(view).offset(-horizontalPadding)
+            make.leading.equalTo(view).offset(Layout.xxLargePadding + 2)
+            make.trailing.equalTo(view).offset(-Layout.xxLargePadding)
         }
     }
     
-    private func configureRowStackView() {
-        let playersIconGroup = GameInfoIconGroup(label: "N/A", icon: Images.players)
-        let timeIconGroup = GameInfoIconGroup(label: "N/A", icon: Images.time)
-        let difficultyIconGroup = GameInfoIconGroup(label: "N/A", icon: Images.difficulty)
-        let ageIconGroup = GameInfoIconGroup(label: "N/A", icon: Images.age)
-        
-        scrollView.addSubview(rowStackView)
-        [playersIconGroup, timeIconGroup, difficultyIconGroup, ageIconGroup].forEach { rowStackView.addArrangedSubview($0)
-            $0.label.numberOfLines = 2
-        }
-        
-        rowStackView.distribution = .fillEqually
-        
-        playersIconGroup.label.text = "\(game.getNumPlayers())\nPlayers"
-        timeIconGroup.label.text = "\(game.getPlayTime())\nMinutes"
-        difficultyIconGroup.label.text = "\(game.getDifficultyDisplayText())\nDifficulty"
-        ageIconGroup.label.text = "\(game.getMinAgeDisplayText())\nYears"
-        
-        rowStackView.snp.makeConstraints { make in
+    private func configureSecondaryAttributesStackView() {
+        scrollView.addSubview(secondaryAttributesStackView)
+
+        secondaryAttributesStackView.snp.makeConstraints { make in
             make.top.equalTo(yearLabel.snp.bottom).offset(Layout.xLargePadding)
             make.leading.trailing.equalTo(view).inset(Layout.mediumPadding)
         }
     }
     
     private func configureDescriptionLabel() {
+        scrollView.addSubview(descriptionLabel)
+        
         descriptionLabel.text = game.getDescription()
         descriptionLabel.font = UIFont.systemFont(ofSize: FontSize.small)
         descriptionLabel.numberOfLines = 6
         descriptionLabel.lineBreakMode = .byTruncatingTail
         descriptionLabel.isUserInteractionEnabled = true
         
-        scrollView.addSubview(descriptionLabel)
-        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(labelTapped(_:)))
         descriptionLabel.addGestureRecognizer(tapGesture)
         
         descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(rowStackView.snp.bottom).offset(Layout.xLargePadding)
-            make.leading.trailing.equalTo(view).inset(horizontalPadding)
+            make.top.equalTo(secondaryAttributesStackView.snp.bottom).offset(Layout.xLargePadding)
+            make.leading.trailing.equalTo(view).inset(Layout.xxLargePadding)
         }
     }
     
@@ -210,9 +195,9 @@ class GameInfoViewController: UIViewController {
         
         galleryImagesContainerView.snp.makeConstraints { make in
             make.top.equalTo(descriptionLabel.snp.bottom).offset(Layout.xLargePadding)
-            make.leading.equalTo(view).offset(horizontalPadding)
-            make.trailing.equalTo(view).offset(-horizontalPadding)
-            make.height.equalTo(view.snp.height).multipliedBy(0.3)
+            make.leading.equalTo(view).offset(Layout.xxLargePadding)
+            make.trailing.equalTo(view).offset(-Layout.xxLargePadding)
+            make.height.equalTo(view.snp.height).multipliedBy(0.26)
         }
         
         galleryImagesViewController.view.snp.makeConstraints { make in
@@ -230,7 +215,7 @@ class GameInfoViewController: UIViewController {
         
         categoriesContainerView.snp.makeConstraints { make in
             make.top.equalTo(galleryImagesContainerView.snp.bottom).offset(Layout.xLargePadding)
-            make.leading.trailing.equalTo(view).inset(horizontalPadding)
+            make.leading.trailing.equalTo(view).inset(Layout.xxLargePadding)
         }
         
         categoriesViewController.view.snp.makeConstraints { make in
@@ -249,7 +234,7 @@ class GameInfoViewController: UIViewController {
         
         mechanicsContainerView.snp.makeConstraints { make in
             make.top.equalTo(categoriesContainerView.snp.bottom).offset(Layout.xLargePadding)
-            make.leading.trailing.equalTo(view).inset(horizontalPadding)
+            make.leading.trailing.equalTo(view).inset(Layout.xxLargePadding)
             make.bottom.equalToSuperview()
         }
         
