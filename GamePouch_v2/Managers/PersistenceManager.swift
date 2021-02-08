@@ -75,7 +75,7 @@ enum PersistenceManager {
         var searchResults: [SearchResult] = []
         
         searches.forEach {
-            if let id = $0.value(forKeyPath: "name") as? String,
+            if let id = $0.value(forKeyPath: "id") as? String,
                let name = $0.value(forKeyPath: "name") as? String {
                 searchResults.append(SearchResult(id: id, name: name))
             }

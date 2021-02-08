@@ -37,7 +37,6 @@ class SearchViewController: UIViewController {
     private func configure() {
         title = "Search"
         navigationController?.navigationBar.prefersLargeTitles = true
-        view.backgroundColor = .systemBackground
         
         resultsTableController = SearchResultsTableController()
         resultsTableController.delegate = self
@@ -72,15 +71,14 @@ class SearchViewController: UIViewController {
                 case .success(let searchResults):
                     self.resultsTableController.searchResults = searchResults
                 case .failure(let error):
-                    print(error.rawValue)
-                    // TODO: display error
+                    print(error.rawValue) // TODO: display error
                 }
             }
         }
     }
     
-    private func displayGameInfo(id: String?, name: String?) {
-        guard let id = id, let name = name else {
+    private func loadGameInfoView(for searchResult: SearchResult) {
+        guard let id = searchResult.id, let name = searchResult.name else {
             return // TODO: display error
         }
         PersistenceManager.saveSearch(id: id, name: name)
@@ -96,18 +94,20 @@ class SearchViewController: UIViewController {
             }
         }
     }
+    
+    private func handleSearchText(_ searchText: String?) {
+        if let searchText = searchText?.trimmingCharacters(in: .whitespacesAndNewlines) {
+            lastSearchText = searchText
+            debouncedSearch!()
+        }
+    }
 }
 
 // MARK: - UISearchBarDelegate
 
 extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        let searchText = searchController.searchBar.text
-        
-        if let searchText = searchText?.trimmingCharacters(in: .whitespacesAndNewlines) {
-            lastSearchText = searchText
-            debouncedSearch!()
-        }
+        handleSearchText(searchBar.text)
         searchBar.resignFirstResponder()
     }
 }
@@ -116,20 +116,15 @@ extension SearchViewController: UISearchBarDelegate {
 
 extension SearchViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        let searchText = searchController.searchBar.text
-        
-        if let searchText = searchText?.trimmingCharacters(in: .whitespacesAndNewlines) {
-            lastSearchText = searchText
-            debouncedSearch!()
-        }
+        handleSearchText(searchController.searchBar.text)
     }
 }
 
 // MARK: - RecentSearchTableControllerDelegate
 
 extension SearchViewController: RecentSearchTableControllerDelegate {
-    func didSelectRecentSearch(id: String?, name: String?) {
-        displayGameInfo(id: id, name: name)
+    func didSelectRecentSearch(result: SearchResult) {
+        loadGameInfoView(for: result)
     }
 }
 
@@ -137,7 +132,7 @@ extension SearchViewController: RecentSearchTableControllerDelegate {
 
 extension SearchViewController: SearchResultsTableControllerDelegate {
     func didSelectSearchResult(result: SearchResult) {
-        displayGameInfo(id: result.id, name: result.name)
+        loadGameInfoView(for: result)
     }
 }
 

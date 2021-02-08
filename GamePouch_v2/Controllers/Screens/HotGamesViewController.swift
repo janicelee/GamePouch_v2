@@ -9,14 +9,20 @@ import UIKit
 
 class HotGamesViewController: UITableViewController {
     
-    private var games: [Game] = []
+    private var games: [Game] = [] {
+        didSet {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+                self.refreshControl!.endRefreshing()
+            }
+        }
+    }
     private let rowHeight: CGFloat = 290
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureViewController()
-        configureTableView()
+        configure()
         getHotnessList()
     }
     
@@ -25,19 +31,17 @@ class HotGamesViewController: UITableViewController {
         tableView.reloadData()
     }
     
-    private func configureViewController() {
-        view.backgroundColor = .systemBackground
+    private func configure() {
         title = "Hot Games"
         navigationController?.navigationBar.prefersLargeTitles = true
-    }
-    
-    private func configureTableView() {
+        
         tableView.frame = view.bounds
         tableView.rowHeight = rowHeight
         
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(HotGameCell.self, forCellReuseIdentifier: HotGameCell.reuseID)
+        tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
         
         refreshControl = UIRefreshControl()
         refreshControl!.addTarget(self, action: #selector(getHotnessList), for: .valueChanged)
@@ -50,13 +54,8 @@ class HotGamesViewController: UITableViewController {
             switch result {
             case .success(let games):
                 self.games = games
-                
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                    self.refreshControl!.endRefreshing()
-                }
             case .failure(let error):
-                print(error.rawValue)
+                print(error.rawValue) // TODO: handle error
             }
         }
     }

@@ -9,7 +9,7 @@ import UIKit
 import CoreData
 
 protocol RecentSearchTableControllerDelegate: class {
-    func didSelectRecentSearch(id: String?, name: String?)
+    func didSelectRecentSearch(result: SearchResult)
 }
 
 class RecentSearchTableController: UITableViewController {
@@ -69,9 +69,6 @@ class RecentSearchTableController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let recentSearch = recentSearches[indexPath.row]
-        let id = recentSearch.id ?? nil
-        let name = recentSearch.name ?? nil
-        
-        delegate?.didSelectRecentSearch(id: id, name: name)
+        delegate?.didSelectRecentSearch(result: recentSearch)
     }
 }
