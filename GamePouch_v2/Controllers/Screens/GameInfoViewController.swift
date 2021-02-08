@@ -159,10 +159,10 @@ class GameInfoViewController: UIViewController {
     }
     
     private func configureRowStackView() {
-        let playersIconGroup = GameInfoIconGroupView(label: "N/A", icon: Images.players)
-        let timeIconGroup = GameInfoIconGroupView(label: "N/A", icon: Images.time)
-        let difficultyIconGroup = GameInfoIconGroupView(label: "N/A", icon: Images.difficulty)
-        let ageIconGroup = GameInfoIconGroupView(label: "N/A", icon: Images.age)
+        let playersIconGroup = GameInfoIconGroup(label: "N/A", icon: Images.players)
+        let timeIconGroup = GameInfoIconGroup(label: "N/A", icon: Images.time)
+        let difficultyIconGroup = GameInfoIconGroup(label: "N/A", icon: Images.difficulty)
+        let ageIconGroup = GameInfoIconGroup(label: "N/A", icon: Images.age)
         
         scrollView.addSubview(rowStackView)
         [playersIconGroup, timeIconGroup, difficultyIconGroup, ageIconGroup].forEach { rowStackView.addArrangedSubview($0)

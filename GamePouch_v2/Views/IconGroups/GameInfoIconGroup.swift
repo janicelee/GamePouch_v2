@@ -7,7 +7,7 @@
 
 import UIKit
 
-class GameInfoIconGroupView: IconGroupView {
+class GameInfoIconGroup: IconGroup {
     
     private let width: CGFloat = 22
     private let verticalOffset: CGFloat = 4

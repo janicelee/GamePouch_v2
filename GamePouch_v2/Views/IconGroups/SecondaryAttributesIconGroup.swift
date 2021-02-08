@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SecondaryAttributesIconGroup: IconGroupView {
+class SecondaryAttributesIconGroup: IconGroup {
     
     private let width: CGFloat = 16
     

@@ -1,5 +1,5 @@
 //
-//  IconGroupView.swift
+//  IconGroup.swift
 //  GamePouch_v2
 //
 //  Created by Janice Lee on 2021-01-29.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class IconGroupView: UIView {
+class IconGroup: UIView {
     
     let label = UILabel()
     let iconImageView = UIImageView()

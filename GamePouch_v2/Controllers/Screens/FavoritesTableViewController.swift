@@ -12,7 +12,7 @@ class FavoritesTableViewController: UITableViewController {
     
     private let rowHeight: CGFloat = 70
     
-    var favorites: [Game] = [] {
+    var games: [Game] = [] {
         didSet {
             DispatchQueue.main.async {
                 self.tableView.reloadData()
@@ -40,7 +40,7 @@ class FavoritesTableViewController: UITableViewController {
             guard let self = self else { return }
             
             if let fetchResult = asyncFetchResult.finalResult {
-                var favorites: [Game?] = Array(repeating: nil, count: fetchResult.count)
+                var games: [Game?] = Array(repeating: nil, count: fetchResult.count)
                 let group = DispatchGroup()
                 
                 for (index, object) in fetchResult.enumerated() {
@@ -50,7 +50,7 @@ class FavoritesTableViewController: UITableViewController {
                         NetworkManager.shared.getGameInfo(id: id) { result in
                             switch result {
                             case .success(let game):
-                                favorites.insert(game, at: index)
+                                games.insert(game, at: index)
                             case .failure(let error):
                                 print("Error retrieving game info for favorite with id: \(id), error: \(error.rawValue)")
                             }
@@ -59,7 +59,7 @@ class FavoritesTableViewController: UITableViewController {
                     }
                 }
                 group.notify(queue: .main) {
-                    self.favorites = favorites.compactMap{$0}
+                    self.games = games.compactMap{$0}
                     // TODO: check num NSManagedObjects in fetchResult vs. favorites, show prompt that not all favorites could retrieve their data
                 }
             } else {
@@ -71,12 +71,12 @@ class FavoritesTableViewController: UITableViewController {
     // MARK: - UITableViewDataSource
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return favorites.count
+        return games.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: FavoriteCell.reuseID, for: indexPath) as! FavoriteCell
-        cell.set(game: favorites[indexPath.row])
+        cell.set(game: games[indexPath.row])
         cell.selectionStyle = .none
         return cell
     }
@@ -84,8 +84,8 @@ class FavoritesTableViewController: UITableViewController {
     // MARK: - UITableViewDelegate
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let favorite = favorites[indexPath.row]
-        let destination = GameInfoViewController(game: favorite)
+        let game = games[indexPath.row]
+        let destination = GameInfoViewController(game: game)
         
         navigationController?.pushViewController(destination, animated: true)
     }
@@ -97,16 +97,10 @@ class FavoritesTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            guard let id = favorites[indexPath.row].id else { return }
+            guard let id = games[indexPath.row].id else { return }
             PersistenceManager.deleteFavorite(gameId: id)
-            favorites.remove(at: indexPath.row)
+            games.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-    }
-    */
 }
