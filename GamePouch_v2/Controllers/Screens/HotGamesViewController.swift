@@ -54,8 +54,10 @@ class HotGamesViewController: UITableViewController {
             switch result {
             case .success(let games):
                 self.games = games
+                if games.count == 0 { self.showErrorAlertOnMainThread(message: UserError.generic.rawValue) }
             case .failure(let error):
-                print(error.rawValue) // TODO: handle error
+                print("Error retrieving hotness list: \(error.rawValue)")
+                self.showErrorAlertOnMainThread(message: UserError.generic.rawValue)
             }
         }
     }

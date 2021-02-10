@@ -60,7 +60,8 @@ class FavoritesTableViewController: UITableViewController {
                 }
                 group.notify(queue: .main) {
                     self.games = games.compactMap{$0}
-                    // TODO: check num NSManagedObjects in fetchResult vs. favorites, show prompt that not all favorites could retrieve their data
+                    if self.games.count == 0 { self.showErrorAlertOnMainThread(message: "Could not retrieve favorites") }
+                    if self.games.count != fetchResult.count { self.showErrorAlertOnMainThread(message: "Could not retrieve all favorites") }
                 }
             } else {
                 // TODO: show error that favorites could not be retrieved successfully

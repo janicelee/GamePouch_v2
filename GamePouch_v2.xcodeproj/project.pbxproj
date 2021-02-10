@@ -24,8 +24,9 @@
 		F7336C8B257493FA00C05848 /* GamePouch_v2UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7336C8A257493FA00C05848 /* GamePouch_v2UITests.swift */; };
 		F7336CA32576033A00C05848 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7336CA22576033A00C05848 /* TabBarController.swift */; };
 		F7336CC5257721EF00C05848 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7336CC4257721EF00C05848 /* NetworkManager.swift */; };
-		F7336CCE257724E800C05848 /* GPError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7336CCD257724E800C05848 /* GPError.swift */; };
 		F7336CD42577340100C05848 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7336CD32577340100C05848 /* Game.swift */; };
+		F7342DD425D35A3A00274F31 /* InternalError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7342DD325D35A3A00274F31 /* InternalError.swift */; };
+		F7342DD925D35B8300274F31 /* UIViewController+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7342DD825D35B8300274F31 /* UIViewController+Ext.swift */; };
 		F734756725905FDF00308880 /* TagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F734756625905FDF00308880 /* TagCell.swift */; };
 		F734756F2591C39300308880 /* TagCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F734756E2591C39300308880 /* TagCollectionView.swift */; };
 		F73475772591C89800308880 /* TagCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73475762591C89800308880 /* TagCollectionViewFlowLayout.swift */; };
@@ -101,8 +102,9 @@
 		F7336C8C257493FA00C05848 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F7336CA22576033A00C05848 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		F7336CC4257721EF00C05848 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
-		F7336CCD257724E800C05848 /* GPError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPError.swift; sourceTree = "<group>"; };
 		F7336CD32577340100C05848 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		F7342DD325D35A3A00274F31 /* InternalError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalError.swift; sourceTree = "<group>"; };
+		F7342DD825D35B8300274F31 /* UIViewController+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Ext.swift"; sourceTree = "<group>"; };
 		F734756625905FDF00308880 /* TagCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCell.swift; sourceTree = "<group>"; };
 		F734756E2591C39300308880 /* TagCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCollectionView.swift; sourceTree = "<group>"; };
 		F73475762591C89800308880 /* TagCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
@@ -281,9 +283,9 @@
 		F7336CCC257724C700C05848 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				F7336CCD257724E800C05848 /* GPError.swift */,
 				F7D8C74D25837C2F00237071 /* Constants.swift */,
 				F78C8DAC25A5D0FA00A3DBE0 /* Debouncer.swift */,
+				F7342DD325D35A3A00274F31 /* InternalError.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -302,6 +304,7 @@
 		F75E5BE8257B109700611A40 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				F7342DD825D35B8300274F31 /* UIViewController+Ext.swift */,
 				F77A469025C0F8820036E6F1 /* UIColor+Ext.swift */,
 				F71571BD25CAAED500A88FE6 /* Int+Ext.swift */,
 			);
@@ -662,6 +665,7 @@
 				F70CC21E25D1065D002B6DFD /* GameAttributesStackView.swift in Sources */,
 				F736EDD425AECA5E00D40A42 /* FavoriteCell.swift in Sources */,
 				F771543D25785A7900FB1508 /* HotnessListParser.swift in Sources */,
+				F7342DD425D35A3A00274F31 /* InternalError.swift in Sources */,
 				F7013D9225A176FB000E2528 /* SearchViewController.swift in Sources */,
 				F716816325C4110C00B75B60 /* IconGroup.swift in Sources */,
 				F7A3A283259572FD00544BFF /* GalleryImages.swift in Sources */,
@@ -671,7 +675,6 @@
 				F7336C6A257493F800C05848 /* HotGamesViewController.swift in Sources */,
 				F777D9DD25887CA900859D64 /* SecondaryAttributesIconGroup.swift in Sources */,
 				F7336C70257493F800C05848 /* GamePouch_v2.xcdatamodeld in Sources */,
-				F7336CCE257724E800C05848 /* GPError.swift in Sources */,
 				F71571BE25CAAED500A88FE6 /* Int+Ext.swift in Sources */,
 				F7B9A7842579E9AF00E06A0F /* HotGameCell.swift in Sources */,
 				F7ECBF7E25B3E15A00E40569 /* PersistenceManager.swift in Sources */,
@@ -691,6 +694,7 @@
 				F7336CA32576033A00C05848 /* TabBarController.swift in Sources */,
 				F7D4C96E259F36BB006E3157 /* GalleryImagesViewController.swift in Sources */,
 				F7EC6278258E136400FD536A /* GameInfoIconGroup.swift in Sources */,
+				F7342DD925D35B8300274F31 /* UIViewController+Ext.swift in Sources */,
 				F7B47E0125B93E6C003597B4 /* FavoriteButton.swift in Sources */,
 				F7336C68257493F700C05848 /* SceneDelegate.swift in Sources */,
 				F7C11AB7259454C200A53778 /* ImageCell.swift in Sources */,

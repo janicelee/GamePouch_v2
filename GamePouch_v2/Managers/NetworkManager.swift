@@ -16,7 +16,7 @@ class NetworkManager {
     private let galleryImageBaseURL = "https://api.geekdo.com/api/"
     private init() {}
     
-    private func sendRequest(urlComponents: URLComponents, completed: @escaping (Result<Data, GPError>) -> ()) {
+    private func sendRequest(urlComponents: URLComponents, completed: @escaping (Result<Data, InternalError>) -> ()) {
         guard let url = urlComponents.url else {
             completed(.failure(.invalidURL))
             return
@@ -42,7 +42,7 @@ class NetworkManager {
         task.resume()
     }
     
-    func getHotnessList(completed: @escaping (Result<[Game], GPError>) -> ()) {
+    func getHotnessList(completed: @escaping (Result<[Game], InternalError>) -> ()) {
         NetworkManager.shared.getHotnessListIds { result in
             switch result {
             case .success(let ids):
@@ -57,6 +57,7 @@ class NetworkManager {
                         case .success(let game):
                             games.insert(game, at: index)
                         case .failure(let error):
+                            // Skip game in case of error
                             print("Failed to get data for game id: \(id), error: \(error.rawValue)")
                         }
                         group.leave()
@@ -71,7 +72,7 @@ class NetworkManager {
         }
     }
     
-    private func getHotnessListIds(completed: @escaping (Result<[String], GPError>) -> ()) {
+    private func getHotnessListIds(completed: @escaping (Result<[String], InternalError>) -> ()) {
         let queryItems = [URLQueryItem(name: "type", value: "boardgame")]
         var urlComps = URLComponents(string: baseURL + "hot")!
         urlComps.queryItems = queryItems
@@ -87,13 +88,12 @@ class NetworkManager {
                     completed(.failure(.unableToParse))
                 }
             case .failure(let error):
-                print(error.rawValue)
-                // TODO: handle error
+                completed(.failure(error))
             }
         }
     }
     
-    func getGameInfo(id: String, completed: @escaping (Result<Game, GPError>) -> ()) {
+    func getGameInfo(id: String, completed: @escaping (Result<Game, InternalError>) -> ()) {
         let queryItems = [URLQueryItem(name: "type", value: "boardgame, boardgameexpansion"),
                           URLQueryItem(name: "stats", value: "1"),
                           URLQueryItem(name: "id", value: id)]
@@ -111,8 +111,7 @@ class NetworkManager {
                     completed(.failure(.unableToParse))
                 }
             case .failure(let error):
-                print(error.rawValue)
-                // TODO: handle error
+                completed(.failure(error))
             }
         }
     }
@@ -133,13 +132,13 @@ class NetworkManager {
                 self.cache.setObject(image, forKey: cacheKey)
                 completed(image)
             case .failure(let error):
-                print(error.rawValue)
-                // TODO: handle error (might not need to since images have placeholders)
+                // Don't need to return error since images have placeholder
+                print("Could not download image from url: \(urlString), error: \(error.rawValue)")
             }
         }
     }
     
-    func getImageGalleryURLs(for id: String, completed: @escaping (Result<[String], GPError>) -> ()) {
+    func getImageGalleryURLs(for id: String, completed: @escaping (Result<[String], InternalError>) -> ()) {
         let queryItems = [URLQueryItem(name: "ajax", value: "1"),
                           URLQueryItem(name: "gallery", value: "all"),
                           URLQueryItem(name: "nosession", value: "1"),
@@ -169,13 +168,12 @@ class NetworkManager {
                     completed(.failure(.unableToParse))
                 }
             case .failure(let error):
-                print(error.rawValue)
-                // TODO: handle error
+                completed(.failure(error))
             }
         }
     }
     
-    func search(for query: String, completed: @escaping(Result<[SearchResult], GPError>) -> ()) {
+    func search(for query: String, completed: @escaping(Result<[SearchResult], InternalError>) -> ()) {
         let queryItems = [URLQueryItem(name: "type", value: "boardgame, boardgameexpansion"), URLQueryItem(name: "query", value: query)]
         var urlComps = URLComponents(string: baseURL + "search")!
         urlComps.queryItems = queryItems
@@ -191,8 +189,7 @@ class NetworkManager {
                     completed(.failure(.unableToParse))
                 }
             case .failure(let error):
-                print(error.rawValue)
-                // TODO: handle error
+                completed(.failure(error))
             }
         }
     }

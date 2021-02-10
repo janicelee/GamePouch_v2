@@ -71,7 +71,8 @@ class SearchViewController: UIViewController {
                 case .success(let searchResults):
                     self.resultsTableController.searchResults = searchResults
                 case .failure(let error):
-                    print(error.rawValue) // TODO: display error
+                    print("Failed to get search results for text: \(text), error: \(error.rawValue)")
+                    self.showErrorAlertOnMainThread(message: UserError.generic.rawValue)
                 }
             }
         }
@@ -82,7 +83,9 @@ class SearchViewController: UIViewController {
             return // TODO: display error
         }
         PersistenceManager.saveSearch(id: id, name: name)
-        NetworkManager.shared.getGameInfo(id: id) { result in
+        NetworkManager.shared.getGameInfo(id: id) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let game):
                 DispatchQueue.main.async {
@@ -90,7 +93,8 @@ class SearchViewController: UIViewController {
                     self.navigationController?.pushViewController(gameInfoViewController, animated: true)
                 }
             case .failure(let error):
-                print(error.rawValue) // TODO: display error
+                print("Failed to get data for game id: \(id), error: \(error.rawValue)")
+                self.showErrorAlertOnMainThread(message: UserError.generic.rawValue)
             }
         }
     }

@@ -12,6 +12,9 @@ class GalleryImagesViewController: UIViewController {
     var imageURLs: [String] = [] {
         didSet {
             DispatchQueue.main.async {
+                if self.imageURLs.isEmpty {
+                    self.handleNoImages()
+                }
                 self.collectionView.reloadData()
             }
         }
@@ -63,6 +66,19 @@ class GalleryImagesViewController: UIViewController {
         }
     }
     
+    private func handleNoImages() {
+        let noImageLabel = UILabel()
+        noImageLabel.text = "No images to display"
+        noImageLabel.textAlignment = .center
+        noImageLabel.textColor = .secondaryLabel
+        noImageLabel.font = UIFont.systemFont(ofSize: FontSize.small, weight: .semibold)
+        self.containerView.addSubview(noImageLabel)
+        
+        noImageLabel.snp.makeConstraints { make in
+            make.top.leading.trailing.bottom.equalToSuperview()
+        }
+    }
+    
     private func downloadGalleryImages(id: String) {
         NetworkManager.shared.getImageGalleryURLs(for: id) { [weak self] result in
             guard let self = self else { return }
@@ -71,7 +87,8 @@ class GalleryImagesViewController: UIViewController {
             case .success(let urls):
                 self.imageURLs = urls
             case .failure(let error):
-                print(error.rawValue) // TODO: handle error
+                print("Failed to download gallery images for id: \(id), error: \(error.rawValue)")
+                self.imageURLs = []
             }
         }
     }
