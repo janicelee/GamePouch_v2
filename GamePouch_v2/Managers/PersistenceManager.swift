@@ -139,7 +139,7 @@ enum PersistenceManager {
         }
     }
     
-    static func fetchFavorites(completed: @escaping (Result<NSAsynchronousFetchResult<NSManagedObject>, Error>) -> ()) {
+    static func fetchFavoriteGameRefsObjects(completed: @escaping (Result<NSAsynchronousFetchResult<NSManagedObject>, Error>) -> ()) {
         guard let managedContext = getManagedContext() else {
             completed(.failure(InternalError.unableToRetrieveManagedContext))
             return
@@ -154,8 +154,42 @@ enum PersistenceManager {
         
         do {
             try managedContext.execute(asyncFetchRequest)
-        } catch let error as NSError {
+        } catch _ as NSError {
             completed(.failure(UserError.unableToRetrieveFavorites))
+        }
+    }
+    
+    static func fetchFavorites(completed: @escaping (Result<[Game], Error>) -> ()) {
+        PersistenceManager.fetchFavoriteGameRefsObjects { result in
+            switch result {
+            case .success(let gameRefObjResult):
+                if let gameRefObj = gameRefObjResult.finalResult {
+                    var games: [Game?] = Array(repeating: nil, count: gameRefObj.count)
+                    let group = DispatchGroup()
+                    
+                    for (index, object) in gameRefObj.enumerated() {
+                        group.enter()
+                        
+                        if let id = object.value(forKeyPath: "id") as? String {
+                            NetworkManager.shared.getGameInfo(id: id) { result in
+                                switch result {
+                                case .success(let game):
+                                    games.insert(game, at: index)
+                                case .failure(let error):
+                                    print("Error retrieving game info for favorite with id: \(id), error: \(error.rawValue)")
+                                }
+                                group.leave()
+                            }
+                        }
+                    }
+                    group.notify(queue: .main) {
+                        let compactedGames = games.compactMap{$0}
+                        completed(.success(compactedGames))
+                    }
+                }
+            case .failure(let error):
+                completed(.failure(error))
+            }
         }
     }
 }

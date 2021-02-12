@@ -34,35 +34,11 @@ class FavoritesTableViewController: UITableViewController {
     }
     
     private func fetchFavorites() {
-        PersistenceManager.fetchFavorites { [weak self] result in
+        PersistenceManager.fetchFavorites { [weak self] gamesResult in
             guard let self = self else { return }
-            
-            switch result {
-            case .success(let fetchResult):
-                if let finalResult = fetchResult.finalResult {
-                    var games: [Game?] = Array(repeating: nil, count: finalResult.count)
-                    let group = DispatchGroup()
-                    
-                    for (index, object) in finalResult.enumerated() {
-                        group.enter()
-                        
-                        if let id = object.value(forKeyPath: "id") as? String {
-                            NetworkManager.shared.getGameInfo(id: id) { result in
-                                switch result {
-                                case .success(let game):
-                                    games.insert(game, at: index)
-                                case .failure(let error):
-                                    print("Error retrieving game info for favorite with id: \(id), error: \(error.rawValue)")
-                                }
-                                group.leave()
-                            }
-                        }
-                    }
-                    group.notify(queue: .main) {
-                        self.games = games.compactMap{$0}
-                        if self.games.count != finalResult.count { self.presentErrorAlertOnMainThread(message: UserError.unableToRetrieveFavorites.rawValue) }
-                    }
-                }
+            switch gamesResult {
+            case .success(let games):
+                self.games = games
             case .failure(let error):
                 if let userError = error as? UserError {
                     self.presentErrorAlertOnMainThread(message: userError.rawValue)
