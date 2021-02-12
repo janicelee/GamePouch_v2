@@ -8,6 +8,10 @@
 import UIKit
 import SnapKit
 
+protocol HotGameCellDelegate: class {
+    func didFailToUpdateFavorite(id: String, error: Error)
+}
+
 class HotGameCell: UITableViewCell {
     
     static let reuseID = "GameCell"
@@ -32,6 +36,7 @@ class HotGameCell: UITableViewCell {
     private let favoriteButtonWidth = 32
     private let secondaryRowViewHeight = 20
     
+    weak var delegate: HotGameCellDelegate?
     private var game: Game?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -163,13 +168,6 @@ class HotGameCell: UITableViewCell {
         gameAttributesView.updateConstraints()
     }
     
-    @objc private func favoriteButtonPressed(_ sender: UIButton) {
-        let isInFavorites = game!.isInFavorites()
-        
-        game!.setFavorite(to: !isInFavorites)
-        favoriteButton.set(active: !isInFavorites)
-    }
-    
     func set(game: Game) {
         self.game = game
         titleLabel.text = game.getTitle()
@@ -190,7 +188,28 @@ class HotGameCell: UITableViewCell {
             gameImageView.setImage(from: imageURL)
         }
         
-        favoriteButton.set(active: self.game!.isInFavorites())
+        setFavorite()
+    }
+    
+    private func setFavorite() {
+        do {
+            let isFavorite = try self.game!.isInFavorites(skipCache: true)
+            self.favoriteButton.set(active: isFavorite)
+        } catch let error as InternalError {
+            print("\(error.rawValue), id: \(game?.id ?? "")")
+        } catch {
+            print("Unexpected error: \(error)")
+        }
+    }
+    
+    @objc private func favoriteButtonPressed(_ sender: UIButton) throws {
+        do {
+            let isInFavorites = try game!.isInFavorites()
+            try game!.setFavorite(to: !isInFavorites)
+            favoriteButton.set(active: !isInFavorites)
+        } catch {
+            delegate?.didFailToUpdateFavorite(id: game?.id ?? "", error: error)
+        }
     }
     
     func clearImage() {

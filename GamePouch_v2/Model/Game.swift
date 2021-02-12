@@ -75,27 +75,30 @@ struct Game {
         return "\(weight)/5"
     }
     
-    mutating func isInFavorites(skipCache: Bool) -> Bool {
+    mutating func isInFavorites(skipCache: Bool) throws -> Bool {
         if isFavorite == nil || skipCache {
-            guard let id = id else { return false }
-            isFavorite = PersistenceManager.isFavourite(id: id)
+            guard let id = id else {
+                throw InternalError.unableToVerifyFavorite
+            }
+            isFavorite = try PersistenceManager.isFavorite(id: id)
         }
         return isFavorite!
     }
 
-    mutating func isInFavorites() -> Bool {
-        return isInFavorites(skipCache: false)
+    mutating func isInFavorites() throws -> Bool {
+        return try isInFavorites(skipCache: false)
     }
     
-    mutating func setFavorite(to isFavorite: Bool) {
-        self.isFavorite = isFavorite
-        
-        if isFavorite {
-            PersistenceManager.saveFavorite(game: self)
+    mutating func setFavorite(to favorite: Bool) throws {
+        if favorite {
+            try PersistenceManager.saveFavorite(game: self)
         } else {
-            guard let id = id else { return } // TODO: show error?
-            PersistenceManager.deleteFavorite(gameId: id)
+            guard let id = id else {
+                throw UserError.unableToDeleteFavorite
+            }
+            try PersistenceManager.deleteFavorite(gameId: id)
         }
+        self.isFavorite = favorite
     }
     
     private func isValidDisplayText(_ label: String) -> Bool {

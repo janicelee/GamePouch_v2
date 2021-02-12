@@ -14,9 +14,7 @@ class FavoritesTableViewController: UITableViewController {
     
     var games: [Game] = [] {
         didSet {
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
+            DispatchQueue.main.async { self.tableView.reloadData() }
         }
     }
 
@@ -36,35 +34,43 @@ class FavoritesTableViewController: UITableViewController {
     }
     
     private func fetchFavorites() {
-        PersistenceManager.fetchFavorites { [weak self] asyncFetchResult in
+        PersistenceManager.fetchFavorites { [weak self] result in
             guard let self = self else { return }
             
-            if let fetchResult = asyncFetchResult.finalResult {
-                var games: [Game?] = Array(repeating: nil, count: fetchResult.count)
-                let group = DispatchGroup()
-                
-                for (index, object) in fetchResult.enumerated() {
-                    group.enter()
+            switch result {
+            case .success(let fetchResult):
+                if let finalResult = fetchResult.finalResult {
+                    var games: [Game?] = Array(repeating: nil, count: finalResult.count)
+                    let group = DispatchGroup()
                     
-                    if let id = object.value(forKeyPath: "id") as? String {
-                        NetworkManager.shared.getGameInfo(id: id) { result in
-                            switch result {
-                            case .success(let game):
-                                games.insert(game, at: index)
-                            case .failure(let error):
-                                print("Error retrieving game info for favorite with id: \(id), error: \(error.rawValue)")
+                    for (index, object) in finalResult.enumerated() {
+                        group.enter()
+                        
+                        if let id = object.value(forKeyPath: "id") as? String {
+                            NetworkManager.shared.getGameInfo(id: id) { result in
+                                switch result {
+                                case .success(let game):
+                                    games.insert(game, at: index)
+                                case .failure(let error):
+                                    print("Error retrieving game info for favorite with id: \(id), error: \(error.rawValue)")
+                                }
+                                group.leave()
                             }
-                            group.leave()
                         }
                     }
+                    group.notify(queue: .main) {
+                        self.games = games.compactMap{$0}
+                        if self.games.count != finalResult.count { self.presentErrorAlertOnMainThread(message: UserError.unableToRetrieveFavorites.rawValue) }
+                    }
                 }
-                group.notify(queue: .main) {
-                    self.games = games.compactMap{$0}
-                    if self.games.count == 0 { self.showErrorAlertOnMainThread(message: "Could not retrieve favorites") }
-                    if self.games.count != fetchResult.count { self.showErrorAlertOnMainThread(message: "Could not retrieve all favorites") }
+            case .failure(let error):
+                if let userError = error as? UserError {
+                    self.presentErrorAlertOnMainThread(message: userError.rawValue)
+                } else if let internalError = error as? InternalError {
+                    print("Could not fetch favorites. \(internalError.rawValue)")
+                } else {
+                    print("Unexpected error: \(error.localizedDescription)")
                 }
-            } else {
-                // TODO: show error that favorites could not be retrieved successfully
             }
         }
     }
@@ -98,10 +104,20 @@ class FavoritesTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            guard let id = games[indexPath.row].id else { return }
-            PersistenceManager.deleteFavorite(gameId: id)
-            games.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            guard let id = games[indexPath.row].id else {
+                presentErrorAlertOnMainThread(message: UserError.unableToDeleteFavorite.rawValue)
+                return
+            }
+            
+            do {
+                try PersistenceManager.deleteFavorite(gameId: id)
+                games.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            } catch let error as UserError {
+                presentErrorAlertOnMainThread(message: error.rawValue)
+            } catch {
+                print("Unexpected error: \(error)")
+            }
         }
     }
 }

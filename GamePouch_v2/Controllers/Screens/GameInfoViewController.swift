@@ -47,7 +47,7 @@ class GameInfoViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.favoriteButton.set(active: self.game.isInFavorites(skipCache: true))
+        setFavorite()
     }
     
     private func configure() {
@@ -104,7 +104,6 @@ class GameInfoViewController: UIViewController {
             rankIconGroup.label.text = "N/A"
         }
         
-        favoriteButton.set(active: game.isInFavorites())
         favoriteButton.addTarget(self, action: #selector(favoriteButtonPressed(_:)), for: .touchUpInside)
         
         mainAttributesView.snp.makeConstraints { make in
@@ -244,9 +243,27 @@ class GameInfoViewController: UIViewController {
     }
     
     @objc private func favoriteButtonPressed(_ sender: UIButton) {
-        let isInFavorites = game.isInFavorites()
-        game.setFavorite(to: !isInFavorites)
-        favoriteButton.set(active: !isInFavorites)
+        do {
+            let isInFavorites = try game.isInFavorites()
+            try game.setFavorite(to: !isInFavorites)
+            favoriteButton.set(active: !isInFavorites)
+        } catch let error as InternalError {
+            presentErrorAlertOnMainThread(message: UserError.generic.rawValue)
+            print("\(error.rawValue), id: \(game?.id ?? "")")
+        } catch {
+            print("Unexpected error: \(error)")
+        }
+    }
+    
+    private func setFavorite() {
+        do {
+            let isFavorite = try self.game.isInFavorites(skipCache: true)
+            self.favoriteButton.set(active: isFavorite)
+        } catch let error as InternalError {
+            print("\(error.rawValue), id: \(game?.id ?? "")")
+        } catch {
+            print("Unexpected error: \(error)")
+        }
     }
     
     @objc private func labelTapped(_ sender: UITapGestureRecognizer) {

@@ -54,10 +54,10 @@ class HotGamesViewController: UITableViewController {
             switch result {
             case .success(let games):
                 self.games = games
-                if games.count == 0 { self.showErrorAlertOnMainThread(message: UserError.generic.rawValue) }
+                if games.count == 0 { self.presentErrorAlertOnMainThread(message: UserError.generic.rawValue) }
             case .failure(let error):
                 print("Error retrieving hotness list: \(error.rawValue)")
-                self.showErrorAlertOnMainThread(message: UserError.generic.rawValue)
+                self.presentErrorAlertOnMainThread(message: UserError.generic.rawValue)
             }
         }
     }
@@ -71,6 +71,7 @@ class HotGamesViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: HotGameCell.reuseID) as! HotGameCell
         cell.set(game: games[indexPath.row])
+        cell.delegate = self
         cell.selectionStyle = .none
         return cell
     }
@@ -87,6 +88,18 @@ class HotGamesViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let cell = cell as! HotGameCell
         cell.clearImage()
+    }
+}
+
+extension HotGamesViewController: HotGameCellDelegate {    
+    func didFailToUpdateFavorite(id: String, error: Error) {
+        presentErrorAlertOnMainThread(message: UserError.generic.rawValue)
+        
+        if let error = error as? InternalError {
+            print("\(error.rawValue), id: \(id)")
+        } else {
+            print("Unexpected error: \(error.localizedDescription)")
+        }
     }
 }
 

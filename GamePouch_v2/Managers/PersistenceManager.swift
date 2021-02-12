@@ -85,25 +85,30 @@ enum PersistenceManager {
     
     // MARK: - Favorite Methods
     
-    static func saveFavorite(game: Game) {
-        guard let managedContext = getManagedContext() else { return }
-        
+    static func saveFavorite(game: Game) throws {
+        guard let managedContext = getManagedContext() else {
+            throw InternalError.unableToRetrieveManagedContext
+        }
+
         let entity = NSEntityDescription.entity(forEntityName: "Favorite", in: managedContext)!
         let favorite = NSManagedObject(entity: entity, insertInto: managedContext)
-        
+
         favorite.setValue(game.id ?? "", forKey: "id")
         favorite.setValue(game.getTitle(), forKey: "title")
         favorite.setValue(Date(), forKey: "date")
-        
+
         do {
             try managedContext.save()
         } catch let error as NSError {
-            print("Could not save favorite. \(error), \(error.userInfo)")
+            print("Could not save favorite, error: \(error), \(error.userInfo)")
+            throw UserError.unableToSaveFavorite
         }
     }
     
-    static func deleteFavorite(gameId: String) {
-        guard let managedContext = getManagedContext() else { return }
+    static func deleteFavorite(gameId: String) throws {
+        guard let managedContext = getManagedContext() else {
+            throw InternalError.unableToRetrieveManagedContext
+        }
 
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Favorite")
         fetchRequest.predicate = NSPredicate(format: "id = %@", gameId)
@@ -114,11 +119,14 @@ enum PersistenceManager {
             try managedContext.save()
         } catch let error as NSError {
             print("Could not delete favorite with id: \(gameId), error: \(error), \(error.userInfo)")
+            throw UserError.unableToDeleteFavorite 
         }
     }
     
-    static func isFavourite(id: String) -> Bool {
-        guard let managedContext = getManagedContext() else { return false }
+    static func isFavorite(id: String) throws -> Bool {
+        guard let managedContext = getManagedContext() else {
+            throw InternalError.unableToRetrieveManagedContext
+        }
 
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Favorite")
         fetchRequest.predicate = NSPredicate(format: "id = %@", id)
@@ -126,26 +134,28 @@ enum PersistenceManager {
         do {
             let count = try managedContext.fetch(fetchRequest).count
             return (count < 1) ? false : true
-        } catch let error as NSError {
-            print("Could not determine if this id is in favorites: \(id), error: \(error), \(error.userInfo)")
+        } catch _ as NSError {
+            throw InternalError.unableToVerifyFavorite
         }
-        return false
     }
     
-    static func fetchFavorites(completed: @escaping (NSAsynchronousFetchResult<NSManagedObject>) -> ()) {
-        guard let managedContext = getManagedContext() else { return }
+    static func fetchFavorites(completed: @escaping (Result<NSAsynchronousFetchResult<NSManagedObject>, Error>) -> ()) {
+        guard let managedContext = getManagedContext() else {
+            completed(.failure(InternalError.unableToRetrieveManagedContext))
+            return
+        }
         
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Favorite")
         let sort = NSSortDescriptor(key: "date", ascending: false)
         fetchRequest.sortDescriptors = [sort]
         let asyncFetchRequest = NSAsynchronousFetchRequest(fetchRequest: fetchRequest) { result in
-            completed(result)
+            completed(.success(result))
         }
         
         do {
             try managedContext.execute(asyncFetchRequest)
         } catch let error as NSError {
-            print("Could not fetch favorites. \(error), \(error.userInfo)")
+            completed(.failure(UserError.unableToRetrieveFavorites))
         }
     }
 }

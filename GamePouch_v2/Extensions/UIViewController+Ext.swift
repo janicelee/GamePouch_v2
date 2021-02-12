@@ -9,7 +9,7 @@ import UIKit
 
 extension UIViewController {
     
-    func showErrorAlertOnMainThread(message: String) {
+    func presentErrorAlertOnMainThread(message: String) {
         DispatchQueue.main.async {
             let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default))
