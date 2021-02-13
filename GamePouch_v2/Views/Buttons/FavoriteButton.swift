@@ -26,7 +26,7 @@ class FavoriteButton: UIButton {
         setImage(Images.emptyHeart, for: .normal)
     }
     
-    func set(active: Bool) {
+    func setImage(active: Bool) {
         let image = active ? Images.filledHeart : Images.emptyHeart
         setImage(image, for: .normal)
     }

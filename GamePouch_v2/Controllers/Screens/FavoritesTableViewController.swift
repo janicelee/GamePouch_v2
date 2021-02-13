@@ -36,17 +36,12 @@ class FavoritesTableViewController: UITableViewController {
     private func fetchFavorites() {
         PersistenceManager.fetchFavorites { [weak self] gamesResult in
             guard let self = self else { return }
+            
             switch gamesResult {
             case .success(let games):
                 self.games = games
             case .failure(let error):
-                if let userError = error as? UserError {
-                    self.presentErrorAlertOnMainThread(message: userError.rawValue)
-                } else if let internalError = error as? InternalError {
-                    print("Could not fetch favorites. \(internalError.rawValue)")
-                } else {
-                    print("Unexpected error: \(error.localizedDescription)")
-                }
+                self.presentErrorAlertOnMainThread(message: error.getErrorMessage())
             }
         }
     }
@@ -81,7 +76,7 @@ class FavoritesTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             guard let id = games[indexPath.row].id else {
-                presentErrorAlertOnMainThread(message: UserError.unableToDeleteFavorite.rawValue)
+                presentErrorAlertOnMainThread(message: InternalError.unableToDeleteFavorite.getErrorMessage())
                 return
             }
             
@@ -89,10 +84,8 @@ class FavoritesTableViewController: UITableViewController {
                 try PersistenceManager.deleteFavorite(gameId: id)
                 games.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .fade)
-            } catch let error as UserError {
-                presentErrorAlertOnMainThread(message: error.rawValue)
-            } catch {
-                print("Unexpected error: \(error)")
+            } catch let error {
+                presentErrorAlertOnMainThread(message: error.getErrorMessage())
             }
         }
     }

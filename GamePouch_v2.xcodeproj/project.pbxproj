@@ -12,6 +12,7 @@
 		B802298D66DA4FBBF4E1B8CD /* Pods_GamePouch_v2_GamePouch_v2UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0B044DB30734DA457D51156 /* Pods_GamePouch_v2_GamePouch_v2UITests.framework */; };
 		F7013D9225A176FB000E2528 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7013D9125A176FB000E2528 /* SearchViewController.swift */; };
 		F70CC21E25D1065D002B6DFD /* GameAttributesStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70CC21D25D1065D002B6DFD /* GameAttributesStackView.swift */; };
+		F70DB98625D7957000F9EAD7 /* Error+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70DB98525D7957000F9EAD7 /* Error+Ext.swift */; };
 		F71571BE25CAAED500A88FE6 /* Int+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71571BD25CAAED500A88FE6 /* Int+Ext.swift */; };
 		F716816325C4110C00B75B60 /* IconGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = F716816225C4110C00B75B60 /* IconGroup.swift */; };
 		F7336C66257493F700C05848 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7336C65257493F700C05848 /* AppDelegate.swift */; };
@@ -84,6 +85,7 @@
 		C3E5C17BC04C710C37B2D7DC /* Pods-GamePouch_v2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GamePouch_v2.release.xcconfig"; path = "Target Support Files/Pods-GamePouch_v2/Pods-GamePouch_v2.release.xcconfig"; sourceTree = "<group>"; };
 		F7013D9125A176FB000E2528 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		F70CC21D25D1065D002B6DFD /* GameAttributesStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameAttributesStackView.swift; sourceTree = "<group>"; };
+		F70DB98525D7957000F9EAD7 /* Error+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Ext.swift"; sourceTree = "<group>"; };
 		F71571BD25CAAED500A88FE6 /* Int+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Ext.swift"; sourceTree = "<group>"; };
 		F716816225C4110C00B75B60 /* IconGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconGroup.swift; sourceTree = "<group>"; };
 		F7336C62257493F700C05848 /* GamePouch_v2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GamePouch_v2.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -307,6 +309,7 @@
 				F7342DD825D35B8300274F31 /* UIViewController+Ext.swift */,
 				F77A469025C0F8820036E6F1 /* UIColor+Ext.swift */,
 				F71571BD25CAAED500A88FE6 /* Int+Ext.swift */,
+				F70DB98525D7957000F9EAD7 /* Error+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -684,6 +687,7 @@
 				F7336C66257493F700C05848 /* AppDelegate.swift in Sources */,
 				F734756725905FDF00308880 /* TagCell.swift in Sources */,
 				F7D8C74925837B8700237071 /* GameImageView.swift in Sources */,
+				F70DB98625D7957000F9EAD7 /* Error+Ext.swift in Sources */,
 				F78C8D9F25A326EE00A3DBE0 /* SearchResultCell.swift in Sources */,
 				F736EDCF25AEC6D300D40A42 /* FavoritesTableViewController.swift in Sources */,
 				F77A469125C0F8820036E6F1 /* UIColor+Ext.swift in Sources */,

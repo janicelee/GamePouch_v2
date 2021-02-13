@@ -71,8 +71,8 @@ class SearchViewController: UIViewController {
                 case .success(let searchResults):
                     self.resultsTableController.searchResults = searchResults
                 case .failure(let error):
+                    self.presentErrorAlertOnMainThread(message: ErrorMessage.generic.rawValue)
                     print("Failed to get search results for text: \(text), error: \(error.rawValue)")
-                    self.presentErrorAlertOnMainThread(message: UserError.generic.rawValue)
                 }
             }
         }
@@ -93,8 +93,8 @@ class SearchViewController: UIViewController {
                     self.navigationController?.pushViewController(gameInfoViewController, animated: true)
                 }
             case .failure(let error):
+                self.presentErrorAlertOnMainThread(message: ErrorMessage.generic.rawValue)
                 print("Failed to get data for game id: \(id), error: \(error.rawValue)")
-                self.presentErrorAlertOnMainThread(message: UserError.generic.rawValue)
             }
         }
     }

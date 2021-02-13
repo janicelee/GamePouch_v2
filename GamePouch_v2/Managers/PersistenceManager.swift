@@ -99,9 +99,8 @@ enum PersistenceManager {
 
         do {
             try managedContext.save()
-        } catch let error as NSError {
-            print("Could not save favorite, error: \(error), \(error.userInfo)")
-            throw UserError.unableToSaveFavorite
+        } catch _ as NSError {
+            throw InternalError.unableToSaveFavorite
         }
     }
     
@@ -117,9 +116,8 @@ enum PersistenceManager {
             let favorite = try managedContext.fetch(fetchRequest)
             managedContext.delete(favorite[0])
             try managedContext.save()
-        } catch let error as NSError {
-            print("Could not delete favorite with id: \(gameId), error: \(error), \(error.userInfo)")
-            throw UserError.unableToDeleteFavorite 
+        } catch _ as NSError {
+            throw InternalError.unableToDeleteFavorite
         }
     }
     
@@ -155,7 +153,7 @@ enum PersistenceManager {
         do {
             try managedContext.execute(asyncFetchRequest)
         } catch _ as NSError {
-            completed(.failure(UserError.unableToRetrieveFavorites))
+            completed(.failure(InternalError.unableToRetrieveFavorites)) 
         }
     }
     
@@ -176,7 +174,7 @@ enum PersistenceManager {
                                 case .success(let game):
                                     games.insert(game, at: index)
                                 case .failure(let error):
-                                    print("Error retrieving game info for favorite with id: \(id), error: \(error.rawValue)")
+                                    print("Error retrieving game info for id: \(id), error: \(error.rawValue)")
                                 }
                                 group.leave()
                             }

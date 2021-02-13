@@ -194,19 +194,17 @@ class HotGameCell: UITableViewCell {
     private func setFavorite() {
         do {
             let isFavorite = try self.game!.isInFavorites(skipCache: true)
-            self.favoriteButton.set(active: isFavorite)
-        } catch let error as InternalError {
-            print("\(error.rawValue), id: \(game?.id ?? "")")
-        } catch {
-            print("Unexpected error: \(error)")
+            self.favoriteButton.setImage(active: isFavorite)
+        } catch let error {
+            print(error.getErrorMessage())
         }
     }
     
-    @objc private func favoriteButtonPressed(_ sender: UIButton) throws {
+    @objc private func favoriteButtonPressed(_ sender: UIButton) {
         do {
             let isInFavorites = try game!.isInFavorites()
             try game!.setFavorite(to: !isInFavorites)
-            favoriteButton.set(active: !isInFavorites)
+            favoriteButton.setImage(active: !isInFavorites)
         } catch {
             delegate?.didFailToUpdateFavorite(id: game?.id ?? "", error: error)
         }

@@ -246,23 +246,18 @@ class GameInfoViewController: UIViewController {
         do {
             let isInFavorites = try game.isInFavorites()
             try game.setFavorite(to: !isInFavorites)
-            favoriteButton.set(active: !isInFavorites)
-        } catch let error as InternalError {
-            presentErrorAlertOnMainThread(message: UserError.generic.rawValue)
-            print("\(error.rawValue), id: \(game?.id ?? "")")
-        } catch {
-            print("Unexpected error: \(error)")
+            favoriteButton.setImage(active: !isInFavorites)
+        } catch let error {
+            presentErrorAlertOnMainThread(message: error.getErrorMessage())
         }
     }
     
     private func setFavorite() {
         do {
             let isFavorite = try self.game.isInFavorites(skipCache: true)
-            self.favoriteButton.set(active: isFavorite)
-        } catch let error as InternalError {
-            print("\(error.rawValue), id: \(game?.id ?? "")")
+            self.favoriteButton.setImage(active: isFavorite)
         } catch {
-            print("Unexpected error: \(error)")
+            print(error.getErrorMessage())
         }
     }
     

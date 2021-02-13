@@ -94,7 +94,7 @@ struct Game {
             try PersistenceManager.saveFavorite(game: self)
         } else {
             guard let id = id else {
-                throw UserError.unableToDeleteFavorite
+                throw InternalError.unableToDeleteFavorite
             }
             try PersistenceManager.deleteFavorite(gameId: id)
         }
