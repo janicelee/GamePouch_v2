@@ -15,11 +15,7 @@ class SearchResultsTableController: UITableViewController {
     
     weak var delegate: SearchResultsTableControllerDelegate?
     var searchResults = [SearchResult]() {
-        didSet {
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-        }
+        didSet { DispatchQueue.main.async { self.tableView.reloadData() }}
     }
 
     override func viewDidLoad() {

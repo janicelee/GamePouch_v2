@@ -18,11 +18,7 @@ class RecentSearchTableController: UITableViewController {
     
     weak var delegate: RecentSearchTableControllerDelegate?
     var recentSearches: [SearchResult] = [] {
-        didSet {
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-        }
+        didSet { DispatchQueue.main.async { self.tableView.reloadData() }}
     }
     
     override func viewWillAppear(_ animated: Bool) {

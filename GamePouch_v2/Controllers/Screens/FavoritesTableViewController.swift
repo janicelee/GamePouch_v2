@@ -13,9 +13,7 @@ class FavoritesTableViewController: UITableViewController {
     private let rowHeight: CGFloat = 70
     
     var games: [Game] = [] {
-        didSet {
-            DispatchQueue.main.async { self.tableView.reloadData() }
-        }
+        didSet { DispatchQueue.main.async { self.tableView.reloadData() } }
     }
 
     override func viewDidLoad() {
