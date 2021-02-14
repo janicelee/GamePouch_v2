@@ -36,7 +36,7 @@ class FavoriteCell: UITableViewCell {
         [titleLabel, ratingIconGroup, rankIconGroup].forEach { attributesContainerView.addSubview($0) }
 
         gameImageView.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview().inset(Layout.mediumPadding)
+            make.top.bottom.equalToSuperview().inset(Layout.mediumPadding).priority(999)
             make.leading.equalToSuperview().offset(Layout.xLargePadding)
             make.width.equalTo(cellWidth)
         }
