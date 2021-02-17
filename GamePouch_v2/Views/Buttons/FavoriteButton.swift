@@ -26,8 +26,14 @@ class FavoriteButton: UIButton {
         setImage(Images.emptyHeart, for: .normal)
     }
     
-    func setImage(active: Bool) {
+    func setSelectionStatus(active: Bool) {
         let image = active ? Images.filledHeart : Images.emptyHeart
         setImage(image, for: .normal)
+        setAccessibilityAttributes(isFavorite: active)
+    }
+    
+    private func setAccessibilityAttributes(isFavorite: Bool) {
+        accessibilityLabel = isFavorite ? "Selected favorite" : "Unselected favorite"
+        accessibilityHint = isFavorite ? "Double tap to un-favorite" : "Double tap to favorite"
     }
 }

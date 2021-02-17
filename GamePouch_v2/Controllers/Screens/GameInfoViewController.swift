@@ -246,7 +246,7 @@ class GameInfoViewController: UIViewController {
         do {
             let isInFavorites = try game.isInFavorites()
             try game.setFavorite(to: !isInFavorites)
-            favoriteButton.setImage(active: !isInFavorites)
+            favoriteButton.setSelectionStatus(active: !isInFavorites)
         } catch let error {
             presentErrorAlertOnMainThread(message: error.getErrorMessage())
         }
@@ -255,7 +255,7 @@ class GameInfoViewController: UIViewController {
     private func setFavorite() {
         do {
             let isFavorite = try self.game.isInFavorites(skipCache: true)
-            self.favoriteButton.setImage(active: isFavorite)
+            self.favoriteButton.setSelectionStatus(active: isFavorite)
         } catch {
             print(error.getErrorMessage())
         }

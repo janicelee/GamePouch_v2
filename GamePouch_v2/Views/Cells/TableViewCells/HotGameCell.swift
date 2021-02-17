@@ -54,6 +54,7 @@ class HotGameCell: UITableViewCell {
         configureRatingandRankView()
         configureTitleContainerView()
         configureGameAttributesView()
+        configureAccessibility()
     }
     
     private func configureGameImageView() {
@@ -170,6 +171,7 @@ class HotGameCell: UITableViewCell {
     
     func set(game: Game) {
         self.game = game
+        
         titleLabel.text = game.getTitle()
         ratingIconGroup.label.text = game.getRating()
         playersIconGroup.label.text = game.getNumPlayers()
@@ -189,12 +191,13 @@ class HotGameCell: UITableViewCell {
         }
         
         setFavorite()
+        applyAccessibility(game: game)
     }
     
     private func setFavorite() {
         do {
-            let isFavorite = try self.game!.isInFavorites(skipCache: true)
-            self.favoriteButton.setImage(active: isFavorite)
+            let isFavorite = try game!.isInFavorites(skipCache: true)
+            favoriteButton.setSelectionStatus(active: isFavorite)
         } catch let error {
             print(error.getErrorMessage())
         }
@@ -204,7 +207,7 @@ class HotGameCell: UITableViewCell {
         do {
             let isInFavorites = try game!.isInFavorites()
             try game!.setFavorite(to: !isInFavorites)
-            favoriteButton.setImage(active: !isInFavorites)
+            favoriteButton.setSelectionStatus(active: !isInFavorites)
         } catch {
             delegate?.didFailToUpdateFavorite(id: game?.id ?? "", error: error)
         }
@@ -212,5 +215,29 @@ class HotGameCell: UITableViewCell {
     
     func clearImage() {
         gameImageView.image = Images.placeholder
+    }
+}
+
+
+// MARK: Accessibility
+
+extension HotGameCell {
+    private func configureAccessibility() {
+        accessibilityElements = [titleLabel, ratingIconGroup.label, rankIconGroup.label, playersIconGroup.label, timeIconGroup.label, difficultyIconGroup.label, ageIconGroup.label, favoriteButton]
+    }
+    
+    private func applyAccessibility(game: Game) {
+        titleLabel.accessibilityLabel = "Game title: \(formatGameLabelToAccessibleText(game.getTitle()))"
+        ratingIconGroup.label.accessibilityLabel = "Rating: \(formatGameLabelToAccessibleText(game.getRating()))"
+        playersIconGroup.label.accessibilityLabel = "Number of players: \(formatGameLabelToAccessibleText(game.getNumPlayers()))"
+        timeIconGroup.label.accessibilityLabel = "Play time: \(formatGameLabelToAccessibleText(game.getPlayTime())) minutes"
+        difficultyIconGroup.label.accessibilityLabel = "Difficulty: \(formatGameLabelToAccessibleText(game.getDifficultyDisplayText()))"
+        ageIconGroup.label.accessibilityLabel = "Minimum age: \(formatGameLabelToAccessibleText(game.getMinAgeDisplayText()))"
+        
+        if let rank = game.getRank() {
+            rankIconGroup.label.accessibilityLabel = "Rank: \(String(rank))"
+        } else {
+            rankIconGroup.label.accessibilityLabel = "Rank: Not Available"
+        }
     }
 }
