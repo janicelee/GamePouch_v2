@@ -174,17 +174,30 @@ class HotGameCell: UITableViewCell {
         self.game = game
         
         titleLabel.text = game.getTitle()
+        titleLabel.accessibilityLabel = "Game title: \(formatGameLabelToAccessibleText(game.getTitle()))"
+        
         ratingIconGroup.label.text = game.getRating()
+        ratingIconGroup.label.accessibilityLabel = "Rating: \(formatGameLabelToAccessibleText(game.getRating()))"
+        
         playersIconGroup.label.text = game.getNumPlayers()
+        playersIconGroup.label.accessibilityLabel = "Number of players: \(formatGameLabelToAccessibleText(game.getNumPlayers()))"
+        
         timeIconGroup.label.text = game.getPlayTime()
+        timeIconGroup.label.accessibilityLabel = "Play time: \(formatGameLabelToAccessibleText(game.getPlayTime())) minutes"
+        
         difficultyIconGroup.label.text = game.getDifficultyDisplayText()
+        difficultyIconGroup.label.accessibilityLabel = "Difficulty: \(formatGameLabelToAccessibleText(game.getDifficultyDisplayText()))"
+        
         ageIconGroup.label.text = game.getMinAgeDisplayText()
+        ageIconGroup.label.accessibilityLabel = "Minimum age: \(formatGameLabelToAccessibleText(game.getMinAgeDisplayText()))"
         
         if let rank = game.getRank(),
            let attString = rank.toOrdinalString(fontSize: FontSize.medium, superscriptFontSize: FontSize.superscript, weight: .bold) {
             rankIconGroup.label.attributedText = attString
+            rankIconGroup.label.accessibilityLabel = "Rank: \(String(rank))"
         } else {
             rankIconGroup.label.text = "N/A"
+            rankIconGroup.label.accessibilityLabel = "Rank: Not Available"
         }
         
         if let imageURL = game.imageURL {
@@ -192,7 +205,6 @@ class HotGameCell: UITableViewCell {
         }
         
         setFavorite()
-        applyAccessibility(game: game)
     }
     
     private func setFavorite() {
@@ -223,21 +235,6 @@ class HotGameCell: UITableViewCell {
 // MARK: Accessibility
 
 extension HotGameCell {
-    
-    private func applyAccessibility(game: Game) {
-        titleLabel.accessibilityLabel = "Game title: \(formatGameLabelToAccessibleText(game.getTitle()))"
-        ratingIconGroup.label.accessibilityLabel = "Rating: \(formatGameLabelToAccessibleText(game.getRating()))"
-        playersIconGroup.label.accessibilityLabel = "Number of players: \(formatGameLabelToAccessibleText(game.getNumPlayers()))"
-        timeIconGroup.label.accessibilityLabel = "Play time: \(formatGameLabelToAccessibleText(game.getPlayTime())) minutes"
-        difficultyIconGroup.label.accessibilityLabel = "Difficulty: \(formatGameLabelToAccessibleText(game.getDifficultyDisplayText()))"
-        ageIconGroup.label.accessibilityLabel = "Minimum age: \(formatGameLabelToAccessibleText(game.getMinAgeDisplayText()))"
-        
-        if let rank = game.getRank() {
-            rankIconGroup.label.accessibilityLabel = "Rank: \(String(rank))"
-        } else {
-            rankIconGroup.label.accessibilityLabel = "Rank: Not Available"
-        }
-    }
     
     private func configureAccessibility() {
         accessibilityElements = [titleLabel, ratingIconGroup.label, rankIconGroup.label, playersIconGroup.label, timeIconGroup.label, difficultyIconGroup.label, ageIconGroup.label, favoriteButton]

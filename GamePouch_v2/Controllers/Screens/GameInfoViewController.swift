@@ -94,14 +94,18 @@ class GameInfoViewController: UIViewController {
 
         scrollView.addSubview(mainAttributesView)
         [ratingIconGroup, rankIconGroup, favoriteButton].forEach { mainAttributesView.addSubview($0) }
+        mainAttributesView.accessibilityElements = [ratingIconGroup, rankIconGroup, favoriteButton]
         
         ratingIconGroup.label.text = game.getRating()
+        ratingIconGroup.label.accessibilityLabel = "Rating: \(formatGameLabelToAccessibleText(game.getRating()))"
         
         if let rank = game.getRank(),
            let attString = rank.toOrdinalString(fontSize: FontSize.medium, superscriptFontSize: FontSize.superscript, weight: .bold) {
             rankIconGroup.label.attributedText = attString
+            rankIconGroup.label.accessibilityLabel = "Rank: \(String(rank))"
         } else {
             rankIconGroup.label.text = "N/A"
+            rankIconGroup.label.accessibilityLabel = "Rank: Not Available"
         }
         
         favoriteButton.addTarget(self, action: #selector(favoriteButtonPressed(_:)), for: .touchUpInside)
@@ -135,6 +139,7 @@ class GameInfoViewController: UIViewController {
         titleLabel.numberOfLines = 2
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = 0.9
+        titleLabel.accessibilityLabel = "Game title: \(formatGameLabelToAccessibleText(game.getTitle()))"
         
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(mainAttributesView.snp.bottom).offset(Layout.largePadding)
@@ -149,6 +154,7 @@ class GameInfoViewController: UIViewController {
         yearLabel.text = game.getYearPublished()
         yearLabel.font = UIFont.systemFont(ofSize: FontSize.small, weight: .bold)
         yearLabel.textColor = .secondaryLabel
+        yearLabel.accessibilityLabel = "Year published: \(game.getYearPublished())"
         
         yearLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(Layout.mediumPadding)
@@ -174,9 +180,15 @@ class GameInfoViewController: UIViewController {
         descriptionLabel.numberOfLines = 6
         descriptionLabel.lineBreakMode = .byTruncatingTail
         descriptionLabel.isUserInteractionEnabled = true
+        descriptionLabel.accessibilityLabel = "Description"
+        descriptionLabel.accessibilityHint = "Double tap to expand description"
+        descriptionLabel.accessibilityValue = formatGameLabelToAccessibleText(game.getDescription())
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(labelTapped(_:)))
         descriptionLabel.addGestureRecognizer(tapGesture)
+        
+        let toggleDescriptionLabelHeight = UIAccessibilityCustomAction(name: "Toggle height of description label", target: self, selector: #selector(labelTapped(_:)))
+        descriptionLabel.accessibilityCustomActions = [toggleDescriptionLabelHeight]
         
         descriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(secondaryAttributesStackView.snp.bottom).offset(Layout.xLargePadding)
@@ -261,7 +273,7 @@ class GameInfoViewController: UIViewController {
         }
     }
     
-    @objc private func labelTapped(_ sender: UITapGestureRecognizer) {
+    @objc private func labelTapped(_ sender: UITapGestureRecognizer) -> Bool {
         if descriptionExpanded {
             descriptionLabel.numberOfLines = 6
             descriptionLabel.lineBreakMode = .byTruncatingTail
@@ -270,5 +282,6 @@ class GameInfoViewController: UIViewController {
             descriptionLabel.lineBreakMode = .byWordWrapping
         }
         descriptionExpanded = !descriptionExpanded
+        return true
     }
 }

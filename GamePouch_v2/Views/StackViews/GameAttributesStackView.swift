@@ -16,10 +16,18 @@ class GameAttributesStackView: UIStackView {
     
     init(game: Game) {
         super.init(frame: .zero)
+        
         playersIconGroup.label.text = "\(game.getNumPlayers())\nPlayers"
+        playersIconGroup.label.accessibilityLabel = "Number of players: \(formatGameLabelToAccessibleText(game.getNumPlayers()))"
+        
         timeIconGroup.label.text = "\(game.getPlayTime())\nMinutes"
+        timeIconGroup.label.accessibilityLabel = "Play time: \(formatGameLabelToAccessibleText(game.getPlayTime())) minutes"
+        
         difficultyIconGroup.label.text = "\(game.getDifficultyDisplayText())\nDifficulty"
+        difficultyIconGroup.label.accessibilityLabel = "Difficulty: \(formatGameLabelToAccessibleText(game.getDifficultyDisplayText()))"
+        
         ageIconGroup.label.text = "\(game.getMinAgeDisplayText())\nYears"
+        ageIconGroup.label.accessibilityLabel = "Minimum age: \(formatGameLabelToAccessibleText(game.getMinAgeDisplayText()))"
         
         configure()
     }
