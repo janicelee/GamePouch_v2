@@ -8,7 +8,7 @@
 import UIKit
 
 enum Images {
-    static let placeholder = UIImage(named: "game-placeholder")
+    static let placeholder = UIImage(named: "placeholder")
     static let rank = UIImage(named: "icon-rank")
     static let rating = UIImage(named: "icon-rating")
     static let players = UIImage(named: "icon-players")

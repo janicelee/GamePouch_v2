@@ -21,7 +21,6 @@ class HotGamesViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configure()
         getHotnessList()
     }
@@ -81,7 +80,6 @@ class HotGamesViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let game = games[indexPath.row]
         let destination = GameInfoViewController(game: game)
-        
         navigationController?.pushViewController(destination, animated: true)
     }
     
@@ -91,9 +89,17 @@ class HotGamesViewController: UITableViewController {
     }
 }
 
-extension HotGamesViewController: HotGameCellDelegate {    
+// MARK: - HotGameCellDelegate
+
+extension HotGamesViewController: HotGameCellDelegate {
+    
     func didFailToUpdateFavorite(id: String, error: Error) {
         presentErrorAlertOnMainThread(message: ErrorMessage.generic.rawValue)
+    }
+    
+    func didSelectCell(game: Game) {
+        let destination = GameInfoViewController(game: game)
+        navigationController?.pushViewController(destination, animated: true)
     }
 }
 

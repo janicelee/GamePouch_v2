@@ -10,6 +10,7 @@ import SnapKit
 
 protocol HotGameCellDelegate: class {
     func didFailToUpdateFavorite(id: String, error: Error)
+    func didSelectCell(game: Game)
 }
 
 class HotGameCell: UITableViewCell {
@@ -222,9 +223,6 @@ class HotGameCell: UITableViewCell {
 // MARK: Accessibility
 
 extension HotGameCell {
-    private func configureAccessibility() {
-        accessibilityElements = [titleLabel, ratingIconGroup.label, rankIconGroup.label, playersIconGroup.label, timeIconGroup.label, difficultyIconGroup.label, ageIconGroup.label, favoriteButton]
-    }
     
     private func applyAccessibility(game: Game) {
         titleLabel.accessibilityLabel = "Game title: \(formatGameLabelToAccessibleText(game.getTitle()))"
@@ -238,6 +236,21 @@ extension HotGameCell {
             rankIconGroup.label.accessibilityLabel = "Rank: \(String(rank))"
         } else {
             rankIconGroup.label.accessibilityLabel = "Rank: Not Available"
+        }
+    }
+    
+    private func configureAccessibility() {
+        accessibilityElements = [titleLabel, ratingIconGroup.label, rankIconGroup.label, playersIconGroup.label, timeIconGroup.label, difficultyIconGroup.label, ageIconGroup.label, favoriteButton]
+        let gameDetails = UIAccessibilityCustomAction(name: "Game details", target: self, selector: #selector(getGameDetails))
+        accessibilityCustomActions = [gameDetails]
+    }
+    
+    @objc private func getGameDetails() -> Bool {
+        if let delegate = delegate, let game = game {
+            delegate.didSelectCell(game: game)
+            return true
+        } else {
+            return false
         }
     }
 }
