@@ -139,7 +139,7 @@ class GameInfoViewController: UIViewController {
         titleLabel.numberOfLines = 2
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = 0.9
-        titleLabel.accessibilityLabel = "Game title: \(formatGameLabelToAccessibleText(game.getTitle()))"
+        titleLabel.accessibilityLabel = "Title: \(formatGameLabelToAccessibleText(game.getTitle()))"
         
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(mainAttributesView.snp.bottom).offset(Layout.largePadding)

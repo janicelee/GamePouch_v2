@@ -34,7 +34,8 @@ class FavoriteCell: UITableViewCell {
     private func configure() {
         [gameImageView, attributesContainerView].forEach { addSubview($0) }
         [titleLabel, ratingIconGroup, rankIconGroup].forEach { attributesContainerView.addSubview($0) }
-
+        accessibilityElements = [titleLabel, ratingIconGroup.label, rankIconGroup.label]
+        
         gameImageView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(Layout.mediumPadding).priority(999)
             make.leading.equalToSuperview().offset(Layout.xLargePadding)
@@ -90,13 +91,18 @@ class FavoriteCell: UITableViewCell {
     
     func set(game: Game) {
         titleLabel.text = game.getTitle()
+        titleLabel.accessibilityLabel = "Title: \(formatGameLabelToAccessibleText(game.getTitle()))"
+        
         ratingIconGroup.label.text = game.getRating()
+        ratingIconGroup.label.accessibilityLabel = "Rating: \(formatGameLabelToAccessibleText(game.getRating()))"
 
         if let rank = game.getRank(),
            let attString = rank.toOrdinalString(fontSize: attributeFontSize, superscriptFontSize: FontSize.superscript, weight: attributeFontWeight) {
             rankIconGroup.label.attributedText = attString
+            rankIconGroup.label.accessibilityLabel = "Rank: \(String(rank))"
         } else {
             rankIconGroup.label.text = "N/A"
+            rankIconGroup.label.accessibilityLabel = "Rank: Not Available"
         }
         
         if let thumbnailURL = game.thumbnailURL {

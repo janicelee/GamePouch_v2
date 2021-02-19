@@ -174,7 +174,7 @@ class HotGameCell: UITableViewCell {
         self.game = game
         
         titleLabel.text = game.getTitle()
-        titleLabel.accessibilityLabel = "Game title: \(formatGameLabelToAccessibleText(game.getTitle()))"
+        titleLabel.accessibilityLabel = "Title: \(formatGameLabelToAccessibleText(game.getTitle()))"
         
         ratingIconGroup.label.text = game.getRating()
         ratingIconGroup.label.accessibilityLabel = "Rating: \(formatGameLabelToAccessibleText(game.getRating()))"
