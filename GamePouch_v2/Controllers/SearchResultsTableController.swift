@@ -31,9 +31,8 @@ class SearchResultsTableController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultCell.reuseID, for: indexPath) as! SearchResultCell
-        if let title = searchResults[indexPath.row].name {
-            cell.setLabel(to: title)
-        }
+        cell.set(searchResult: searchResults[indexPath.row])
+        cell.delegate = self
         return cell
     }
     
@@ -41,6 +40,13 @@ class SearchResultsTableController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let searchResult = searchResults[indexPath.row]
+        delegate?.didSelectSearchResult(result: searchResult)
+    }
+}
+
+extension SearchResultsTableController: SearchResultCellDelegate {
+    
+    func didSelectSearchResult(_ searchResult: SearchResult) {
         delegate?.didSelectSearchResult(result: searchResult)
     }
 }

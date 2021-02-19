@@ -41,7 +41,8 @@ class RecentSearchTableController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultCell.reuseID, for: indexPath) as! SearchResultCell
         let recentSearch = recentSearches[indexPath.row]
-        cell.setLabel(to: recentSearch.name ?? "")
+        cell.set(searchResult: recentSearch)
+        cell.delegate = self
         return cell
     }
     
@@ -66,5 +67,12 @@ class RecentSearchTableController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let recentSearch = recentSearches[indexPath.row]
         delegate?.didSelectRecentSearch(result: recentSearch)
+    }
+}
+
+extension RecentSearchTableController: SearchResultCellDelegate {
+    
+    func didSelectSearchResult(_ searchResult: SearchResult) {
+        delegate?.didSelectRecentSearch(result: searchResult)
     }
 }
