@@ -69,16 +69,14 @@ extension GameInfoParser: XMLParserDelegate {
         } else if elementName == "image" {
             game.imageURL = foundCharacters
         } else if elementName == "description" {
-            var description = foundCharacters.replacingOccurrences(of: "&#10;", with: "\n")
-            description = description.replacingOccurrences(of: "&ldquo;", with: "\"")
-            description = description.replacingOccurrences(of: "&rdquo;", with: "\"")
-            description = description.replacingOccurrences(of: "&lsquo;", with: "'")
-            description = description.replacingOccurrences(of: "&rsquo;", with: "'")
-            description = description.replacingOccurrences(of: "&quot;", with: "\"")
-            description = description.replacingOccurrences(of: "&mdash;", with: "-")
-            description = description.replacingOccurrences(of: "&ndash;", with: "-")
-            description = description.replacingOccurrences(of: "&nbsp;", with: "\u{00a0}")
-            game.description = description
+            if let data = foundCharacters.data(using: .utf8) {
+                do {
+                    let attrStr = try NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil)
+                    game.description = attrStr.string
+                 } catch {
+                     print("Could not decode game description: \(error)")
+                 }
+            }
         }
         self.foundCharacters = ""
     }
