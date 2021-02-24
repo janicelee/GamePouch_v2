@@ -21,7 +21,7 @@ class SecondaryAttributesIconGroup: IconGroup {
         iconImageView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.bottom.equalToSuperview().priority(998)
-            make.width.height.equalTo(width)
+            make.width.height.equalTo(width).priority(998)
         }
         
         label.snp.makeConstraints { make in

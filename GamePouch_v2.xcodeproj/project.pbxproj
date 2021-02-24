@@ -40,6 +40,8 @@
 		F779E7F72585D82B00AC829D /* MainAttributesIconGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = F779E7F62585D82B00AC829D /* MainAttributesIconGroup.swift */; };
 		F77A469125C0F8820036E6F1 /* UIColor+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77A469025C0F8820036E6F1 /* UIColor+Ext.swift */; };
 		F7881EC325DC91740010B5DE /* AccessibilityUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7881EC225DC91740010B5DE /* AccessibilityUtil.swift */; };
+		F7881EDC25E486680010B5DE /* DetailedInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7881EDB25E486680010B5DE /* DetailedInfoView.swift */; };
+		F7881EE725E4B6A60010B5DE /* DetailedInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7881EE625E4B6A60010B5DE /* DetailedInfoViewController.swift */; };
 		F78C8D8125A30BBF00A3DBE0 /* SearchParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78C8D8025A30BBF00A3DBE0 /* SearchParser.swift */; };
 		F78C8D8625A3121E00A3DBE0 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78C8D8525A3121E00A3DBE0 /* SearchResult.swift */; };
 		F78C8D8F25A325D500A3DBE0 /* SearchResultsTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78C8D8E25A325D500A3DBE0 /* SearchResultsTableController.swift */; };
@@ -120,6 +122,8 @@
 		F779E7F62585D82B00AC829D /* MainAttributesIconGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAttributesIconGroup.swift; sourceTree = "<group>"; };
 		F77A469025C0F8820036E6F1 /* UIColor+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Ext.swift"; sourceTree = "<group>"; };
 		F7881EC225DC91740010B5DE /* AccessibilityUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityUtil.swift; sourceTree = "<group>"; };
+		F7881EDB25E486680010B5DE /* DetailedInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedInfoView.swift; sourceTree = "<group>"; };
+		F7881EE625E4B6A60010B5DE /* DetailedInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedInfoViewController.swift; sourceTree = "<group>"; };
 		F78C8D8025A30BBF00A3DBE0 /* SearchParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchParser.swift; sourceTree = "<group>"; };
 		F78C8D8525A3121E00A3DBE0 /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 		F78C8D8E25A325D500A3DBE0 /* SearchResultsTableController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsTableController.swift; sourceTree = "<group>"; };
@@ -345,6 +349,7 @@
 				F7D4C96D259F36BB006E3157 /* GalleryImagesViewController.swift */,
 				F78C8D8E25A325D500A3DBE0 /* SearchResultsTableController.swift */,
 				F7707A5A25A712230076419A /* RecentSearchTableController.swift */,
+				F7881EE625E4B6A60010B5DE /* DetailedInfoViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -409,6 +414,7 @@
 				F7D8C7552584729000237071 /* Labels */,
 				F7D8C74725837B4700237071 /* ImageViews */,
 				F7B9A7762579E72E00E06A0F /* Cells */,
+				F7881EDB25E486680010B5DE /* DetailedInfoView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -667,6 +673,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F779E7F72585D82B00AC829D /* MainAttributesIconGroup.swift in Sources */,
+				F7881EDC25E486680010B5DE /* DetailedInfoView.swift in Sources */,
 				F78C8DAD25A5D0FA00A3DBE0 /* Debouncer.swift in Sources */,
 				F70CC21E25D1065D002B6DFD /* GameAttributesStackView.swift in Sources */,
 				F736EDD425AECA5E00D40A42 /* FavoriteCell.swift in Sources */,
@@ -685,6 +692,7 @@
 				F7B9A7842579E9AF00E06A0F /* HotGameCell.swift in Sources */,
 				F7ECBF7E25B3E15A00E40569 /* PersistenceManager.swift in Sources */,
 				F7EC6268258CC14900FD536A /* GameInfoViewController.swift in Sources */,
+				F7881EE725E4B6A60010B5DE /* DetailedInfoViewController.swift in Sources */,
 				F7AF6B05259ABD9400BBE0CB /* TagViewController.swift in Sources */,
 				F734756F2591C39300308880 /* TagCollectionView.swift in Sources */,
 				F7336C66257493F700C05848 /* AppDelegate.swift in Sources */,

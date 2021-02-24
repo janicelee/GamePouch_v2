@@ -34,6 +34,11 @@ class HotGamesViewController: UITableViewController {
         title = "Hot Games"
         navigationController?.navigationBar.prefersLargeTitles = true
         
+        let moreInfoButton = UIButton(type: .infoLight)
+        moreInfoButton.addTarget(self, action: #selector(moreInfoTapped), for: .touchUpInside)
+        moreInfoButton.tintColor = Colors.purple
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: moreInfoButton)
+        
         tableView.frame = view.bounds
         tableView.rowHeight = rowHeight
         
@@ -59,6 +64,13 @@ class HotGamesViewController: UITableViewController {
                 print("Error retrieving hotness list: \(error.rawValue)")
             }
         }
+    }
+    
+    @objc private func moreInfoTapped() {
+        let detailedInfoViewController = DetailedInfoViewController()
+        detailedInfoViewController.modalPresentationStyle = .overFullScreen
+        detailedInfoViewController.modalTransitionStyle = .crossDissolve
+        present(detailedInfoViewController, animated: true)
     }
     
     // MARK: - UITableViewDataSource
@@ -102,4 +114,3 @@ extension HotGamesViewController: HotGameCellDelegate {
         navigationController?.pushViewController(destination, animated: true)
     }
 }
-
