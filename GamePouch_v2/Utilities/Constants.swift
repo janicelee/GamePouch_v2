@@ -18,10 +18,10 @@ enum Images {
     static let filledHeart = UIImage(named: "icon-filled-heart")
     static let emptyHeart = UIImage(named: "icon-empty-heart")
     
-    static let tabBarGlyphConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
-    static let hotGamesGlyph = UIImage(systemName: "flame", withConfiguration: tabBarGlyphConfig)
-    static let searchGlyph = UIImage(systemName: "magnifyingglass", withConfiguration: tabBarGlyphConfig)
-    static let favoritesGlyph = UIImage(systemName: "heart", withConfiguration: tabBarGlyphConfig)
+    static let tabBarConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
+    static let hotGamesGlyph = UIImage(systemName: "flame", withConfiguration: tabBarConfig)
+    static let searchGlyph = UIImage(systemName: "magnifyingglass", withConfiguration: tabBarConfig)
+    static let favoritesGlyph = UIImage(systemName: "heart", withConfiguration: tabBarConfig)
 }
 
 enum Layout {

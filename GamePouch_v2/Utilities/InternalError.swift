@@ -9,6 +9,8 @@ import Foundation
 
 enum InternalError: String, Error {
     
+    case generic = "Something went wrong.\n Please try again."
+    
     // MARK: - Networking errors
     case invalidURL = "Invalid URL."
     case unableToCompleteRequest = "Unable to complete request."
@@ -23,8 +25,4 @@ enum InternalError: String, Error {
     case unableToRetrieveFavorites = "Unable to retrieve favorites."
     case unableToSaveFavorite = "Unable to save favorite."
     case unableToDeleteFavorite = "Unable to delete favorite."
-}
-
-enum ErrorMessage: String {
-    case generic = "Something went wrong.\n Please try again."
 }
