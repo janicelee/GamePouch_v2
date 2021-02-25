@@ -10,11 +10,10 @@ import CoreData
 
 class FavoritesTableViewController: UITableViewController {
     
+    let emptyStateView = EmptyFavoritesView()
     private let rowHeight: CGFloat = 70
     
-    var games: [Game] = [] {
-        didSet { DispatchQueue.main.async { self.tableView.reloadData() } }
-    }
+    var games: [Game] = [] { didSet { updateUI() } }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,11 +23,23 @@ class FavoritesTableViewController: UITableViewController {
         tableView.register(FavoriteCell.self, forCellReuseIdentifier: FavoriteCell.reuseID)
         tableView.rowHeight = rowHeight
         tableView.separatorStyle = .none
+        
+        configureEmptyStateView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchFavorites() 
+    }
+    
+    private func configureEmptyStateView() {
+        view.addSubview(emptyStateView)
+        
+        emptyStateView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(40)
+            make.centerX.equalToSuperview()
+            make.width.equalToSuperview().inset(20)
+        }
     }
     
     private func fetchFavorites() {
@@ -40,6 +51,20 @@ class FavoritesTableViewController: UITableViewController {
                 self.games = games
             case .failure(let error):
                 self.presentErrorAlertOnMainThread(message: error.getErrorMessage())
+            }
+        }
+    }
+    
+    private func updateUI() {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+            
+            if self.games.isEmpty {
+                UIView.transition(with: self.emptyStateView, duration: 0.3, options: .transitionCrossDissolve) {
+                    self.emptyStateView.isHidden = false
+                }
+            } else {
+                self.emptyStateView.isHidden = true
             }
         }
     }
