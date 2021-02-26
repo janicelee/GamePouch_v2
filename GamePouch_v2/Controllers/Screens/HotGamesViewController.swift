@@ -58,9 +58,9 @@ class HotGamesViewController: UITableViewController {
             switch result {
             case .success(let games):
                 self.games = games
-                if games.count == 0 { self.presentErrorAlertOnMainThread(message: ErrorMessage.generic.rawValue) }
+                if games.count == 0 { self.presentErrorAlertOnMainThread(message: InternalError.generic.rawValue) }
             case .failure(let error):
-                self.presentErrorAlertOnMainThread(message: ErrorMessage.generic.rawValue)
+                self.presentErrorAlertOnMainThread(message: InternalError.generic.rawValue)
                 print("Error retrieving hotness list: \(error.rawValue)")
             }
         }
@@ -106,7 +106,7 @@ class HotGamesViewController: UITableViewController {
 extension HotGamesViewController: HotGameCellDelegate {
     
     func didFailToUpdateFavorite(id: String, error: Error) {
-        presentErrorAlertOnMainThread(message: ErrorMessage.generic.rawValue)
+        presentErrorAlertOnMainThread(message: InternalError.generic.rawValue)
     }
     
     func didSelectCell(game: Game) {

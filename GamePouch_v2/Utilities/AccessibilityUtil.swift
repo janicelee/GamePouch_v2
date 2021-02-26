@@ -26,6 +26,5 @@ func formatGameLabelToAccessibleText(_ text: String) -> String {
     if scoreRegex.firstMatch(in: text, options: [], range: range) != nil {
         return text.replacingOccurrences(of: "/", with: " out of ")
     }
-    
     return text
 }
