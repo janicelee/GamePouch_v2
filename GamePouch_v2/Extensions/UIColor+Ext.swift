@@ -9,7 +9,7 @@ import UIKit
 
 extension UIColor {
     
-    // Creates UIColor given hex
+    // Creates UIColor matching given hex
     public convenience init?(hex: String) {
         let r, g, b, a: CGFloat
 

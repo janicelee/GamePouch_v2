@@ -8,7 +8,6 @@
 import UIKit
 
 class NetworkManager {
-    
     static let shared = NetworkManager()
     private let cache = NSCache<NSString, UIImage>()
     

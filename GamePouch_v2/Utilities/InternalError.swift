@@ -8,7 +8,6 @@
 import Foundation
 
 enum InternalError: String, Error {
-    
     case generic = "Something went wrong.\n Please try again."
     
     // MARK: - Networking errors

@@ -21,7 +21,6 @@ class SearchParser: NSObject {
 extension SearchParser: XMLParserDelegate {
     
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
-        
         if elementName == "item", let id = attributeDict["id"] {
             searchResult = SearchResult()
             searchResult.id = id
@@ -31,7 +30,6 @@ extension SearchParser: XMLParserDelegate {
     }
     
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-        
         if elementName == "item" {
             searchResults.append(searchResult)
         }

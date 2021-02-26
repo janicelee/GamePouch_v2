@@ -16,7 +16,7 @@ class GameInfoParser: NSObject {
         let parser = XMLParser(data: data)
         parser.delegate = self
         
-        // Sometimes malformed XML causes uncaught failure in parsing, so we check if id exists
+        // Check if id exists since malformed XML sometimes causes uncaught failure in parsing
         return parser.parse() && game.id != nil
     }
 }
@@ -69,6 +69,7 @@ extension GameInfoParser: XMLParserDelegate {
         } else if elementName == "image" {
             game.imageURL = foundCharacters
         } else if elementName == "description" {
+            // decodes HTML entities
             if let data = foundCharacters.data(using: .utf8) {
                 do {
                     let attrStr = try NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil)

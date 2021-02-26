@@ -24,7 +24,17 @@ struct Game {
     var rating: String?
     var rank: String?
     var weight: String?
-    private var isFavorite: Bool?
+    private lazy var isFavorite: Bool = {
+        guard let id = id else { return false }
+        do {
+            return try PersistenceManager.isFavorite(id: id)
+        } catch {
+            return false
+        }
+    }()
+    
+    
+    // MARK: - Getters
     
     func getTitle() -> String {
         guard let name = name, isValidDisplayText(name) else { return "N/A" }
@@ -42,14 +52,20 @@ struct Game {
     }
     
     func getNumPlayers() -> String {
-        guard let minPlayers = minPlayers, let maxPlayers = maxPlayers, isValidDisplayText(minPlayers), isValidDisplayText(maxPlayers) else {
+        guard let minPlayers = minPlayers,
+              let maxPlayers = maxPlayers,
+              isValidDisplayText(minPlayers),
+              isValidDisplayText(maxPlayers) else {
            return "N/A"
         }
         return "\(minPlayers)-\(maxPlayers)"
     }
     
     func getPlayTime() -> String {
-        guard let minPlayTime = minPlayTime, let maxPlayTime = maxPlayTime, isValidDisplayText(minPlayTime), isValidDisplayText(maxPlayTime) else {
+        guard let minPlayTime = minPlayTime,
+              let maxPlayTime = maxPlayTime,
+              isValidDisplayText(minPlayTime),
+              isValidDisplayText(maxPlayTime) else {
             return "N/A"
         }
         return "\(minPlayTime)-\(maxPlayTime)"
@@ -75,14 +91,22 @@ struct Game {
         return "\(weight)/5"
     }
     
+    private func isValidDisplayText(_ label: String) -> Bool {
+        guard !label.isEmpty,
+              label != "0",
+              label != "0.0",
+              label != "Not Ranked" else { return false }
+        return true
+    }
+    
+    // MARK: - Favorite Logic
+    
     mutating func isInFavorites(skipCache: Bool) throws -> Bool {
-        if isFavorite == nil || skipCache {
-            guard let id = id else {
-                throw InternalError.unableToVerifyFavorite
-            }
+        if skipCache {
+            guard let id = id else { throw InternalError.unableToVerifyFavorite }
             isFavorite = try PersistenceManager.isFavorite(id: id)
         }
-        return isFavorite!
+        return isFavorite
     }
 
     mutating func isInFavorites() throws -> Bool {
@@ -99,9 +123,5 @@ struct Game {
             try PersistenceManager.deleteFavorite(gameId: id)
         }
         self.isFavorite = favorite
-    }
-    
-    private func isValidDisplayText(_ label: String) -> Bool {
-        return !label.isEmpty && label != "0" && label != "0.0" && label != "Not Ranked"
     }
 }
