@@ -43,7 +43,7 @@ class FavoritesTableViewController: UITableViewController {
     }
     
     private func fetchFavorites() {
-        PersistenceManager.fetchFavorites { [weak self] gamesResult in
+        CoreDataClient.shared.fetchFavoriteGames { [weak self] gamesResult in
             guard let self = self else { return }
             
             switch gamesResult {
@@ -104,7 +104,7 @@ class FavoritesTableViewController: UITableViewController {
             }
             
             do {
-                try PersistenceManager.deleteFavorite(gameId: id)
+                try CoreDataClient.shared.deleteFavoriteGame(id: id)
                 games.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .fade)
             } catch let error {

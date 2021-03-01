@@ -1,5 +1,5 @@
 //
-//  PersistenceManager.swift
+//  CoreDataClient.swift
 //  GamePouch_v2
 //
 //  Created by Janice Lee on 2021-01-16.
@@ -8,17 +8,23 @@
 import UIKit
 import CoreData
 
-enum PersistenceManager {
-    static let searchEntity = "Search"
+class CoreDataClient {
+    static let shared = CoreDataClient()
     
-    static func getManagedContext() -> NSManagedObjectContext? {
+    private let searchEntity = "Search"
+    private let favoriteEntity = "Favorite"
+    private let maxNumSearches = 5
+    
+    private init() {}
+    
+    private func getManagedContext() -> NSManagedObjectContext? {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return nil }
         return appDelegate.persistentContainer.viewContext
     }
     
     // MARK: - Search Result Methods
     
-    static func saveSearch(id: String, name: String) {
+    func saveSearch(id: String, name: String) {
         guard let managedContext = getManagedContext() else { return }
         
         let entity = NSEntityDescription.entity(forEntityName: searchEntity, in: managedContext)!
@@ -33,16 +39,21 @@ enum PersistenceManager {
         } catch let error as NSError {
             print("Could not save search. \(error), \(error.userInfo)")
         }
+        deleteOldestSearchIfNecessary()
+    }
+    
+    // If number of saved searches exceeds max, delete oldest search
+    private func deleteOldestSearchIfNecessary() {
+        guard let managedContext = getManagedContext() else { return }
         
-        // If there are more than five saved searches, delete the oldest search
         do {
             let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: searchEntity)
             let count = try managedContext.count(for: fetchRequest)
 
-            if count > 5 {
+            if count > maxNumSearches {
                 let sort = NSSortDescriptor(key: "date", ascending: true)
                 fetchRequest.sortDescriptors = [sort]
-                fetchRequest.fetchLimit = 1
+                fetchRequest.fetchLimit = 1 // get oldest search
 
                 let oldestSearch = try managedContext.fetch(fetchRequest)
                 if oldestSearch.count == 1 {
@@ -55,7 +66,7 @@ enum PersistenceManager {
         }
     }
     
-    static func fetchRecentSearches() -> [SearchResult] {
+    func fetchRecentSearches() -> [SearchResult] {
         guard let managedContext = getManagedContext() else { return [] }
         
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: searchEntity)
@@ -71,7 +82,7 @@ enum PersistenceManager {
         return []
     }
     
-    static func parseRecentSearches(searches: [NSManagedObject]) -> [SearchResult] {
+    private func parseRecentSearches(searches: [NSManagedObject]) -> [SearchResult] {
         var searchResults: [SearchResult] = []
         
         searches.forEach {
@@ -85,12 +96,12 @@ enum PersistenceManager {
     
     // MARK: - Favorite Methods
     
-    static func saveFavorite(game: Game) throws {
+    func saveFavoriteGame(game: Game) throws {
         guard let managedContext = getManagedContext() else {
             throw InternalError.unableToRetrieveManagedContext
         }
 
-        let entity = NSEntityDescription.entity(forEntityName: "Favorite", in: managedContext)!
+        let entity = NSEntityDescription.entity(forEntityName: favoriteEntity, in: managedContext)!
         let favorite = NSManagedObject(entity: entity, insertInto: managedContext)
 
         favorite.setValue(game.id ?? "", forKey: "id")
@@ -99,51 +110,68 @@ enum PersistenceManager {
 
         do {
             try managedContext.save()
-        } catch _ as NSError {
+        } catch {
             throw InternalError.unableToSaveFavorite
         }
     }
     
-    static func deleteFavorite(gameId: String) throws {
+    func deleteFavoriteGame(id: String) throws {
         guard let managedContext = getManagedContext() else {
             throw InternalError.unableToRetrieveManagedContext
         }
 
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Favorite")
-        fetchRequest.predicate = NSPredicate(format: "id = %@", gameId)
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: favoriteEntity)
+        fetchRequest.predicate = NSPredicate(format: "id = %@", id)
         
         do {
             let favorite = try managedContext.fetch(fetchRequest)
             managedContext.delete(favorite[0])
             try managedContext.save()
-        } catch _ as NSError {
+        } catch {
             throw InternalError.unableToDeleteFavorite
         }
     }
     
-    static func isFavorite(id: String) throws -> Bool {
+    func isFavoriteGame(id: String) throws -> Bool {
         guard let managedContext = getManagedContext() else {
             throw InternalError.unableToRetrieveManagedContext
         }
 
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Favorite")
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: favoriteEntity)
         fetchRequest.predicate = NSPredicate(format: "id = %@", id)
 
         do {
             let count = try managedContext.fetch(fetchRequest).count
             return (count < 1) ? false : true
-        } catch _ as NSError {
+        } catch {
             throw InternalError.unableToVerifyFavorite
         }
     }
     
-    static func fetchFavoriteGameRefsObjects(completed: @escaping (Result<NSAsynchronousFetchResult<NSManagedObject>, Error>) -> ()) {
+    func fetchFavoriteGames(completed: @escaping (Result<[Game], Error>) -> ()) {
+        CoreDataClient.shared.fetchFavoriteGameRefs { result in
+            switch result {
+            case .success(let gameRefsResult):
+                guard let gameRefs = gameRefsResult.finalResult else {
+                    completed(.failure(InternalError.unableToRetrieveFavorites))
+                    return
+                }
+                CoreDataClient.shared.getGamesFromRefs(refs: gameRefs) { games in
+                    completed(.success(games))
+                }
+            case .failure(let error):
+                completed(.failure(error))
+            }
+        }
+    }
+    
+    private func fetchFavoriteGameRefs(completed: @escaping (Result<NSAsynchronousFetchResult<NSManagedObject>, Error>) -> ()) {
         guard let managedContext = getManagedContext() else {
             completed(.failure(InternalError.unableToRetrieveManagedContext))
             return
         }
         
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Favorite")
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: favoriteEntity)
         let sort = NSSortDescriptor(key: "date", ascending: false)
         fetchRequest.sortDescriptors = [sort]
         let asyncFetchRequest = NSAsynchronousFetchRequest(fetchRequest: fetchRequest) { result in
@@ -152,42 +180,34 @@ enum PersistenceManager {
         
         do {
             try managedContext.execute(asyncFetchRequest)
-        } catch _ as NSError {
+        } catch {
             completed(.failure(InternalError.unableToRetrieveFavorites)) 
         }
     }
     
-    static func fetchFavorites(completed: @escaping (Result<[Game], Error>) -> ()) {
-        PersistenceManager.fetchFavoriteGameRefsObjects { result in
-            switch result {
-            case .success(let gameRefObjResult):
-                if let gameRefObj = gameRefObjResult.finalResult {
-                    var games: [Game?] = Array(repeating: nil, count: gameRefObj.count)
-                    let group = DispatchGroup()
-                    
-                    for (index, object) in gameRefObj.enumerated() {
-                        group.enter()
-                        
-                        if let id = object.value(forKeyPath: "id") as? String {
-                            NetworkManager.shared.getGameInfo(id: id) { result in
-                                switch result {
-                                case .success(let game):
-                                    games.insert(game, at: index)
-                                case .failure(let error):
-                                    print("Error retrieving game info for id: \(id), error: \(error.rawValue)")
-                                }
-                                group.leave()
-                            }
-                        }
+    private func getGamesFromRefs(refs: [NSManagedObject], completed: @escaping([Game]) -> ()) {
+        var games: [Game?] = Array(repeating: nil, count: refs.count)
+        let group = DispatchGroup()
+        
+        for (index, object) in refs.enumerated() {
+            group.enter()
+            
+            if let id = object.value(forKeyPath: "id") as? String {
+                BoardGameGeekClient.shared.getGame(id: id) { result in
+                    switch result {
+                    case .success(let game):
+                        games.insert(game, at: index)
+                    case .failure(let error):
+                        // Skip game in case of error
+                        print("Error retrieving game info for id: \(id), error: \(error.rawValue)")
                     }
-                    group.notify(queue: .main) {
-                        let compactedGames = games.compactMap{$0}
-                        completed(.success(compactedGames))
-                    }
+                    group.leave()
                 }
-            case .failure(let error):
-                completed(.failure(error))
             }
+        }
+        
+        group.notify(queue: .main) {
+            completed(games.compactMap{$0})
         }
     }
 }

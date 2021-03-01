@@ -80,7 +80,7 @@ class GalleryImagesViewController: UIViewController {
     }
     
     private func downloadGalleryImages(id: String) {
-        NetworkManager.shared.getImageGalleryURLs(for: id) { [weak self] result in
+        BoardGameGeekClient.shared.getGalleryImagesURLs(for: id) { [weak self] result in
             guard let self = self else { return }
             
             switch result {

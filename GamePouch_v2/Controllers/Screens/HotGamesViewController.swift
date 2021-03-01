@@ -52,7 +52,7 @@ class HotGamesViewController: UITableViewController {
     }
     
     @objc private func getHotnessList() {
-        NetworkManager.shared.getHotnessList { [weak self] result in
+        BoardGameGeekClient.shared.getHotnessList { [weak self] result in
             guard let self = self else { return }
             
             switch result {

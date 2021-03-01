@@ -63,7 +63,7 @@ class SearchViewController: UIViewController {
     }
     
     private func getSearchResults(for text: String) {
-        NetworkManager.shared.search(for: text) { [weak self] result in
+        BoardGameGeekClient.shared.search(for: text) { [weak self] result in
             guard let self = self else { return }
             
             if text == self.lastSearchText {
@@ -82,8 +82,8 @@ class SearchViewController: UIViewController {
         guard let id = searchResult.id, let name = searchResult.name else {
             return // TODO: display error
         }
-        PersistenceManager.saveSearch(id: id, name: name)
-        NetworkManager.shared.getGameInfo(id: id) { [weak self] result in
+        CoreDataClient.shared.saveSearch(id: id, name: name)
+        BoardGameGeekClient.shared.getGame(id: id) { [weak self] result in
             guard let self = self else { return }
             
             switch result {

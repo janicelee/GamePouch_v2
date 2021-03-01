@@ -27,7 +27,7 @@ struct Game {
     private lazy var isFavorite: Bool = {
         guard let id = id else { return false }
         do {
-            return try PersistenceManager.isFavorite(id: id)
+            return try CoreDataClient.shared.isFavoriteGame(id: id)
         } catch {
             return false
         }
@@ -104,7 +104,7 @@ struct Game {
     mutating func isInFavorites(skipCache: Bool) throws -> Bool {
         if skipCache {
             guard let id = id else { throw InternalError.unableToVerifyFavorite }
-            isFavorite = try PersistenceManager.isFavorite(id: id)
+            isFavorite = try CoreDataClient.shared.isFavoriteGame(id: id)
         }
         return isFavorite
     }
@@ -115,12 +115,12 @@ struct Game {
     
     mutating func setFavorite(to favorite: Bool) throws {
         if favorite {
-            try PersistenceManager.saveFavorite(game: self)
+            try CoreDataClient.shared.saveFavoriteGame(game: self)
         } else {
             guard let id = id else {
                 throw InternalError.unableToDeleteFavorite
             }
-            try PersistenceManager.deleteFavorite(gameId: id)
+            try CoreDataClient.shared.deleteFavoriteGame(id: id)
         }
         self.isFavorite = favorite
     }

@@ -23,7 +23,7 @@ class RecentSearchTableController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        recentSearches = PersistenceManager.fetchRecentSearches()
+        recentSearches = CoreDataClient.shared.fetchRecentSearches()
     }
     
     override func viewDidLoad() {

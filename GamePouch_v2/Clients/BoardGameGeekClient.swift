@@ -1,5 +1,5 @@
 //
-//  NetworkManager.swift
+//  BoardGameGeekClient.swift
 //  GamePouch_v2
 //
 //  Created by Janice Lee on 2020-12-01.
@@ -7,8 +7,8 @@
 
 import UIKit
 
-class NetworkManager {
-    static let shared = NetworkManager()
+class BoardGameGeekClient {
+    static let shared = BoardGameGeekClient()
     private let cache = NSCache<NSString, UIImage>()
     
     private let baseURL = "https://www.boardgamegeek.com/xmlapi2/"
@@ -40,31 +40,19 @@ class NetworkManager {
         }
         task.resume()
     }
-    
+        
     func getHotnessList(completed: @escaping (Result<[Game], InternalError>) -> ()) {
-        NetworkManager.shared.getHotnessListIds { result in
+        BoardGameGeekClient.shared.getHotnessListIds { [weak self] result in
+            guard let self = self else {
+                completed(.failure(InternalError.generic))
+                return
+            }
+            
             switch result {
             case .success(let ids):
-                var games: [Game?] = Array(repeating: nil, count: ids.count)
-                let group = DispatchGroup()
-                
-                for (index, id) in ids.enumerated() {
-                    group.enter()
-            
-                    NetworkManager.shared.getGameInfo(id: id) { result in
-                        switch result {
-                        case .success(let game):
-                            games.insert(game, at: index)
-                        case .failure(let error):
-                            // Skip game in case of error
-                            print("Failed to get data for game id: \(id), error: \(error.rawValue)")
-                        }
-                        group.leave()
-                    }
-                }
-                group.notify(queue: .main) {
-                    completed(.success(games.compactMap{$0}))
-                }
+                self.getGamesFromIds(ids: ids, completed: { games in
+                    completed(.success(games))
+                })
             case .failure(let error):
                 completed(.failure(error))
             }
@@ -92,7 +80,31 @@ class NetworkManager {
         }
     }
     
-    func getGameInfo(id: String, completed: @escaping (Result<Game, InternalError>) -> ()) {
+    private func getGamesFromIds(ids: [String], completed: @escaping ([Game]) -> ()) {
+        var games: [Game?] = Array(repeating: nil, count: ids.count)
+        let group = DispatchGroup()
+        
+        for (index, id) in ids.enumerated() {
+            group.enter()
+    
+            BoardGameGeekClient.shared.getGame(id: id) { result in
+                switch result {
+                case .success(let game):
+                    games.insert(game, at: index)
+                case .failure(let error):
+                    // Skip game in case of error
+                    print("Failed to get data for game id: \(id), error: \(error.rawValue)")
+                }
+                group.leave()
+            }
+        }
+        
+        group.notify(queue: .main) {
+            completed(games.compactMap{$0})
+        }
+    }
+    
+    func getGame(id: String, completed: @escaping (Result<Game, InternalError>) -> ()) {
         let queryItems = [URLQueryItem(name: "type", value: "boardgame, boardgameexpansion"),
                           URLQueryItem(name: "stats", value: "1"),
                           URLQueryItem(name: "id", value: id)]
@@ -137,7 +149,7 @@ class NetworkManager {
         }
     }
     
-    func getImageGalleryURLs(for id: String, completed: @escaping (Result<[String], InternalError>) -> ()) {
+    func getGalleryImagesURLs(for id: String, completed: @escaping (Result<[String], InternalError>) -> ()) {
         let queryItems = [URLQueryItem(name: "ajax", value: "1"),
                           URLQueryItem(name: "gallery", value: "all"),
                           URLQueryItem(name: "nosession", value: "1"),
@@ -173,7 +185,8 @@ class NetworkManager {
     }
     
     func search(for query: String, completed: @escaping(Result<[SearchResult], InternalError>) -> ()) {
-        let queryItems = [URLQueryItem(name: "type", value: "boardgame, boardgameexpansion"), URLQueryItem(name: "query", value: query)]
+        let queryItems = [URLQueryItem(name: "type", value: "boardgame, boardgameexpansion"),
+                          URLQueryItem(name: "query", value: query)]
         var urlComps = URLComponents(string: baseURL + "search")!
         urlComps.queryItems = queryItems
         
