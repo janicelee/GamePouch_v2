@@ -209,10 +209,10 @@
 		F715719025C815DF00A88FE6 /* IconGroups */ = {
 			isa = PBXGroup;
 			children = (
+				F7EC6277258E136400FD536A /* GameInfoIconGroup.swift */,
 				F716816225C4110C00B75B60 /* IconGroup.swift */,
 				F779E7F62585D82B00AC829D /* MainAttributesIconGroup.swift */,
 				F777D9DC25887CA900859D64 /* SecondaryAttributesIconGroup.swift */,
-				F7EC6277258E136400FD536A /* GameInfoIconGroup.swift */,
 			);
 			path = IconGroups;
 			sourceTree = "<group>";
@@ -220,8 +220,8 @@
 		F715719725C964C900A88FE6 /* CollectionViews */ = {
 			isa = PBXGroup;
 			children = (
-				F734756E2591C39300308880 /* TagCollectionView.swift */,
 				F73475762591C89800308880 /* TagCollectionViewFlowLayout.swift */,
+				F734756E2591C39300308880 /* TagCollectionView.swift */,
 			);
 			path = CollectionViews;
 			sourceTree = "<group>";
@@ -293,10 +293,10 @@
 		F7336CCC257724C700C05848 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				F7D8C74D25837C2F00237071 /* Constants.swift */,
-				F7342DD325D35A3A00274F31 /* InternalError.swift */,
-				F78C8DAC25A5D0FA00A3DBE0 /* Debouncer.swift */,
 				F7881EC225DC91740010B5DE /* AccessibilityUtil.swift */,
+				F7D8C74D25837C2F00237071 /* Constants.swift */,
+				F78C8DAC25A5D0FA00A3DBE0 /* Debouncer.swift */,
+				F7342DD325D35A3A00274F31 /* InternalError.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -304,8 +304,8 @@
 		F7336CD2257733F300C05848 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				F7336CD32577340100C05848 /* Game.swift */,
 				F7A3A282259572FD00544BFF /* GalleryImages.swift */,
+				F7336CD32577340100C05848 /* Game.swift */,
 				F78C8D8525A3121E00A3DBE0 /* SearchResult.swift */,
 				F771542D2578531900FB1508 /* Parsers */,
 			);
@@ -315,10 +315,10 @@
 		F75E5BE8257B109700611A40 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				F7342DD825D35B8300274F31 /* UIViewController+Ext.swift */,
-				F77A469025C0F8820036E6F1 /* UIColor+Ext.swift */,
-				F71571BD25CAAED500A88FE6 /* Int+Ext.swift */,
 				F70DB98525D7957000F9EAD7 /* Error+Ext.swift */,
+				F71571BD25CAAED500A88FE6 /* Int+Ext.swift */,
+				F77A469025C0F8820036E6F1 /* UIColor+Ext.swift */,
+				F7342DD825D35B8300274F31 /* UIViewController+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -326,8 +326,8 @@
 		F7707A6A25A716630076419A /* CollectionViewCells */ = {
 			isa = PBXGroup;
 			children = (
-				F734756625905FDF00308880 /* TagCell.swift */,
 				F7C11AB6259454C200A53778 /* ImageCell.swift */,
+				F734756625905FDF00308880 /* TagCell.swift */,
 			);
 			path = CollectionViewCells;
 			sourceTree = "<group>";
@@ -335,9 +335,9 @@
 		F7707A6B25A716700076419A /* TableViewCells */ = {
 			isa = PBXGroup;
 			children = (
+				F736EDD325AECA5E00D40A42 /* FavoriteCell.swift */,
 				F7B9A7832579E9AF00E06A0F /* HotGameCell.swift */,
 				F78C8D9E25A326EE00A3DBE0 /* SearchResultCell.swift */,
-				F736EDD325AECA5E00D40A42 /* FavoriteCell.swift */,
 			);
 			path = TableViewCells;
 			sourceTree = "<group>";
@@ -345,13 +345,13 @@
 		F771542B2578526C00FB1508 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				F78C8D8D25A318E500A3DBE0 /* Screens */,
+				F7881EE625E4B6A60010B5DE /* DetailedInfoViewController.swift */,
+				F7D4C96D259F36BB006E3157 /* GalleryImagesViewController.swift */,
+				F7707A5A25A712230076419A /* RecentSearchTableController.swift */,
+				F78C8D8E25A325D500A3DBE0 /* SearchResultsTableController.swift */,
 				F7336CA22576033A00C05848 /* TabBarController.swift */,
 				F7AF6B04259ABD9400BBE0CB /* TagViewController.swift */,
-				F7D4C96D259F36BB006E3157 /* GalleryImagesViewController.swift */,
-				F78C8D8E25A325D500A3DBE0 /* SearchResultsTableController.swift */,
-				F7707A5A25A712230076419A /* RecentSearchTableController.swift */,
-				F7881EE625E4B6A60010B5DE /* DetailedInfoViewController.swift */,
+				F78C8D8D25A318E500A3DBE0 /* Screens */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -371,8 +371,8 @@
 		F771542D2578531900FB1508 /* Parsers */ = {
 			isa = PBXGroup;
 			children = (
-				F771543C25785A7900FB1508 /* HotnessListParser.swift */,
 				F75E5BEE257B155800611A40 /* GameInfoParser.swift */,
+				F771543C25785A7900FB1508 /* HotnessListParser.swift */,
 				F78C8D8025A30BBF00A3DBE0 /* SearchParser.swift */,
 			);
 			path = Parsers;
@@ -381,10 +381,10 @@
 		F78C8D8D25A318E500A3DBE0 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				F7336C69257493F700C05848 /* HotGamesViewController.swift */,
-				F7EC6267258CC14900FD536A /* GameInfoViewController.swift */,
-				F7013D9125A176FB000E2528 /* SearchViewController.swift */,
 				F736EDCE25AEC6D300D40A42 /* FavoritesTableViewController.swift */,
+				F7EC6267258CC14900FD536A /* GameInfoViewController.swift */,
+				F7336C69257493F700C05848 /* HotGamesViewController.swift */,
+				F7013D9125A176FB000E2528 /* SearchViewController.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -409,15 +409,15 @@
 		F7B9A7772579E74000E06A0F /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				F70CC21925D10562002B6DFD /* StackViews */,
-				F715719025C815DF00A88FE6 /* IconGroups */,
-				F715719725C964C900A88FE6 /* CollectionViews */,
-				F7B47DFF25B93E50003597B4 /* Buttons */,
-				F7D8C7552584729000237071 /* Labels */,
-				F7D8C74725837B4700237071 /* ImageViews */,
-				F7B9A7762579E72E00E06A0F /* Cells */,
 				F7881EDB25E486680010B5DE /* DetailedInfoView.swift */,
 				F712104825E66CEA00ED68B9 /* EmptyFavoritesView.swift */,
+				F7B47DFF25B93E50003597B4 /* Buttons */,
+				F7B9A7762579E72E00E06A0F /* Cells */,
+				F715719725C964C900A88FE6 /* CollectionViews */,
+				F715719025C815DF00A88FE6 /* IconGroups */,
+				F7D8C74725837B4700237071 /* ImageViews */,
+				F7D8C7552584729000237071 /* Labels */,
+				F70CC21925D10562002B6DFD /* StackViews */,
 			);
 			path = Views;
 			sourceTree = "<group>";
