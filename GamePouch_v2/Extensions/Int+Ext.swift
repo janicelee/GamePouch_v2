@@ -10,6 +10,7 @@ import UIKit
 extension Int {
     
     // Converts to ordinal format with superscripted ordinal indicator
+    
     func toOrdinalString(fontSize: CGFloat, superscriptFontSize: CGFloat, weight: UIFont.Weight) -> NSMutableAttributedString? {
         let formatter = NumberFormatter()
         formatter.numberStyle = .ordinal

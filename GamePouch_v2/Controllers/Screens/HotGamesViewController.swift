@@ -67,7 +67,7 @@ class HotGamesViewController: UITableViewController {
     }
     
     @objc private func moreInfoTapped() {
-        let detailedInfoViewController = DetailedInfoViewController()
+        let detailedInfoViewController = LegendInfoViewController()
         detailedInfoViewController.modalPresentationStyle = .overFullScreen
         detailedInfoViewController.modalTransitionStyle = .crossDissolve
         present(detailedInfoViewController, animated: true)

@@ -69,6 +69,7 @@ extension GameInfoParser: XMLParserDelegate {
         } else if elementName == "image" {
             game.imageURL = foundCharacters
         } else if elementName == "description" {
+            
             // decodes HTML entities
             if let data = foundCharacters.data(using: .utf8) {
                 do {

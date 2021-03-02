@@ -31,26 +31,28 @@ class TagViewController: UIViewController {
         configure()
     }
     
+    // MARK: - Configuration
+    
     private func configure() {
-        let containerView = UIView()
-        [titleLabel, containerView].forEach { view.addSubview($0) }
+        let tagContainerView = UIView()
+        [titleLabel, tagContainerView].forEach { view.addSubview($0) }
         
         let flowLayout = TagCollectionViewFlowLayout()
         flowLayout.minimumInteritemSpacing = 6
         flowLayout.minimumLineSpacing = 6
         
-        collectionView = TagCollectionView(frame: containerView.frame, collectionViewLayout: flowLayout)
+        collectionView = TagCollectionView(frame: tagContainerView.frame, collectionViewLayout: flowLayout)
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(TagCell.self, forCellWithReuseIdentifier: TagCell.reuseID)
         collectionView.backgroundColor = .systemBackground
-        containerView.addSubview(collectionView)
+        tagContainerView.addSubview(collectionView)
   
         titleLabel.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
         }
         
-        containerView.snp.makeConstraints { make in
+        tagContainerView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(Layout.mediumPadding)
             make.leading.trailing.bottom.equalToSuperview()
         }
@@ -61,7 +63,10 @@ class TagViewController: UIViewController {
     }
 }
 
-extension TagViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+// MARK: - UICollectionViewDataSource
+
+extension TagViewController: UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return tags.count
     }
@@ -73,13 +78,16 @@ extension TagViewController: UICollectionViewDelegate, UICollectionViewDataSourc
     }
 }
 
-extension TagViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+// MARK: - UICollectionViewDelegateFlowLayout
 
+extension TagViewController: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let text = tags[indexPath.row]
         var width = text.size(withAttributes: [.font: TagCell.font]).width + (TagCell.horizontalPadding * 2) + 1
         let height = text.size(withAttributes: [.font: TagCell.font]).height + (TagCell.verticalPadding * 2) + 1
-
+        
+        // Ensures max width is the collectionView width; text will truncate tail
         let collectionViewWidth = collectionView.frame.size.width
         width = (width <= collectionViewWidth) ? width : collectionViewWidth
         return CGSize(width: width, height: height)

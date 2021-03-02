@@ -43,6 +43,7 @@ class CoreDataClient {
     }
     
     // If number of saved searches exceeds max, delete oldest search
+    
     private func deleteOldestSearchIfNecessary() {
         guard let managedContext = getManagedContext() else { return }
         

@@ -39,33 +39,6 @@ class GalleryImagesViewController: UIViewController {
         configure()
     }
     
-    private func configure() {
-        [titleLabel, containerView].forEach { view.addSubview($0) }
-        
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .horizontal
-        
-        collectionView = UICollectionView(frame: containerView.frame, collectionViewLayout: flowLayout)
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.register(ImageCell.self, forCellWithReuseIdentifier: ImageCell.reuseID)
-        collectionView.backgroundColor = .systemBackground
-        containerView.addSubview(collectionView)
-        
-        titleLabel.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-        }
-
-        containerView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(Layout.mediumPadding)
-            make.leading.trailing.bottom.equalToSuperview()
-        }
-
-        collectionView.snp.makeConstraints { make in
-            make.top.leading.trailing.bottom.equalToSuperview()
-        }
-    }
-    
     private func handleNoImages() {
         let noImageLabel = UILabel()
         noImageLabel.text = "No images to display"
@@ -92,11 +65,41 @@ class GalleryImagesViewController: UIViewController {
             }
         }
     }
+    
+    // MARK: - Configuration
+    
+    private func configure() {
+        [titleLabel, containerView].forEach { view.addSubview($0) }
+        
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        
+        collectionView = UICollectionView(frame: containerView.frame, collectionViewLayout: flowLayout)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(ImageCell.self, forCellWithReuseIdentifier: ImageCell.reuseID)
+        collectionView.backgroundColor = .systemBackground
+        containerView.addSubview(collectionView)
+        
+        titleLabel.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+        }
+
+        containerView.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(Layout.mediumPadding)
+            make.leading.trailing.bottom.equalToSuperview()
+        }
+
+        collectionView.snp.makeConstraints { make in
+            make.top.leading.trailing.bottom.equalToSuperview()
+        }
+    }
 }
 
 // MARK: - UICollectionViewDataSource
 
 extension GalleryImagesViewController: UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return imageURLs.count
     }
@@ -111,6 +114,7 @@ extension GalleryImagesViewController: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegate
 
 extension GalleryImagesViewController: UICollectionViewDelegate {
+    
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let cell = cell as! ImageCell
         cell.clearImage()
@@ -120,6 +124,7 @@ extension GalleryImagesViewController: UICollectionViewDelegate {
 // MARK: - UICollectionViewDelegateFlowLayout
 
 extension GalleryImagesViewController: UICollectionViewDelegateFlowLayout {
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let numVisibleImages = 1.5
         let width = collectionView.frame.size.width / CGFloat(numVisibleImages)

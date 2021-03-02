@@ -11,6 +11,7 @@ enum InternalError: String, Error {
     case generic = "Something went wrong.\n Please try again."
     
     // MARK: - Networking errors
+    
     case invalidURL = "Invalid URL."
     case unableToCompleteRequest = "Unable to complete request."
     case invalidResponse = "Invalid response from the server."
@@ -19,6 +20,7 @@ enum InternalError: String, Error {
 
     
     // MARK: - Persistence errors
+    
     case unableToRetrieveManagedContext = "Unable to retrieve managed context."
     case unableToVerifyFavorite = "Unable to verify if this game is in favorites."
     case unableToRetrieveFavorites = "Unable to retrieve favorites."
