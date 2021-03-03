@@ -10,10 +10,9 @@ import SafariServices
 
 class LegendInfoViewController: UIViewController {
     
-    let containerView = UIView()
-    let titleLabel = UILabel()
-    let detailedInfoView = DetailedInfoView()
-    let attributionButton = UIButton()
+    private let containerView = UIView()
+    private let legendInfoView = LegendInfoView()
+    private let attributionButton = UIButton()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,9 +40,9 @@ class LegendInfoViewController: UIViewController {
     
     private func configure() {
         view.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.4)
+        
         configureContainerView()
-        configureTitleLabel()
-        configureDetailedInfoView()
+        configureLegendInfoView()
         configureAttributionButton()
     }
     
@@ -69,25 +68,12 @@ class LegendInfoViewController: UIViewController {
         }
     }
     
-    private func configureTitleLabel() {
-        containerView.addSubview(titleLabel)
-        
-        titleLabel.text = "Legend"
-        titleLabel.textAlignment = .center
-        titleLabel.font = UIFont.systemFont(ofSize: FontSize.large, weight: .bold)
-        titleLabel.textColor = .label
-        
-        titleLabel.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview().inset(Layout.xLargePadding)
-        }
-    }
-    
-    private func configureDetailedInfoView() {
-        containerView.addSubview(detailedInfoView)
-        
-        detailedInfoView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(Layout.xLargePadding)
-            make.leading.trailing.bottom.equalToSuperview().inset(Layout.xLargePadding)
+    private func configureLegendInfoView() {
+        containerView.addSubview(legendInfoView)
+
+        legendInfoView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(Layout.largePadding)
+            make.leading.trailing.equalToSuperview().inset(Layout.xLargePadding)
         }
     }
     
@@ -100,7 +86,8 @@ class LegendInfoViewController: UIViewController {
         attributionButton.addTarget(self, action: #selector(presentSafariViewController), for: .touchUpInside)
         
         attributionButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().inset(Layout.xLargePadding)
+            make.top.equalTo(legendInfoView.snp.bottom).offset(Layout.largePadding)
+            make.leading.trailing.equalToSuperview().inset(Layout.xLargePadding)
             make.bottom.equalToSuperview().inset(Layout.smallPadding)
         }
     }

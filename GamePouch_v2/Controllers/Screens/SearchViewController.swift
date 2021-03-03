@@ -11,8 +11,8 @@ import CoreData
 class SearchViewController: UIViewController {
     
     private var searchController: UISearchController!
-    private var resultsTableController: SearchResultsTableController!
-    private var recentSearchTableController: RecentSearchTableController!
+    private var resultsTableController: SearchResultsTableViewController!
+    private var recentSearchTableController: RecentSearchTableViewController!
     
     private var lastSearchText : String?
     private var debouncedSearch: (() -> Void)?
@@ -38,7 +38,7 @@ class SearchViewController: UIViewController {
         title = "Search"
         navigationController?.navigationBar.prefersLargeTitles = true
         
-        resultsTableController = SearchResultsTableController()
+        resultsTableController = SearchResultsTableViewController()
         resultsTableController.delegate = self
         
         searchController = UISearchController(searchResultsController: resultsTableController)
@@ -51,7 +51,7 @@ class SearchViewController: UIViewController {
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         
-        recentSearchTableController = RecentSearchTableController()
+        recentSearchTableController = RecentSearchTableViewController()
         addChild(recentSearchTableController)
         view.addSubview(recentSearchTableController.view)
         recentSearchTableController.didMove(toParent: self)
@@ -126,17 +126,17 @@ extension SearchViewController: UISearchResultsUpdating {
 
 // MARK: - RecentSearchTableControllerDelegate
 
-extension SearchViewController: RecentSearchTableControllerDelegate {
-    func didSelectRecentSearch(result: SearchResult) {
-        loadGameInfoView(for: result)
+extension SearchViewController: RecentSearchTableViewControllerDelegate {
+    func didSelectRecentSearch(searchResult: SearchResult) {
+        loadGameInfoView(for: searchResult)
     }
 }
 
 // MARK: - SearchResultsTableControllerDelegate
 
-extension SearchViewController: SearchResultsTableControllerDelegate {
-    func didSelectSearchResult(result: SearchResult) {
-        loadGameInfoView(for: result)
+extension SearchViewController: SearchResultsTableViewControllerDelegate {
+    func didSelectSearchResult(searchResult: SearchResult) {
+        loadGameInfoView(for: searchResult)
     }
 }
 

@@ -7,16 +7,17 @@
 
 import UIKit
 
-protocol SearchResultsTableControllerDelegate: class {
-    func didSelectSearchResult(result: SearchResult)
+protocol SearchResultsTableViewControllerDelegate: class {
+    func didSelectSearchResult(searchResult: SearchResult)
 }
 
-class SearchResultsTableController: UITableViewController {
+class SearchResultsTableViewController: UITableViewController {
     
-    weak var delegate: SearchResultsTableControllerDelegate?
     var searchResults = [SearchResult]() {
         didSet { DispatchQueue.main.async { self.tableView.reloadData() }}
     }
+    
+    weak var delegate: SearchResultsTableViewControllerDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,13 +41,15 @@ class SearchResultsTableController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let searchResult = searchResults[indexPath.row]
-        delegate?.didSelectSearchResult(result: searchResult)
+        delegate?.didSelectSearchResult(searchResult: searchResult)
     }
 }
 
-extension SearchResultsTableController: SearchResultCellDelegate {
+// MARK: - SearchResultCellDelegate
+
+extension SearchResultsTableViewController: SearchResultCellDelegate {
     
     func didSelectSearchResult(_ searchResult: SearchResult) {
-        delegate?.didSelectSearchResult(result: searchResult)
+        delegate?.didSelectSearchResult(searchResult: searchResult)
     }
 }

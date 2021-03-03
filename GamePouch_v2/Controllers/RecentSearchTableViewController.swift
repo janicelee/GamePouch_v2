@@ -1,5 +1,5 @@
 //
-//  RecentSearchController.swift
+//  RecentSearchTableViewController.swift
 //  GamePouch_v2
 //
 //  Created by Janice Lee on 2021-01-07.
@@ -8,18 +8,18 @@
 import UIKit
 import CoreData
 
-protocol RecentSearchTableControllerDelegate: class {
-    func didSelectRecentSearch(result: SearchResult)
+protocol RecentSearchTableViewControllerDelegate: class {
+    func didSelectRecentSearch(searchResult: SearchResult)
 }
 
-class RecentSearchTableController: UITableViewController {
+class RecentSearchTableViewController: UITableViewController {
     
-    private let headerHeight: CGFloat = 50
-    
-    weak var delegate: RecentSearchTableControllerDelegate?
     var recentSearches: [SearchResult] = [] {
         didSet { DispatchQueue.main.async { self.tableView.reloadData() }}
     }
+    
+    weak var delegate: RecentSearchTableViewControllerDelegate?
+    private let headerHeight: CGFloat = 50
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -46,6 +46,13 @@ class RecentSearchTableController: UITableViewController {
         return cell
     }
     
+    // MARK: - UITableViewDelegate
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let recentSearch = recentSearches[indexPath.row]
+        delegate?.didSelectRecentSearch(searchResult: recentSearch)
+    }
+    
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: headerHeight))
         view.backgroundColor = .systemBackground
@@ -61,18 +68,13 @@ class RecentSearchTableController: UITableViewController {
         }
         return view
     }
-    
-    // MARK: - UITableViewDelegate
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let recentSearch = recentSearches[indexPath.row]
-        delegate?.didSelectRecentSearch(result: recentSearch)
-    }
 }
 
-extension RecentSearchTableController: SearchResultCellDelegate {
+// MARK: - SearchResultCellDelegate
+
+extension RecentSearchTableViewController: SearchResultCellDelegate {
     
     func didSelectSearchResult(_ searchResult: SearchResult) {
-        delegate?.didSelectRecentSearch(result: searchResult)
+        delegate?.didSelectRecentSearch(searchResult: searchResult)
     }
 }
