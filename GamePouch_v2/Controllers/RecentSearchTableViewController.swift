@@ -14,12 +14,12 @@ protocol RecentSearchTableViewControllerDelegate: class {
 
 class RecentSearchTableViewController: UITableViewController {
     
-    var recentSearches: [SearchResult] = [] {
-        didSet { DispatchQueue.main.async { self.tableView.reloadData() }}
-    }
-    
-    weak var delegate: RecentSearchTableViewControllerDelegate?
     private let headerHeight: CGFloat = 50
+    
+    private var recentSearches: [SearchResult] = [] {
+        didSet { DispatchQueue.main.async { self.tableView.reloadData() } }
+    }
+    weak var delegate: RecentSearchTableViewControllerDelegate?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

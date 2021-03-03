@@ -12,14 +12,14 @@ class FavoriteCell: UITableViewCell {
     
     static let reuseID = "FavoriteCell"
     
-    let gameImageView = GameImageView(frame: .zero)
-    let attributesContainerView = UIView()
-    let titleLabel = TitleLabel(textAlignment: .left, fontSize: FontSize.medium)
-    let ratingIconGroup = SecondaryAttributesIconGroup(label: "N/A", icon: Images.rating)
-    let rankIconGroup = SecondaryAttributesIconGroup(label: "N/A", icon: Images.rank)
+    private let gameImageView = GameImageView(frame: .zero)
+    private let attributesContainerView = UIView()
+    private let titleLabel = TitleLabel(textAlignment: .left, fontSize: FontSize.medium)
+    private let ratingIconGroup = SecondaryAttributesIconGroup(label: "N/A", icon: Images.rating)
+    private let rankIconGroup = SecondaryAttributesIconGroup(label: "N/A", icon: Images.rank)
     
-    private let cellWidth: CGFloat = 60
-    private let attributeFontSize = FontSize.medium
+    private let gameImageViewWidth: CGFloat = 60
+    private let attributeFontSize = FontSize.small
     private let attributeFontWeight = UIFont.Weight.semibold
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -31,6 +31,33 @@ class FavoriteCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func set(game: Game) {
+        titleLabel.text = game.getTitle()
+        titleLabel.accessibilityLabel = "Title: \(formatGameLabelToAccessibleText(game.getTitle()))"
+        
+        ratingIconGroup.label.text = game.getRating()
+        ratingIconGroup.label.accessibilityLabel = "Rating: \(formatGameLabelToAccessibleText(game.getRating()))"
+
+        if let rank = game.getRank(),
+           let attString = rank.toOrdinalString(fontSize: attributeFontSize, superscriptFontSize: FontSize.superscript, weight: attributeFontWeight) {
+            rankIconGroup.label.attributedText = attString
+            rankIconGroup.label.accessibilityLabel = "Rank: \(String(rank))"
+        } else {
+            rankIconGroup.label.text = "N/A"
+            rankIconGroup.label.accessibilityLabel = "Rank: Not Available"
+        }
+        
+        if let thumbnailURL = game.thumbnailURL {
+            gameImageView.setImage(from: thumbnailURL)
+        }
+    }
+    
+    func clearImage() {
+        gameImageView.image = Images.placeholder
+    }
+    
+    // MARK: - Configuration
+    
     private func configure() {
         [gameImageView, attributesContainerView].forEach { addSubview($0) }
         [titleLabel, ratingIconGroup, rankIconGroup].forEach { attributesContainerView.addSubview($0) }
@@ -39,7 +66,7 @@ class FavoriteCell: UITableViewCell {
         gameImageView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(Layout.mediumPadding).priority(999)
             make.leading.equalToSuperview().offset(Layout.xLargePadding)
-            make.width.equalTo(cellWidth)
+            make.width.equalTo(gameImageViewWidth)
         }
         
         attributesContainerView.snp.makeConstraints { make in
@@ -66,7 +93,7 @@ class FavoriteCell: UITableViewCell {
         }
         
         ratingIconGroup.iconImageView.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().offset(-3).priority(999)
+            make.bottom.equalToSuperview().offset(-2).priority(999)
         }
         
         ratingIconGroup.label.snp.makeConstraints { make in
@@ -75,42 +102,19 @@ class FavoriteCell: UITableViewCell {
     }
     
     private func configureRankIconGroup() {
+        rankIconGroup.label.font = UIFont.systemFont(ofSize: attributeFontSize, weight: attributeFontWeight)
+        
         rankIconGroup.snp.makeConstraints { make in
             make.top.equalTo(ratingIconGroup)
             make.leading.equalTo(ratingIconGroup.snp.trailing).offset(Layout.largePadding)
         }
         
         rankIconGroup.iconImageView.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().offset(-2).priority(999)
+            make.bottom.equalToSuperview().offset(-1).priority(999)
         }
         
         rankIconGroup.label.snp.makeConstraints { make in
             make.leading.equalTo(rankIconGroup.iconImageView.snp.trailing).offset(Layout.xsPadding)
         }
-    }
-    
-    func set(game: Game) {
-        titleLabel.text = game.getTitle()
-        titleLabel.accessibilityLabel = "Title: \(formatGameLabelToAccessibleText(game.getTitle()))"
-        
-        ratingIconGroup.label.text = game.getRating()
-        ratingIconGroup.label.accessibilityLabel = "Rating: \(formatGameLabelToAccessibleText(game.getRating()))"
-
-        if let rank = game.getRank(),
-           let attString = rank.toOrdinalString(fontSize: attributeFontSize, superscriptFontSize: FontSize.superscript, weight: attributeFontWeight) {
-            rankIconGroup.label.attributedText = attString
-            rankIconGroup.label.accessibilityLabel = "Rank: \(String(rank))"
-        } else {
-            rankIconGroup.label.text = "N/A"
-            rankIconGroup.label.accessibilityLabel = "Rank: Not Available"
-        }
-        
-        if let thumbnailURL = game.thumbnailURL {
-            gameImageView.setImage(from: thumbnailURL)
-        }
-    }
-    
-    func clearImage() {
-        gameImageView.image = Images.placeholder
     }
 }

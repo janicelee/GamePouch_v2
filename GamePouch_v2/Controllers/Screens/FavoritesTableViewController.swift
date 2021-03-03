@@ -10,10 +10,10 @@ import CoreData
 
 class FavoritesTableViewController: UITableViewController {
     
-    let emptyStateView = EmptyFavoritesView()
+    private let emptyStateView = EmptyFavoritesView()
     private let rowHeight: CGFloat = 70
     
-    var games: [Game] = [] { didSet { updateUI() } }
+    private var games: [Game] = [] { didSet { updateUI() } }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,16 +30,6 @@ class FavoritesTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchFavorites() 
-    }
-    
-    private func configureEmptyStateView() {
-        view.addSubview(emptyStateView)
-        
-        emptyStateView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(40)
-            make.centerX.equalToSuperview()
-            make.width.equalToSuperview().inset(20)
-        }
     }
     
     private func fetchFavorites() {
@@ -66,6 +56,18 @@ class FavoritesTableViewController: UITableViewController {
             } else {
                 self.emptyStateView.isHidden = true
             }
+        }
+    }
+    
+    // MARK: - Configuration
+    
+    private func configureEmptyStateView() {
+        view.addSubview(emptyStateView)
+        
+        emptyStateView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(40)
+            make.centerX.equalToSuperview()
+            make.width.equalToSuperview().inset(20)
         }
     }
 

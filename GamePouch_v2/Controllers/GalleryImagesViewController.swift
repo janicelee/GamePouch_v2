@@ -8,8 +8,12 @@
 import UIKit
 
 class GalleryImagesViewController: UIViewController {
+
+    private let titleLabel = TitleLabel(textAlignment: .left, fontSize: FontSize.xLarge)
+    private let containerView = UIView()
     
-    var imageURLs: [String] = [] {
+    private var collectionView: UICollectionView!
+    private var imageURLs: [String] = [] {
         didSet {
             DispatchQueue.main.async {
                 if self.imageURLs.isEmpty {
@@ -19,10 +23,6 @@ class GalleryImagesViewController: UIViewController {
             }
         }
     }
-
-    let titleLabel = TitleLabel(textAlignment: .left, fontSize: FontSize.xLarge)
-    let containerView = UIView()
-    var collectionView: UICollectionView!
 
     init(title: String, id: String) {
         super.init(nibName: nil, bundle: nil)

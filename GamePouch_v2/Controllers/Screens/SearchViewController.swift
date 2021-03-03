@@ -69,7 +69,7 @@ class SearchViewController: UIViewController {
             if text == self.lastSearchText {
                 switch result {
                 case .success(let searchResults):
-                    self.resultsTableController.searchResults = searchResults
+                    self.resultsTableController.setSearchResults(searchResults)
                 case .failure(let error):
                     self.presentErrorAlertOnMainThread(message: InternalError.generic.rawValue)
                     print("Failed to get search results for text: \(text), error: \(error.rawValue)")

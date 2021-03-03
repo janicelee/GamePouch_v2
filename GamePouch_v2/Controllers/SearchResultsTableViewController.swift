@@ -13,15 +13,18 @@ protocol SearchResultsTableViewControllerDelegate: class {
 
 class SearchResultsTableViewController: UITableViewController {
     
-    var searchResults = [SearchResult]() {
-        didSet { DispatchQueue.main.async { self.tableView.reloadData() }}
+    private var searchResults = [SearchResult]() {
+        didSet { DispatchQueue.main.async { self.tableView.reloadData() } }
     }
-    
     weak var delegate: SearchResultsTableViewControllerDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(SearchResultCell.self, forCellReuseIdentifier: SearchResultCell.reuseID)
+    }
+    
+    func setSearchResults(_ searchResults: [SearchResult]) {
+        self.searchResults = searchResults
     }
 
     // MARK: - UITableViewDataSource
