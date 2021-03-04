@@ -209,8 +209,8 @@
 		F715719025C815DF00A88FE6 /* IconGroups */ = {
 			isa = PBXGroup;
 			children = (
-				F7EC6277258E136400FD536A /* GameInfoIconGroup.swift */,
 				F716816225C4110C00B75B60 /* IconGroup.swift */,
+				F7EC6277258E136400FD536A /* GameInfoIconGroup.swift */,
 				F779E7F62585D82B00AC829D /* MainAttributesIconGroup.swift */,
 				F777D9DC25887CA900859D64 /* SecondaryAttributesIconGroup.swift */,
 			);

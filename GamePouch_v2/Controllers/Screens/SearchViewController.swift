@@ -11,8 +11,8 @@ import CoreData
 class SearchViewController: UIViewController {
     
     private var searchController: UISearchController!
-    private var resultsTableController: SearchResultsTableViewController!
-    private var recentSearchTableController: RecentSearchTableViewController!
+    private var resultsTableViewController: SearchResultsTableViewController!
+    private var recentsTableViewController: RecentSearchTableViewController!
     
     private var lastSearchText : String?
     private var debouncedSearch: (() -> Void)?
@@ -29,36 +29,8 @@ class SearchViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if let selectedIndexPath = resultsTableController.tableView.indexPathForSelectedRow {
-            resultsTableController.tableView.deselectRow(at: selectedIndexPath, animated: animated)
-        }
-    }
-    
-    private func configure() {
-        title = "Search"
-        navigationController?.navigationBar.prefersLargeTitles = true
-        
-        resultsTableController = SearchResultsTableViewController()
-        resultsTableController.delegate = self
-        
-        searchController = UISearchController(searchResultsController: resultsTableController)
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Search for a game"
-        searchController.searchBar.delegate = self
-        
-        definesPresentationContext = true
-        navigationItem.searchController = searchController
-        navigationItem.hidesSearchBarWhenScrolling = false
-        
-        recentSearchTableController = RecentSearchTableViewController()
-        addChild(recentSearchTableController)
-        view.addSubview(recentSearchTableController.view)
-        recentSearchTableController.didMove(toParent: self)
-        recentSearchTableController.delegate = self
-        
-        recentSearchTableController.view.snp.makeConstraints { make in
-            make.top.leading.trailing.bottom.equalToSuperview()
+        if let selectedIndexPath = resultsTableViewController.tableView.indexPathForSelectedRow {
+            resultsTableViewController.tableView.deselectRow(at: selectedIndexPath, animated: animated)
         }
     }
     
@@ -69,7 +41,7 @@ class SearchViewController: UIViewController {
             if text == self.lastSearchText {
                 switch result {
                 case .success(let searchResults):
-                    self.resultsTableController.setSearchResults(searchResults)
+                    self.resultsTableViewController.setSearchResults(searchResults)
                 case .failure(let error):
                     self.presentErrorAlertOnMainThread(message: InternalError.generic.rawValue)
                     print("Failed to get search results for text: \(text), error: \(error.rawValue)")
@@ -78,10 +50,19 @@ class SearchViewController: UIViewController {
         }
     }
     
+    private func handleSearchText(_ searchText: String?) {
+        if let searchText = searchText?.trimmingCharacters(in: .whitespacesAndNewlines) {
+            lastSearchText = searchText
+            debouncedSearch!()
+        }
+    }
+    
     private func loadGameInfoView(for searchResult: SearchResult) {
         guard let id = searchResult.id, let name = searchResult.name else {
-            return // TODO: display error
+            self.presentErrorAlertOnMainThread(message: InternalError.generic.rawValue)
+            return
         }
+        
         CoreDataClient.shared.saveSearch(id: id, name: name)
         BoardGameGeekClient.shared.getGame(id: id) { [weak self] result in
             guard let self = self else { return }
@@ -99,10 +80,33 @@ class SearchViewController: UIViewController {
         }
     }
     
-    private func handleSearchText(_ searchText: String?) {
-        if let searchText = searchText?.trimmingCharacters(in: .whitespacesAndNewlines) {
-            lastSearchText = searchText
-            debouncedSearch!()
+    // MARK: - Configuration
+    
+    private func configure() {
+        title = "Search"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        
+        resultsTableViewController = SearchResultsTableViewController()
+        resultsTableViewController.delegate = self
+        
+        searchController = UISearchController(searchResultsController: resultsTableViewController)
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search for a game"
+        searchController.searchBar.delegate = self
+        
+        definesPresentationContext = true
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        
+        recentsTableViewController = RecentSearchTableViewController()
+        addChild(recentsTableViewController)
+        view.addSubview(recentsTableViewController.view)
+        recentsTableViewController.didMove(toParent: self)
+        recentsTableViewController.delegate = self
+        
+        recentsTableViewController.view.snp.makeConstraints { make in
+            make.top.leading.trailing.bottom.equalToSuperview()
         }
     }
 }
@@ -110,6 +114,7 @@ class SearchViewController: UIViewController {
 // MARK: - UISearchBarDelegate
 
 extension SearchViewController: UISearchBarDelegate {
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         handleSearchText(searchBar.text)
         searchBar.resignFirstResponder()
@@ -119,6 +124,7 @@ extension SearchViewController: UISearchBarDelegate {
 // MARK: - UISearchResultsUpdating
 
 extension SearchViewController: UISearchResultsUpdating {
+    
     func updateSearchResults(for searchController: UISearchController) {
         handleSearchText(searchController.searchBar.text)
     }
@@ -127,6 +133,7 @@ extension SearchViewController: UISearchResultsUpdating {
 // MARK: - RecentSearchTableControllerDelegate
 
 extension SearchViewController: RecentSearchTableViewControllerDelegate {
+    
     func didSelectRecentSearch(searchResult: SearchResult) {
         loadGameInfoView(for: searchResult)
     }
@@ -135,6 +142,7 @@ extension SearchViewController: RecentSearchTableViewControllerDelegate {
 // MARK: - SearchResultsTableControllerDelegate
 
 extension SearchViewController: SearchResultsTableViewControllerDelegate {
+    
     func didSelectSearchResult(searchResult: SearchResult) {
         loadGameInfoView(for: searchResult)
     }

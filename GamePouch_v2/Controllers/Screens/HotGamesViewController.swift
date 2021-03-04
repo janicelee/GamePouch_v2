@@ -9,6 +9,8 @@ import UIKit
 
 class HotGamesViewController: UITableViewController {
     
+    private let rowHeight: CGFloat = 290
+    
     private var games: [Game] = [] {
         didSet {
             DispatchQueue.main.async {
@@ -17,7 +19,6 @@ class HotGamesViewController: UITableViewController {
             }
         }
     }
-    private let rowHeight: CGFloat = 290
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,27 +29,6 @@ class HotGamesViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
-    }
-    
-    private func configure() {
-        title = "Hot Games"
-        navigationController?.navigationBar.prefersLargeTitles = true
-        
-        let moreInfoButton = UIButton(type: .infoLight)
-        moreInfoButton.addTarget(self, action: #selector(moreInfoTapped), for: .touchUpInside)
-        moreInfoButton.tintColor = Colors.purple
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: moreInfoButton)
-        
-        tableView.frame = view.bounds
-        tableView.rowHeight = rowHeight
-        
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(HotGameCell.self, forCellReuseIdentifier: HotGameCell.reuseID)
-        tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
-        
-        refreshControl = UIRefreshControl()
-        refreshControl!.addTarget(self, action: #selector(getHotnessList), for: .valueChanged)
     }
     
     @objc private func getHotnessList() {
@@ -71,6 +51,29 @@ class HotGamesViewController: UITableViewController {
         detailedInfoViewController.modalPresentationStyle = .overFullScreen
         detailedInfoViewController.modalTransitionStyle = .crossDissolve
         present(detailedInfoViewController, animated: true)
+    }
+    
+    // MARK: - Configuration
+    
+    private func configure() {
+        title = "Hot Games"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        
+        let moreInfoButton = UIButton(type: .infoLight)
+        moreInfoButton.addTarget(self, action: #selector(moreInfoTapped), for: .touchUpInside)
+        moreInfoButton.tintColor = Colors.purple
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: moreInfoButton)
+        
+        tableView.frame = view.bounds
+        tableView.rowHeight = rowHeight
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(HotGameCell.self, forCellReuseIdentifier: HotGameCell.reuseID)
+        tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
+        
+        refreshControl = UIRefreshControl()
+        refreshControl!.addTarget(self, action: #selector(getHotnessList), for: .valueChanged)
     }
     
     // MARK: - UITableViewDataSource

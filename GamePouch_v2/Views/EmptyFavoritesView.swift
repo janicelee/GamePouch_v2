@@ -21,6 +21,8 @@ class EmptyFavoritesView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Configuration
+    
     private func configure() {
         configureImageView()
         configureTitleLabel()
@@ -31,10 +33,12 @@ class EmptyFavoritesView: UIView {
         imageView.image = Images.filledHeart
         imageView.contentMode = .scaleAspectFit
         
+        let width: CGFloat = 20
+        
         imageView.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(Layout.largePadding)
             make.centerX.equalToSuperview()
-            make.width.height.equalTo(20)
+            make.width.height.equalTo(width)
         }
     }
     

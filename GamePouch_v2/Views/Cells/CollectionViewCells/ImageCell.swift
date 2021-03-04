@@ -10,8 +10,7 @@ import UIKit
 class ImageCell: UICollectionViewCell {
     
     static let reuseID = "ImageCell"
-    
-    let imageView = GameImageView(frame: .zero)
+    private let imageView = GameImageView(frame: .zero)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -22,19 +21,21 @@ class ImageCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func configure() {
-        addSubview(imageView)
-        
-        imageView.snp.makeConstraints { make in
-            make.top.bottom.leading.trailing.equalToSuperview()
-        }
-    }
-    
     func set(imageURL: String) {
         imageView.setImage(from: imageURL)
     }
     
     func clearImage() {
         imageView.image = Images.placeholder
+    }
+    
+    // MARK: - Configuration
+    
+    private func configure() {
+        addSubview(imageView)
+        
+        imageView.snp.makeConstraints { make in
+            make.top.bottom.leading.trailing.equalToSuperview()
+        }
     }
 }

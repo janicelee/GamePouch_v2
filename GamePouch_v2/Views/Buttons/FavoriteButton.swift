@@ -20,12 +20,6 @@ class FavoriteButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func configure() {
-        imageView?.contentMode = .scaleAspectFit
-        imageEdgeInsets = UIEdgeInsets(top: imageInset, left: imageInset, bottom: imageInset, right: imageInset)
-        setImage(Images.emptyHeart, for: .normal)
-    }
-    
     func setSelectionStatus(active: Bool) {
         let image = active ? Images.filledHeart : Images.emptyHeart
         setImage(image, for: .normal)
@@ -35,5 +29,13 @@ class FavoriteButton: UIButton {
     private func setAccessibilityAttributes(isFavorite: Bool) {
         accessibilityLabel = isFavorite ? "Selected favorite" : "Unselected favorite"
         accessibilityHint = isFavorite ? "Double tap to un-favorite" : "Double tap to favorite"
+    }
+    
+    // MARK: - Configuration
+    
+    private func configure() {
+        imageView?.contentMode = .scaleAspectFit
+        imageEdgeInsets = UIEdgeInsets(top: imageInset, left: imageInset, bottom: imageInset, right: imageInset)
+        setImage(Images.emptyHeart, for: .normal)
     }
 }
