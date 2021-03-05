@@ -9,14 +9,21 @@ import UIKit
 
 class GameAttributesStackView: UIStackView {
     
-    let playersIconGroup = GameInfoIconGroup(label: "N/A", icon: Images.players)
-    let timeIconGroup = GameInfoIconGroup(label: "N/A", icon: Images.time)
-    let difficultyIconGroup = GameInfoIconGroup(label: "N/A", icon: Images.difficulty)
-    let ageIconGroup = GameInfoIconGroup(label: "N/A", icon: Images.age)
+    let playersIconGroup = GameInfoIconGroup(labelText: "N/A", icon: Images.players)
+    let timeIconGroup = GameInfoIconGroup(labelText: "N/A", icon: Images.time)
+    let difficultyIconGroup = GameInfoIconGroup(labelText: "N/A", icon: Images.difficulty)
+    let ageIconGroup = GameInfoIconGroup(labelText: "N/A", icon: Images.age)
     
-    init(game: Game) {
+    init() {
         super.init(frame: .zero)
-        
+        configure()
+    }
+    
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setAttributeLabels(for game: Game) {
         playersIconGroup.label.text = "\(game.getNumPlayers())\nPlayers"
         playersIconGroup.label.accessibilityLabel = "Number of players: \(formatGameLabelToAccessibleText(game.getNumPlayers()))"
         
@@ -28,13 +35,9 @@ class GameAttributesStackView: UIStackView {
         
         ageIconGroup.label.text = "\(game.getMinAgeDisplayText())\nYears"
         ageIconGroup.label.accessibilityLabel = "Minimum age: \(formatGameLabelToAccessibleText(game.getMinAgeDisplayText()))"
-        
-        configure()
     }
     
-    required init(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    // MARK: - Configuration
     
     private func configure() {
         distribution = .fillEqually

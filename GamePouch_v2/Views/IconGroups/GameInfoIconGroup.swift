@@ -7,10 +7,12 @@
 
 import UIKit
 
+// Icon group used on game info screen
+// Icon placed above label
+
 class GameInfoIconGroup: IconGroup {
     
     private let width: CGFloat = 22
-    private let verticalOffset: CGFloat = 4
     
     override func configure() {
         super.configure()
@@ -25,7 +27,7 @@ class GameInfoIconGroup: IconGroup {
         }
         
         label.snp.makeConstraints { make in
-            make.top.equalTo(iconImageView.snp.bottom).offset(verticalOffset)
+            make.top.equalTo(iconImageView.snp.bottom).offset(Layout.smallPadding)
             make.leading.trailing.bottom.equalToSuperview()
         }
     }

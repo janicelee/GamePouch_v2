@@ -15,8 +15,8 @@ class FavoriteCell: UITableViewCell {
     private let gameImageView = GameImageView(frame: .zero)
     private let attributesContainerView = UIView()
     private let titleLabel = TitleLabel(textAlignment: .left, fontSize: FontSize.medium)
-    private let ratingIconGroup = SecondaryAttributesIconGroup(label: "N/A", icon: Images.rating)
-    private let rankIconGroup = SecondaryAttributesIconGroup(label: "N/A", icon: Images.rank)
+    private let ratingIconGroup = SecondaryAttributesIconGroup(labelText: "N/A", icon: Images.rating)
+    private let rankIconGroup = SecondaryAttributesIconGroup(labelText: "N/A", icon: Images.rank)
     
     private let gameImageViewWidth: CGFloat = 60
     private let attributeFontSize = FontSize.small

@@ -7,6 +7,8 @@
 
 import UIKit
 
+// Icon placed to the left of label
+
 class SecondaryAttributesIconGroup: IconGroup {
     
     private let width: CGFloat = 16

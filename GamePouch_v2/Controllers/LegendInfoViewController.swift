@@ -36,10 +36,17 @@ class LegendInfoViewController: UIViewController {
         }
     }
     
+    @objc private func dismissToPreviousScreen() {
+        dismiss(animated: true)
+    }
+    
     // MARK: - Configuration
     
     private func configure() {
         view.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.4)
+        
+        let dismissLegend = UIAccessibilityCustomAction(name: "Dismiss legend", target: self, selector: #selector(dismissToPreviousScreen))
+        view.accessibilityCustomActions = [dismissLegend]
         
         configureContainerView()
         configureLegendInfoView()

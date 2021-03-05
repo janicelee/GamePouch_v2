@@ -1,11 +1,13 @@
 //
-//  PrimaryIconGroupView.swift
+//  MainAttributesIconGroup.swift
 //  GamePouch_v2
 //
 //  Created by Janice Lee on 2020-12-13.
 //
 
 import UIKit
+
+// Label placed to the left of icon
 
 class MainAttributesIconGroup: IconGroup {
     

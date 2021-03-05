@@ -7,16 +7,19 @@
 
 import UIKit
 
+// Parent class for displaying game attribute info with an icon and label
+// Relative positioning of icon and label varies in subclasses
+
 class IconGroup: UIView {
     
     let label = UILabel()
     let iconImageView = UIImageView()
     
-    required init(label: String, icon: UIImage?) {
-        self.label.text = label
-        self.iconImageView.image = icon
-        
+    init(labelText: String, icon: UIImage?) {
         super.init(frame: .zero)
+        
+        self.label.text = labelText
+        self.iconImageView.image = icon
         configure()
     }
     

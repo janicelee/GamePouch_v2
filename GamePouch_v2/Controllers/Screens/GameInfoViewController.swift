@@ -10,18 +10,18 @@ import SnapKit
 
 class GameInfoViewController: UIViewController {
     
-    let scrollView = UIScrollView()
-    let headerImageView = GameImageView(frame: .zero)
-    let mainAttributesView = UIView()
-    let favoriteButton = FavoriteButton()
-    let titleLabel = TitleLabel(textAlignment: .left, fontSize: FontSize.xLarge)
-    let yearLabel = UILabel()
-    let secondaryAttributesStackView: GameAttributesStackView!
-    let descriptionLabel = UILabel()
+    private let scrollView = UIScrollView()
+    private let headerImageView = GameImageView(frame: .zero)
+    private let mainAttributesView = UIView()
+    private let favoriteButton = FavoriteButton()
+    private let titleLabel = TitleLabel(textAlignment: .left, fontSize: FontSize.xLarge)
+    private let yearLabel = UILabel()
+    private let secondaryAttributesStackView = GameAttributesStackView()
+    private let descriptionLabel = UILabel()
     
-    var galleryImagesViewController: GalleryImagesViewController!
-    let galleryImagesContainerView = UIView()
-    let categoriesContainerView = UIView()
+    private var galleryImagesViewController: GalleryImagesViewController!
+    private let galleryImagesContainerView = UIView()
+    private let categoriesContainerView = UIView()
     
     private let headerImageViewHeight = 300
     private let favoriteButtonWidth: CGFloat = 34
@@ -30,9 +30,8 @@ class GameInfoViewController: UIViewController {
     var descriptionExpanded = false
     
     init(game: Game) {
-        self.game = game
-        self.secondaryAttributesStackView = GameAttributesStackView(game: game)
         super.init(nibName: nil, bundle: nil)
+        self.game = game
     }
     
     required init?(coder: NSCoder) {
@@ -47,8 +46,41 @@ class GameInfoViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setFavorite()
+        setFavoriteStatus()
     }
+    
+    private func setFavoriteStatus() {
+        do {
+            let isFavorite = try self.game.isInFavorites(skipCache: true)
+            self.favoriteButton.setSelectionStatus(active: isFavorite)
+        } catch {
+            print(error.getErrorMessage())
+        }
+    }
+    
+    @objc private func favoriteButtonPressed(_ sender: UIButton) {
+        do {
+            let isInFavorites = try game.isInFavorites()
+            try game.setFavorite(to: !isInFavorites)
+            favoriteButton.setSelectionStatus(active: !isInFavorites)
+        } catch let error {
+            presentErrorAlertOnMainThread(message: error.getErrorMessage())
+        }
+    }
+    
+    @objc private func labelTapped(_ sender: UITapGestureRecognizer) -> Bool {
+        if descriptionExpanded {
+            descriptionLabel.numberOfLines = 6
+            descriptionLabel.lineBreakMode = .byTruncatingTail
+        } else {
+            descriptionLabel.numberOfLines = 0
+            descriptionLabel.lineBreakMode = .byWordWrapping
+        }
+        descriptionExpanded = !descriptionExpanded
+        return true
+    }
+    
+    // MARK: - Configuration
     
     private func configure() {
         view.backgroundColor = .systemBackground
@@ -77,9 +109,7 @@ class GameInfoViewController: UIViewController {
         scrollView.addSubview(headerImageView)
         headerImageView.layer.cornerRadius = 0
         
-        if let imageURL = game.imageURL {
-            headerImageView.setImage(from: imageURL)
-        }
+        if let imageURL = game.imageURL { headerImageView.setImage(from: imageURL) }
         
         headerImageView.snp.makeConstraints { make in
             make.top.equalToSuperview()
@@ -89,8 +119,8 @@ class GameInfoViewController: UIViewController {
     }
     
     private func configureMainAttributesView() {
-        let ratingIconGroup = MainAttributesIconGroup(label: "N/A", icon: Images.rating)
-        let rankIconGroup = MainAttributesIconGroup(label: "N/A", icon: Images.rank)
+        let ratingIconGroup = MainAttributesIconGroup(labelText: "N/A", icon: Images.rating)
+        let rankIconGroup = MainAttributesIconGroup(labelText: "N/A", icon: Images.rank)
 
         scrollView.addSubview(mainAttributesView)
         [ratingIconGroup, rankIconGroup, favoriteButton].forEach { mainAttributesView.addSubview($0) }
@@ -145,7 +175,6 @@ class GameInfoViewController: UIViewController {
             make.top.equalTo(mainAttributesView.snp.bottom).offset(Layout.largePadding)
             make.leading.trailing.equalTo(view).inset(Layout.xxLargePadding)
         }
-
     }
     
     private func configureYearLabel() {
@@ -165,6 +194,7 @@ class GameInfoViewController: UIViewController {
     
     private func configureSecondaryAttributesStackView() {
         scrollView.addSubview(secondaryAttributesStackView)
+        secondaryAttributesStackView.setAttributeLabels(for: game)
 
         secondaryAttributesStackView.snp.makeConstraints { make in
             make.top.equalTo(yearLabel.snp.bottom).offset(Layout.xLargePadding)
@@ -204,15 +234,14 @@ class GameInfoViewController: UIViewController {
         galleryImagesContainerView.addSubview(galleryImagesViewController.view)
         galleryImagesViewController.didMove(toParent: self)
         
-        galleryImagesContainerView.snp.makeConstraints { make in
-            make.top.equalTo(descriptionLabel.snp.bottom).offset(Layout.xLargePadding)
-            make.leading.equalTo(view).offset(Layout.xxLargePadding)
-            make.trailing.equalTo(view).offset(-Layout.xxLargePadding)
-            make.height.equalTo(view.snp.height).multipliedBy(0.26)
-        }
-        
         galleryImagesViewController.view.snp.makeConstraints { make in
             make.top.leading.trailing.bottom.equalToSuperview()
+        }
+        
+        galleryImagesContainerView.snp.makeConstraints { make in
+            make.top.equalTo(descriptionLabel.snp.bottom).offset(Layout.xLargePadding)
+            make.leading.trailing.equalTo(view).inset(Layout.xxLargePadding)
+            make.height.equalTo(view.snp.height).multipliedBy(0.26)
         }
     }
     
@@ -222,15 +251,15 @@ class GameInfoViewController: UIViewController {
         let categoriesViewController = TagViewController(title: "Categories", tags: game.categories, borderColor: Colors.teal)
         addChild(categoriesViewController)
         categoriesContainerView.addSubview(categoriesViewController.view)
-        categoriesViewController.didMove(toParent: self )
+        categoriesViewController.didMove(toParent: self)
+        
+        categoriesViewController.view.snp.makeConstraints { make in
+            make.top.leading.trailing.bottom.equalToSuperview()
+        }
         
         categoriesContainerView.snp.makeConstraints { make in
             make.top.equalTo(galleryImagesContainerView.snp.bottom).offset(Layout.xLargePadding)
             make.leading.trailing.equalTo(view).inset(Layout.xxLargePadding)
-        }
-        
-        categoriesViewController.view.snp.makeConstraints { make in
-            make.top.leading.trailing.bottom.equalToSuperview()
         }
     }
     
@@ -241,47 +270,16 @@ class GameInfoViewController: UIViewController {
         let mechanicsViewController = TagViewController(title: "Mechanics", tags: game.mechanics, borderColor: Colors.yellow)
         addChild(mechanicsViewController)
         mechanicsContainerView.addSubview(mechanicsViewController.view)
-        mechanicsViewController.didMove(toParent: self )
+        mechanicsViewController.didMove(toParent: self)
+        
+        mechanicsViewController.view.snp.makeConstraints { make in
+            make.top.leading.trailing.bottom.equalToSuperview()
+        }
         
         mechanicsContainerView.snp.makeConstraints { make in
             make.top.equalTo(categoriesContainerView.snp.bottom).offset(Layout.xLargePadding)
             make.leading.trailing.equalTo(view).inset(Layout.xxLargePadding)
             make.bottom.equalToSuperview()
         }
-        
-        mechanicsViewController.view.snp.makeConstraints { make in
-            make.top.leading.trailing.bottom.equalToSuperview()
-        }
-    }
-    
-    @objc private func favoriteButtonPressed(_ sender: UIButton) {
-        do {
-            let isInFavorites = try game.isInFavorites()
-            try game.setFavorite(to: !isInFavorites)
-            favoriteButton.setSelectionStatus(active: !isInFavorites)
-        } catch let error {
-            presentErrorAlertOnMainThread(message: error.getErrorMessage())
-        }
-    }
-    
-    private func setFavorite() {
-        do {
-            let isFavorite = try self.game.isInFavorites(skipCache: true)
-            self.favoriteButton.setSelectionStatus(active: isFavorite)
-        } catch {
-            print(error.getErrorMessage())
-        }
-    }
-    
-    @objc private func labelTapped(_ sender: UITapGestureRecognizer) -> Bool {
-        if descriptionExpanded {
-            descriptionLabel.numberOfLines = 6
-            descriptionLabel.lineBreakMode = .byTruncatingTail
-        } else {
-            descriptionLabel.numberOfLines = 0
-            descriptionLabel.lineBreakMode = .byWordWrapping
-        }
-        descriptionExpanded = !descriptionExpanded
-        return true
     }
 }

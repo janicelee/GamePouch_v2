@@ -10,10 +10,10 @@ import UIKit
 class LegendInfoView: UIView {
     
     let titleLabel = UILabel()
-    let ratingIconGroup = SecondaryAttributesIconGroup(label: "Number of players", icon: Images.players)
-    let timeIconGroup = SecondaryAttributesIconGroup(label: "Playtime", icon: Images.time)
-    let difficultyIconGroup = SecondaryAttributesIconGroup(label: "Difficulty", icon: Images.difficulty)
-    let ageIconGroup = SecondaryAttributesIconGroup(label: "Minimum Age", icon: Images.age)
+    let ratingIconGroup = SecondaryAttributesIconGroup(labelText: "Number of players", icon: Images.players)
+    let timeIconGroup = SecondaryAttributesIconGroup(labelText: "Playtime", icon: Images.time)
+    let difficultyIconGroup = SecondaryAttributesIconGroup(labelText: "Difficulty", icon: Images.difficulty)
+    let ageIconGroup = SecondaryAttributesIconGroup(labelText: "Minimum Age", icon: Images.age)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
