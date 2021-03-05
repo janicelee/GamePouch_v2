@@ -228,7 +228,7 @@ class HotGameCell: UITableViewCell {
     }
 }
 
-// MARK: Accessibility
+// MARK: - Accessibility
 
 extension HotGameCell {
     

@@ -21,8 +21,6 @@ class EmptyFavoritesView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Configuration
-    
     private func configure() {
         configureImageView()
         configureTitleLabel()
