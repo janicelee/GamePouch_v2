@@ -105,7 +105,7 @@ class BoardGameGeekClient {
     }
     
     func getGame(id: String, completed: @escaping (Result<Game, InternalError>) -> ()) {
-        let queryItems = [URLQueryItem(name: "type", value: "boardgame, boardgameexpansion"),
+        let queryItems = [URLQueryItem(name: "type", value: "boardgame,boardgameexpansion"),
                           URLQueryItem(name: "stats", value: "1"),
                           URLQueryItem(name: "id", value: id)]
         var urlComps = URLComponents(string: baseURL + "thing")!
