@@ -26,7 +26,7 @@ class ImageCell: UICollectionViewCell {
     }
     
     func clearImage() {
-        imageView.image = Images.placeholder
+        imageView.setImageToPlaceholder()
     }
     
     // MARK: - Configuration

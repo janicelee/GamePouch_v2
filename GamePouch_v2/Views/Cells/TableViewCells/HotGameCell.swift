@@ -103,7 +103,7 @@ class HotGameCell: UITableViewCell {
     }
     
     func clearImage() {
-        gameImageView.image = Images.placeholder
+        gameImageView.setImageToPlaceholder()
     }
     
     // MARK: - Configuration

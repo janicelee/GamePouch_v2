@@ -53,7 +53,7 @@ class FavoriteCell: UITableViewCell {
     }
     
     func clearImage() {
-        gameImageView.image = Images.placeholder
+        gameImageView.setImageToPlaceholder()
     }
     
     // MARK: - Configuration

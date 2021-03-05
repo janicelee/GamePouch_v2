@@ -21,18 +21,23 @@ class GameImageView: UIImageView {
     }
     
     private func configure() {
+        setImageToPlaceholder()
         layer.cornerRadius = cornerRadius
         clipsToBounds = true
-        image = Images.placeholder
-        contentMode = .scaleAspectFill
     }
     
     func setImage(from urlString: String) {
         BoardGameGeekClient.shared.downloadImage(from: urlString) { [weak self] image in
             guard let self = self else { return }
             DispatchQueue.main.async {
+                self.contentMode = .scaleAspectFill
                 self.image = image
             }
         }
+    }
+    
+    func setImageToPlaceholder() {
+        contentMode = .scaleAspectFit
+        image = Images.placeholder
     }
 }
