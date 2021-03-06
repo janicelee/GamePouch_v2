@@ -12,7 +12,8 @@ class LegendInfoViewController: UIViewController {
     
     private let containerView = UIView()
     private let legendInfoView = LegendInfoView()
-    private let attributionButton = UIButton()
+    private let iconsAttributionButton = UIButton()
+    private let iconsAttributionURL = "https://icons8.com"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,11 +21,13 @@ class LegendInfoViewController: UIViewController {
     }
     
     @objc private func presentSafariViewController() {
-        if let url = URL(string: "https://icons8.com") {
+        if let url = URL(string: iconsAttributionURL) {
             let safariViewController = SFSafariViewController(url: url)
             present(safariViewController, animated: true)
         }
     }
+    
+    // Dismiss view controller if user taps outside containerView frame
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
@@ -36,8 +39,9 @@ class LegendInfoViewController: UIViewController {
         }
     }
     
-    @objc private func dismissToPreviousScreen() {
+    @objc private func dismissToPreviousScreen() -> Bool {
         dismiss(animated: true)
+        return true
     }
     
     // MARK: - Configuration
@@ -50,7 +54,8 @@ class LegendInfoViewController: UIViewController {
         
         configureContainerView()
         configureLegendInfoView()
-        configureAttributionButton()
+        configureIconsLinkButton()
+        configureDataAttributionLabel()
     }
     
     private func configureContainerView() {
@@ -66,7 +71,7 @@ class LegendInfoViewController: UIViewController {
         containerView.layer.rasterizationScale = UIScreen.main.scale
         
         let width: CGFloat = 260
-        let height: CGFloat = 220
+        let height: CGFloat = 228
         
         containerView.snp.makeConstraints { make in
             make.centerX.centerY.equalToSuperview()
@@ -84,18 +89,32 @@ class LegendInfoViewController: UIViewController {
         }
     }
     
-    private func configureAttributionButton() {
-        containerView.addSubview(attributionButton)
+    private func configureIconsLinkButton() {
+        containerView.addSubview(iconsAttributionButton)
 
-        attributionButton.setTitle("Icon art by Icons8", for: .normal)
-        attributionButton.setTitleColor(.secondaryLabel, for: .normal)
-        attributionButton.titleLabel?.font = UIFont.systemFont(ofSize: FontSize.small, weight: .regular)
-        attributionButton.addTarget(self, action: #selector(presentSafariViewController), for: .touchUpInside)
+        iconsAttributionButton.setTitle("Icon art by Icons8", for: .normal)
+        iconsAttributionButton.setTitleColor(.secondaryLabel, for: .normal)
+        iconsAttributionButton.titleLabel?.font = UIFont.systemFont(ofSize: FontSize.xs, weight: .light)
+        iconsAttributionButton.addTarget(self, action: #selector(presentSafariViewController), for: .touchUpInside)
         
-        attributionButton.snp.makeConstraints { make in
-            make.top.equalTo(legendInfoView.snp.bottom).offset(Layout.largePadding)
+        iconsAttributionButton.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(Layout.xLargePadding)
-            make.bottom.equalToSuperview().inset(Layout.smallPadding)
+        }
+    }
+    
+    private func configureDataAttributionLabel() {
+        let label = UILabel()
+        containerView.addSubview(label)
+        
+        label.text = "Powered by BoardGameGeek"
+        label.textColor = .secondaryLabel
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: FontSize.xs, weight: .light)
+        
+        label.snp.makeConstraints { make in
+            make.top.equalTo(iconsAttributionButton.snp.bottom)
+            make.leading.trailing.equalToSuperview().inset(Layout.xLargePadding)
+            make.bottom.equalToSuperview().inset(Layout.largePadding)
         }
     }
 }
