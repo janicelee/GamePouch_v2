@@ -54,7 +54,7 @@ class LegendInfoViewController: UIViewController {
         
         configureContainerView()
         configureLegendInfoView()
-        configureIconsLinkButton()
+        configureIconsAttributionButton()
         configureDataAttributionLabel()
     }
     
@@ -89,7 +89,7 @@ class LegendInfoViewController: UIViewController {
         }
     }
     
-    private func configureIconsLinkButton() {
+    private func configureIconsAttributionButton() {
         containerView.addSubview(iconsAttributionButton)
 
         iconsAttributionButton.setTitle("Icon art by Icons8", for: .normal)
