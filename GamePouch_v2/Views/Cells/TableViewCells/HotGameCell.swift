@@ -132,10 +132,7 @@ class HotGameCell: UITableViewCell {
         [ratingIconGroup, rankIconGroup].forEach { ratingAndRankContainerView.addSubview($0) }
         
         ratingAndRankContainerView.layer.cornerRadius = 6
-        ratingAndRankContainerView.backgroundColor = UIColor.white.withAlphaComponent(0.86)
-        
-        ratingIconGroup.label.textColor = .black
-        rankIconGroup.label.textColor = .black
+        ratingAndRankContainerView.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.86)
         
         ratingAndRankContainerView.snp.makeConstraints { make in
             make.top.trailing.equalToSuperview().inset(Layout.largePadding)
