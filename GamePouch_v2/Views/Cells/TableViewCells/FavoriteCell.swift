@@ -86,10 +86,13 @@ class FavoriteCell: UITableViewCell {
     private func configureRatingIconGroup() {
         ratingIconGroup.label.font = UIFont.systemFont(ofSize: attributeFontSize, weight: attributeFontWeight)
         
+        let width: CGFloat = 44
+        
         ratingIconGroup.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(Layout.mediumPadding)
             make.leading.equalToSuperview().offset(Layout.xsPadding)
             make.bottom.equalToSuperview()
+            make.width.equalTo(width)
         }
         
         ratingIconGroup.iconImageView.snp.makeConstraints { make in
