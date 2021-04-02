@@ -17,9 +17,9 @@
 
 - SnapKit (Fully programmatic UI)
 - UIKit
-- AutoLayout
+- Auto Layout
 - Core Data
-- SafariServices
+- Safari Services
 - <a href=https://boardgamegeek.com/wiki/page/BGG_XML_API2>BoardGameGeek API</a>
 
 <h3> Credits </h3>
